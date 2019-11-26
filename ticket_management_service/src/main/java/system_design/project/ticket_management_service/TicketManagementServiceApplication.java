@@ -30,7 +30,7 @@ public class TicketManagementServiceApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(TicketRepository repo){
 
-		return (args)->{
+		return args ->{
 			Ticket t1 = new Ticket(7.0, "Fast and the Furious 9");
 			Ticket t2 = new Ticket(7.5, "The conjuring");
 
@@ -42,16 +42,16 @@ public class TicketManagementServiceApplication {
 
 	@Bean
 	public CommandLineRunner getAllTickets(TicketRepository repo){
-		return (args) -> {
+		return args -> {
 			repo.findAll().forEach(ticket -> {logger.info(ticket.toString());});
 		};
 	}
 
-	@Bean
-	public CommandLineRunner testRest(){
-		return (args) -> {
-			logger.info(getMovieSchedule().toString());
-		};
-	}
+	//@Bean
+	//public CommandLineRunner testRest(){
+	//	return (args) -> {
+	//		logger.info(getMovieSchedule().toString());
+	//	};
+	//}
 
 }
