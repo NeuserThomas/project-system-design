@@ -1,12 +1,12 @@
 # project-system-design
-##System design project: Bioscoop system
+## System design project: Bioscoop system
 
 This repository contains all the folders/ files related to the Bioscoop system project for the course System Design 2019-2020.
 
 
-##**TicketManagement service**
+## **TicketManagement service**
 
-###***Domain*
+### ***Domain*
 
 Added next classes:
 
@@ -15,10 +15,10 @@ Added next classes:
 - MovieSchedule (MovieSchedule is an array of Movies, used when getting the MovieSchedule from the MoviePlanner service)
 - TicketStatus (enum containing the states that a Ticket can have)
 
-###***Persistence*
+### ***Persistence*
 
 Added a TicketRepository (currrently working with H2 database) for storing the tickets
 
-###***Adapters*
+### ***Adapters*
 
 Added a RestController (that can later be used for validateTicket)
