@@ -13,6 +13,9 @@ import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
 
 @Service("planningService")
 @EnableScheduling
@@ -22,6 +25,9 @@ public class PlanningService {
 	public PlanningRepository planRepo;
 	@Autowired
 	public CinemaRepository cinemaRepo;
+	@Autowired
+	private KafkaTemplate<String, String> simpleProducer;
+
 	
 	/**
 	 * Will run every day, at 8 in the morning.
@@ -39,13 +45,17 @@ public class PlanningService {
 	 */
 	public void planDay(LocalDate date) {
 		List<Cinema> cinemas = cinemaRepo.findAll();
+		boolean updated=false;
 		for(Cinema c: cinemas) {
 			List<Day> days = planRepo.findDaysOnDateForCinema(date, c.getId());
 			if(days.isEmpty()) {
 				//TODO
+				updated=true;
 				throw new NotYetImplementedException("Need to have movies to calculate planning.");
 			} //else nothing has to be done, since it's planned already
-			//TODO: send event: schedule calculated. Question: send event per cinema, or one per day
+			if(updated) {
+				publish("Updated schedule!");
+			}
 		}
 	}
 	
@@ -55,10 +65,16 @@ public class PlanningService {
 	 */
 	public void clearDay(LocalDate date) {
 		List<Cinema> cinemas = cinemaRepo.findAll();
+		boolean updated=false;
 		for(Cinema c: cinemas) {
 			List<Day> days = planRepo.findDaysOnDateForCinema(date, c.getId());
-			for(Day d: days)
-			planRepo.delete(d);
+			for(Day d: days) {
+				planRepo.delete(d);
+				updated=true;
+			}
+		}
+		if(updated) {
+			publish("Removed parts from schedule!");
 		}
 	}
 	
@@ -66,6 +82,10 @@ public class PlanningService {
 		for(LocalDate i = start;i.isBefore(stop);i.plusDays(1)) {
 			planDay(i);
 		}
+	}
+	
+	private void publish(String message) {
+		simpleProducer.send("PlanningEvent:", message);
 	}
 	
 }

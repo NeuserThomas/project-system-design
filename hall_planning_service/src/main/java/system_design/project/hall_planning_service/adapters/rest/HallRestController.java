@@ -1,4 +1,4 @@
-package system_design.project.hall_planning_service.adapters;
+package system_design.project.hall_planning_service.adapters.rest;
 
 import java.util.List;
 
