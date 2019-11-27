@@ -46,7 +46,7 @@ public class Day {
 		this.date = date;
 	}
 	public Long getCinemaId() {
-		return cinema.getCinemaId();
+		return cinema.getId();
 	}
 	public void setCinemaId(Cinema cinema) {
 		this.cinema=cinema;

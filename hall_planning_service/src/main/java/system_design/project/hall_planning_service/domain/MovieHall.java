@@ -2,14 +2,20 @@ package system_design.project.hall_planning_service.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -21,11 +27,19 @@ import javax.persistence.OneToMany;
 public class MovieHall{
 	
 	@Id
-	private long hall_id;
+	@GeneratedValue
+	private long hallId;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "movieHall")
+	private int hallNumber;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name="id")
+	@JsonIgnore
+	private Cinema cinema;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "movieHall",cascade = CascadeType.ALL)
 	private List<Seat> seats;
-	
+
 	@Column(name = "projectorTypes", nullable = false)
     @ElementCollection(targetClass=ProjectorType.class)
 	@Enumerated(EnumType.STRING)
@@ -42,12 +56,12 @@ public class MovieHall{
 		return seats.size();
 	}
 	
-	public long getHall_id() {
-		return hall_id;
+	public long getHallId() {
+		return hallId;
 	}
 
-	public void setHall_id(long hall_id) {
-		this.hall_id = hall_id;
+	public void setHall_id(long hallId) {
+		this.hallId = hallId;
 	}
 	
 	public List<ProjectorType> getProjector_types() {
@@ -56,6 +70,30 @@ public class MovieHall{
 
 	public void setProjector_types(List<ProjectorType> projector_types) {
 		this.projector_types = projector_types;
+	}
+
+	public int getHall_number() {
+		return hallNumber;
+	}
+
+	public void setHall_number(int hall_number) {
+		this.hallNumber = hall_number;
+	}
+
+	public Cinema getCinema() {
+		return cinema;
+	}
+
+	public void setCinema(Cinema cinema) {
+		this.cinema = cinema;
+	}
+	
+	public List<Seat> getSeats() {
+		return seats;
+	}
+
+	public void setSeats(List<Seat> seats) {
+		this.seats = seats;
 	}
 	
 	

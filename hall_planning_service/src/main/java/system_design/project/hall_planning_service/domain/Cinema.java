@@ -1,6 +1,11 @@
 package system_design.project.hall_planning_service.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
@@ -8,11 +13,11 @@ import javax.persistence.OrderColumn;
 @Entity
 public class Cinema {
 	@Id
-	private long CinemaId;
+	@GeneratedValue
+	private long id=0;
 	
-	@OneToMany
-	@OrderColumn
-	private MovieHall[] halls;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema",cascade = CascadeType.ALL)
+	private List<MovieHall> halls;
 	
 	private String cinemaName;
 	
@@ -20,19 +25,19 @@ public class Cinema {
 	
 	//-----------------------------------------------
 	
-	public long getCinemaId() {
-		return CinemaId;
+	public long getId() {
+		return id;
 	}
 
-	public void setCinemaId(long cinemaId) {
-		CinemaId = cinemaId;
+	public void setId(long cinemaId) {
+		this.id = cinemaId;
 	}
 
-	public MovieHall[] getHalls() {
+	public List<MovieHall> getHalls() {
 		return halls;
 	}
 
-	public void setHalls(MovieHall[] halls) {
+	public void setHalls(List<MovieHall> halls) {
 		this.halls = halls;
 	}
 

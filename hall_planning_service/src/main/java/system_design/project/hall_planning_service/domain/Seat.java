@@ -9,12 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Seat {
 	@Id
 	@GeneratedValue
 	private long seatId;
-
+	
+	//giving it the name column = big no no for databases
 	@Column(name="hallColumn")
 	private int column;
 	
@@ -25,17 +28,26 @@ public class Seat {
 	private TypeOfSeat typeOfSeat;
 
 	@ManyToOne
-	@JoinColumn(name="hall_id",nullable=false)
+	@JoinColumn(name="hallId",nullable=false)
+	@JsonIgnore
 	private MovieHall movieHall;
 	
 	//-------------------------------------------------
 	
-	/*Seat(){
+	public Seat(){
 		typeOfSeat=TypeOfSeat.normal_seat;
 		column=1;
 		row=1;
-	}*/
+	}
 	
+	public MovieHall getMovieHall() {
+		return movieHall;
+	}
+
+	public void setMovieHall(MovieHall movieHall) {
+		this.movieHall = movieHall;
+	}
+
 	public long getSeatId() {
 		return seatId;
 	}
