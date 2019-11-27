@@ -1,4 +1,4 @@
-package system_design.project.hall_planning_service.persistance;
+package system_design.project.hall_planning_service.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

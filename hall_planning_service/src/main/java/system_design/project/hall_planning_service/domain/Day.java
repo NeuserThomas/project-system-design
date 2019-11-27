@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 
 @Entity
 /**
@@ -13,26 +13,26 @@ import javax.persistence.IdClass;
  * @author robin
  *
  */
-@IdClass(value = DayId.class)
 public class Day {
 
 	@Id
+	private long id;
 	/**
 	 * Describes what day it is.
 	 */
 	//TODO: generated manually
 	private LocalDate date;
-	@Id
-	/**
-	 * Describes what cinema it is mapped to.
-	 */
-	private Cinema cinema;
 	/**
 	 * Maps the hall number, to an array of TimeSlots that describe what movies will be played when.
 	 * The hall number, is the same number it has in the array of Cinema.
 	 */
 	private HashMap<Integer,TimeSlot[]> timeSlots;
 	
+	@ManyToOne
+	/**
+	 * Describes what cinema it is mapped to.
+	 */
+	private Cinema cinema;
 	
 	//------------ separation declarations and methods ------------------------
 	Day(Cinema cinema){
