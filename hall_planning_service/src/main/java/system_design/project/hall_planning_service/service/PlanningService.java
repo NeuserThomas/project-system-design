@@ -4,24 +4,24 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import system_design.project.hall_planning_service.adapters.messaging.KafkaTopicConfig;
+import system_design.project.hall_planning_service.adapters.messaging.MessageGateway;
 import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
-import org.springframework.kafka.core.KafkaTemplate;
 
 
 @Service("planningService")
@@ -32,11 +32,17 @@ public class PlanningService {
 	public PlanningRepository planRepo;
 	@Autowired
 	public CinemaRepository cinemaRepo;
-	@Autowired
-	private KafkaTemplate<String, String> simpleProducer;
+	//@Autowired
+	//private KafkaTemplate<String, String> simpleProducer;
 	
 	final Logger logger = LoggerFactory.getLogger(PlanningService.class);
+	
+	private final MessageGateway gateway;
 
+	@Autowired
+	public PlanningService(MessageGateway gateway) {
+		this.gateway = gateway;
+	}
 	
 	/**
 	 * Will run every day, at 8 in the morning.
@@ -119,6 +125,8 @@ public class PlanningService {
 	
 	private void publish(String message) {
 		logger.info("--- Sending kafka message: "+message+" ---");
-		simpleProducer.send("planningMade",message);
+		gateway.updateDay(message);
+		
+		//simpleProducer.send("planningMade",message);
 	}
 }

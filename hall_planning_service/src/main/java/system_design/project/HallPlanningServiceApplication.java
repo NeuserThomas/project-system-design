@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
+import system_design.project.hall_planning_service.adapters.messaging.Channels;
 import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.Day;
@@ -19,6 +21,7 @@ import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.service.PlanningService;
 
 @SpringBootApplication
+@EnableBinding(Channels.class)
 public class HallPlanningServiceApplication {
 
 	public static void main(String[] args) {
