@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -16,7 +18,8 @@ import javax.persistence.ManyToOne;
 public class Day {
 
 	@Id
-	private long id;
+	@GeneratedValue
+	private long dayId;
 	/**
 	 * Describes what day it is.
 	 */
@@ -30,8 +33,10 @@ public class Day {
 	
 	@ManyToOne
 	/**
-	 * Describes what cinema it is mapped to.
+	 * Describes what Cinema it is mapped to.
 	 */
+	@JoinColumn(name="id")
+
 	private Cinema cinema;
 	
 	//------------ separation declarations and methods ------------------------
@@ -58,6 +63,30 @@ public class Day {
 
 	public void setTimeslots(HashMap<Integer,TimeSlot[]> timeslots) {
 		this.timeSlots = timeslots;
+	}
+	
+	public long getDayId() {
+		return dayId;
+	}
+
+	public void setDayId(long dayId) {
+		this.dayId = dayId;
+	}
+
+	public HashMap<Integer, TimeSlot[]> getTimeSlots() {
+		return timeSlots;
+	}
+
+	public void setTimeSlots(HashMap<Integer, TimeSlot[]> timeSlots) {
+		this.timeSlots = timeSlots;
+	}
+
+	public Cinema getCinema() {
+		return cinema;
+	}
+
+	public void setCinema(Cinema cinema) {
+		this.cinema = cinema;
 	}
 	
 	

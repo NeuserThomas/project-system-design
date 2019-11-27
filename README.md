@@ -24,11 +24,16 @@ Added a TicketRepository (currrently working with H2 database) for storing the t
 Added a RestController (that can later be used for validateTicket)
 
 ## **Planning service**
-### **Rest Calls**
+### **General info**
+Server port: 2223
+
+### **Rest Calls (WIP)**
 Available rest calls:
 - /cinema						: Returns all Cinemas
 - /cinema/{cinemaId}			: Returns cinema with id
 - /hall/cinema/{cinemaId}	: Returns all halls from a certain cinema
 - /halls/{cinemaId}/{hallId}	: Return the hall with hallId
-- /planning/{cinemaId}		: Return all planned days from today (WIP)
+- /planning						: Return all days
+- /planning/{date}				: Return all days after date
+- /planning/cinema/{cinemaId}		: Return all planned days from today for cinema
 - /planning/{cinemaId}/{day}	: Return planning for certain day (WIP)
