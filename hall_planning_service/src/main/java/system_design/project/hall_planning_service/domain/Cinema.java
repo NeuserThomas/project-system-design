@@ -15,7 +15,7 @@ public class Cinema {
 	@GeneratedValue
 	private long id=0;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cinema",cascade = CascadeType.ALL)
 	private List<MovieHall> halls;
 	
 	private String cinemaName;

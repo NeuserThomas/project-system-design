@@ -1,8 +1,13 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,20 +34,17 @@ public class Day {
 	 * Maps the hall number, to an array of TimeSlots that describe what movies will be played when.
 	 * The hall number, is the same number it has in the array of Cinema.
 	 */
-	private HashMap<Integer,TimeSlot[]> timeSlots;
+	@ElementCollection
+	private Map<Integer,ArrayList<TimeSlot>> timeSlots;
 	
 	@ManyToOne
 	/**
 	 * Describes what Cinema it is mapped to.
 	 */
 	@JoinColumn(name="id")
-
 	private Cinema cinema;
 	
 	//------------ separation declarations and methods ------------------------
-	Day(Cinema cinema){
-		this.cinema=cinema;
-	}
 	
 	public LocalDate getDate() {
 		return date;
@@ -53,15 +55,12 @@ public class Day {
 	public Long getCinemaId() {
 		return cinema.getId();
 	}
-	public void setCinemaId(Cinema cinema) {
-		this.cinema=cinema;
-	}
 
-	public HashMap<Integer,TimeSlot[]> getTimeslots() {
+	public Map<Integer,ArrayList<TimeSlot>> getTimeSlots() {
 		return timeSlots;
 	}
 
-	public void setTimeslots(HashMap<Integer,TimeSlot[]> timeslots) {
+	public void setTimeSlots(HashMap<Integer,ArrayList<TimeSlot>> timeslots) {
 		this.timeSlots = timeslots;
 	}
 	
@@ -72,15 +71,6 @@ public class Day {
 	public void setDayId(long dayId) {
 		this.dayId = dayId;
 	}
-
-	public HashMap<Integer, TimeSlot[]> getTimeSlots() {
-		return timeSlots;
-	}
-
-	public void setTimeSlots(HashMap<Integer, TimeSlot[]> timeSlots) {
-		this.timeSlots = timeSlots;
-	}
-
 	public Cinema getCinema() {
 		return cinema;
 	}

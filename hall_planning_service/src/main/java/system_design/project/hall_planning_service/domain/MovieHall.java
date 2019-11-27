@@ -37,7 +37,7 @@ public class MovieHall{
 	@JsonIgnore
 	private Cinema cinema;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "movieHall",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "movieHall",cascade = CascadeType.ALL)
 	private List<Seat> seats;
 
 	@Column(name = "projectorTypes", nullable = false)

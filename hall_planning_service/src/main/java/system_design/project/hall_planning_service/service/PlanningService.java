@@ -1,20 +1,27 @@
 package system_design.project.hall_planning_service.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
-import org.hibernate.cfg.NotYetImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import system_design.project.hall_planning_service.adapters.messaging.KafkaTopicConfig;
 import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
+import system_design.project.hall_planning_service.domain.MovieHall;
+import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
 
 
 @Service("planningService")
@@ -27,6 +34,8 @@ public class PlanningService {
 	public CinemaRepository cinemaRepo;
 	@Autowired
 	private KafkaTemplate<String, String> simpleProducer;
+	
+	final Logger logger = LoggerFactory.getLogger(PlanningService.class);
 
 	
 	/**
@@ -48,15 +57,39 @@ public class PlanningService {
 		boolean updated=false;
 		for(Cinema c: cinemas) {
 			List<Day> days = planRepo.findDaysOnDateForCinema(date, c.getId());
+			if(days==null) {
+				days=new ArrayList<Day>();
+			}
 			if(days.isEmpty()) {
-				//TODO
+				//TODO: make dynamic
+				dummyImplementation(c);
 				updated=true;
-				throw new NotYetImplementedException("Need to have movies to calculate planning.");
 			} //else nothing has to be done, since it's planned already
 			if(updated) {
 				publish("Updated schedule!");
 			}
 		}
+	}
+	
+	private void dummyImplementation(Cinema c) {
+		Day day = new Day();
+		day.setCinema(c);
+		LocalTime startTime= LocalTime.of(20, 0);
+		LocalTime stopTime= LocalTime.of(22, 30);
+		HashMap<Integer,ArrayList<TimeSlot>> timeSlots = new HashMap<Integer,ArrayList<TimeSlot>>();
+		//Creation of time schedule
+		for(MovieHall h:c.getHalls()) {
+			TimeSlot t = new TimeSlot();
+			t.setStartTime(startTime);
+			t.setStopTime(stopTime);
+			if(!timeSlots.containsKey(h.getHall_number())) {
+				timeSlots.put(h.getHall_number(), new ArrayList<TimeSlot>());
+			}
+			timeSlots.get(h.getHall_number()).add(t);
+			
+		}
+		day.setTimeSlots(timeSlots);
+		planRepo.save(day);
 	}
 	
 	/**
@@ -85,7 +118,7 @@ public class PlanningService {
 	}
 	
 	private void publish(String message) {
-		simpleProducer.send("PlanningEvent:", message);
+		logger.info("--- Sending kafka message: "+message+" ---");
+		simpleProducer.send("planningMade",message);
 	}
-	
 }

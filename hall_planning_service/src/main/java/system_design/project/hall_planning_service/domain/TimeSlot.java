@@ -1,8 +1,12 @@
 package system_design.project.hall_planning_service.domain;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Embeddable
 /**
@@ -10,13 +14,17 @@ import javax.persistence.Embeddable;
  * @author robin
  *
  */
-public class TimeSlot {
+public class TimeSlot implements Serializable {
 	
-	private LocalTime startTime,stopTime;
 	/**
-	 * First array contains the breaks. Second dimension start and stop time. 
+	 * Version number?
 	 */
-	private LocalTime[][] breaks;
+	private static final long serialVersionUID = 1L;
+	private LocalTime startTime,stopTime;
+	/*@Id
+	@GeneratedValue
+	private long id;
+	*/
 	//Todo mapping
 	private long movieId;
 	
@@ -33,17 +41,18 @@ public class TimeSlot {
 	public void setStopTime(LocalTime stopTime) {
 		this.stopTime = stopTime;
 	}
-	public LocalTime[][] getBreaks() {
-		return breaks;
-	}
-	public void setBreaks(LocalTime[][] breaks) {
-		this.breaks = breaks;
-	}
+
 	public long getMovieId() {
 		return movieId;
 	}
 	public void setMovieId(long movieId) {
 		this.movieId = movieId;
 	}
-	
+	/*public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	*/
 }

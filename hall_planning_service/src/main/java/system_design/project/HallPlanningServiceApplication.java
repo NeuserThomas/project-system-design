@@ -1,5 +1,6 @@
 package system_design.project;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.Seat;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
-import system_design.project.hall_planning_service.persistence.PlanningRepository;
+import system_design.project.hall_planning_service.service.PlanningService;
 
 @SpringBootApplication
 public class HallPlanningServiceApplication {
@@ -26,7 +27,7 @@ public class HallPlanningServiceApplication {
 
 	
 	@Bean
-	CommandLineRunner testRepository(CinemaRepository cRep, PlanningRepository p) {
+	CommandLineRunner testRepository(CinemaRepository cRep, PlanningService pServ) {
 		
 		return (args)->{
 			final Logger logger = LoggerFactory.getLogger(Day.class);
@@ -50,6 +51,7 @@ public class HallPlanningServiceApplication {
 			}
 			c.setHalls(halls);
 			cRep.save(c);
+			pServ.planDay(LocalDate.now());
 			logger.info("Dummy data loaded");
 		};
 	}
