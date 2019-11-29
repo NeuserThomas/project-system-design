@@ -78,6 +78,7 @@ public class PlanningService {
 	private void dummyImplementation(Cinema c) {
 		Day day = new Day();
 		day.setCinema(c);
+		day.setDate(LocalDate.now());
 		LocalTime startTime= LocalTime.of(20, 0);
 		LocalTime stopTime= LocalTime.of(22, 30);
 		HashMap<Integer,ArrayList<TimeSlot>> timeSlots = new HashMap<Integer,ArrayList<TimeSlot>>();

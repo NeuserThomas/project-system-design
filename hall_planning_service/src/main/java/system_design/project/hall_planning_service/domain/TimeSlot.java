@@ -3,6 +3,7 @@ package system_design.project.hall_planning_service.domain;
 import java.io.Serializable;
 import java.time.LocalTime;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -17,7 +18,11 @@ public class TimeSlot implements Serializable {
 	 * Version number?
 	 */
 	private static final long serialVersionUID = 1L;
-	private LocalTime startTime,stopTime;
+	@Column(name = "startTime", columnDefinition = "TIME")
+	private LocalTime startTime;
+	
+	@Column(name = "stopTime", columnDefinition = "TIME")
+	private LocalTime stopTime;
 	/*@Id
 	@GeneratedValue
 	private long id;

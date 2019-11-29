@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class Day {
 	 * Describes what day it is.
 	 */
 	//TODO: generated manually
+	@Column(name = "date", columnDefinition = "DATE")
 	private LocalDate date;
 	/**
 	 * Maps the hall number, to an array of TimeSlots that describe what movies will be played when.
