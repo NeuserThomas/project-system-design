@@ -23,21 +23,47 @@ Added a TicketRepository (currrently working with H2 database) for storing the t
 
 Added a RestController (that can later be used for validateTicket)
 
-## **Planning service**
+## **Hall Planning service**
 ### **General info**
-Server port: 2223
-Uses Zookeeper, Kafka, and MySQL
-### **Running the application**
-#### From IDE:
-Make sure Zookeeper,Kafka and MySQL (container) is running, or change to H2
-#### Docker:
-There are 2 dockerfiles, one to build, and one to run
+- Server port: `2223`
+- Dependencies:
+  - Zookeeper
+  - Kafka
+  - MySQL
 
-There also is a script that builds with the Dockerfile\_build. One just uses the jar, and the other one builds from scratch
+### **Running Hall Planning Service**
+
+Two ways to run this service:
+
+1. From IDE
+2. Using Docker
+
+#### From IDE:
+Make sure Zookeeper, Kafka and MySQL (container) is running, or change to H2.
+#### Docker:
+- There are 2 dockerfiles one to build, and one to run
+
+- There also is a script that builds with the Dockerfile\_build. One just uses the jar, and the other one builds from scratch
 
 Make sure that for docker compose these are enabled in settings properties:
+
+```
 spring.cloud.stream.kafka.binder.brokers=kafka
 spring.cloud.stream.kafka.binder.zkNodes=zookeeper
+```
+
+##### Bash: `build_docker.sh` & `run_mysqlcontainer.sh`
+###### Permission denied errors 
+Make sure to grant execution rights:
+
+```bash
+# current directory: project-system-design/bash_scripts
+chmod +x build_docker.sh
+chmod +x ../hall_planning_service/mvnw
+
+chmod +x ./run_mysqlcontainer.sh
+```
+
 
 ### **Rest Calls (WIP)**
 Available rest calls:
