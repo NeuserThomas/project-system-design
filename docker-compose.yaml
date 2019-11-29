@@ -38,6 +38,7 @@ services:
         delay: 20s
         max_attempts: 5
         window: 10s
+    restart: on-failure
     links:
       - mySQLdb
       - kafka
@@ -47,7 +48,7 @@ services:
       - kafka
       - zookeeper
     ports:
-      - "2223"
+      - "2223:2223"
     expose:
       - "2223"
 
