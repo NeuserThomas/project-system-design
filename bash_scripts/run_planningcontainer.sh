@@ -1,3 +1,3 @@
 #!/bin/bash
-docker run hall_planning --network=test_network -p 2223
+docker run hall_planning --link mySQLdb:Day -p 2223
 
