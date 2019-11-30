@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,16 +39,11 @@ public class HallRestController {
 		return new ResponseEntity<List<MovieHall>>(hallRepo.findAll(),HttpStatus.OK);
 	}
 	
-	
-	@GetMapping("/cinema/{cinemaId}")
-	public @ResponseBody ResponseEntity<List<MovieHall>> getHallsByCinemaId(@PathVariable long cinemaId) {
-		List<MovieHall> halls = hallRepo.findAllByCinemaId(cinemaId);
-		logger.info("Call: getHallsByCinemaId");
-		if(!halls.isEmpty()) {
-			return new ResponseEntity<List<MovieHall>>(halls,HttpStatus.OK);
-		} else {
-			return new ResponseEntity<List<MovieHall>>(HttpStatus.NOT_FOUND);
-		}
+	@PostMapping(consumes="application/json")
+	public ResponseEntity<MovieHall> postHall(@RequestBody MovieHall hall) {
+		hallRepo.save(hall);
+		logger.info("Call: postHall");
+		return new ResponseEntity<MovieHall>(HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/{hallId}")
@@ -57,6 +54,17 @@ public class HallRestController {
 			return new ResponseEntity<MovieHall>(hall,HttpStatus.OK);
 		} else {
 			return new ResponseEntity<MovieHall>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/cinema/{cinemaId}")
+	public @ResponseBody ResponseEntity<List<MovieHall>> getHallsByCinemaId(@PathVariable long cinemaId) {
+		List<MovieHall> halls = hallRepo.findAllByCinemaId(cinemaId);
+		logger.info("Call: getHallsByCinemaId");
+		if(!halls.isEmpty()) {
+			return new ResponseEntity<List<MovieHall>>(halls,HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<MovieHall>>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
