@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
-import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
 
 @RestController
