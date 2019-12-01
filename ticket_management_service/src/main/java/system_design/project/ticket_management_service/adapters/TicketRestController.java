@@ -26,7 +26,7 @@ public class TicketRestController {
 
     //this call can be used for validateTicket: check if ticket is in db en is sold, check endTime etc
     @GetMapping("/{id}")
-    public Ticket getTicket(@PathVariable("id") String id){
+    public Ticket getTicket(@PathVariable("id") Long id){
         return repo.findById(id).orElse(null);
     }
 
