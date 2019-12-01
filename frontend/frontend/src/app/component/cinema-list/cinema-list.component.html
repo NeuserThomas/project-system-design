@@ -5,13 +5,12 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Name</th>
-          <th scope="col">Email</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let day of days">
-          <td>{{ day.dayId }}</td>
-          <td>{{ day.date }}</td>
+        <tr *ngFor="let cinema of cinemas">
+          <td>{{ cinema.id }}</td>
+          <td>{{ cinema.cinemaName }}</td>
         </tr>
       </tbody>
     </table>

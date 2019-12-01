@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DayService } from '../services/day-service.service';
-import { Day } from '../model/day';
+import { DayService } from '../../service/day-service.service';
+import { Day } from '../../model/day';
 
 
 @Component({

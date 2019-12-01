@@ -5,15 +5,22 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DayListComponent } from './day-list/day-list.component';
-import { DayFormComponent } from './day-form/day-form.component';
-import { DayService } from './services/day-service.service';
+
+import { DayListComponent } from './component/day-list/day-list.component';
+import { DayFormComponent } from './component/day-form/day-form.component';
+import { CinemaListComponent } from './component/cinema-list/cinema-list.component';
+import { CinemaFormComponent } from './component/cinema-form/cinema-form.component';
+
+import { DayService } from './service/day-service.service';
+import { CinemaService } from './service/cinema-service.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     DayListComponent,
-    DayFormComponent
+    DayFormComponent,
+    CinemaListComponent,
+    CinemaFormComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +28,7 @@ import { DayService } from './services/day-service.service';
     HttpClientModule,
     FormsModule
   ],
-  providers: [DayService],
+  providers: [DayService,CinemaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,7 @@
+//import { Cinema } from './cinema'
+
 export class Day {
-  dayId: string;
-  date: string;
-  timeSlots: string;
+  dayId: number;
+  date: Date;
+  //cinema: Cinema;
 }
