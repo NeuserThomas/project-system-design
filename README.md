@@ -78,7 +78,7 @@ Available rest calls:
 
 ## **frontend**
 To run the frontend, go to the direcotry /frontent/frontend in the terminal, and run:
-´´´
+```bash
 $ ng serve --open
-´´´
+```
 
