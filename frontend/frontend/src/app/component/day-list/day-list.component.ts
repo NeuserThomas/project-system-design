@@ -15,6 +15,7 @@ export class DayListComponent implements OnInit {
 
   ngOnInit() {
     this.dayService.findAll().subscribe(data => {
+      console.log(data);
       this.days = data;
     })
   }

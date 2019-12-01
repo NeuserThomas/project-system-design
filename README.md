@@ -75,3 +75,10 @@ Available rest calls:
 - /planning/{date}				: Return all days after date
 - /planning/cinema/{cinemaId}		: Return all planned days from today for cinema
 - /planning/{cinemaId}/{day}	: Return planning for certain day (WIP)
+
+## **frontend**
+To run the frontend, go to the direcotry /frontent/frontend in the terminal, and run:
+´´´
+$ ng serve --open
+´´´
+
