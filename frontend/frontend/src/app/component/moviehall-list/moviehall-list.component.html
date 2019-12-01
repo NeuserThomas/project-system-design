@@ -4,15 +4,15 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">date</th>
-          <th scope="col">Cinema</th>
+          <th scope="col">hallNumber</th>
+          <th scope="col"># seats</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let day of days">
-          <td>{{ day.dayId }}</td>
-          <td>{{ day.date }}</td>
-          <td>{{ day.cinema.cinemaName }}</td>
+        <tr *ngFor="let moviehall of moviehalls">
+          <td>{{ moviehall.hallId }}</td>
+          <td>{{ moviehall.hall_number }}</td>
+          <td>{{ moviehall.seats.length }}</td>
         </tr>
       </tbody>
     </table>

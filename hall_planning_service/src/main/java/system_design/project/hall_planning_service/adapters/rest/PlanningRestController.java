@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
+import system_design.project.hall_planning_service.service.PlanningService;
 
 @RestController
 @RequestMapping("planning")
@@ -27,6 +28,8 @@ public class PlanningRestController {
 	
 	@Autowired
 	private PlanningRepository planRepo;
+	@Autowired
+	private PlanningService planService;
 	
 	final Logger logger = LoggerFactory.getLogger(PlanningRestController.class);
 
@@ -50,6 +53,13 @@ public class PlanningRestController {
 	public ResponseEntity<Day> postDay(@RequestBody Day day) {
 		planRepo.save(day);
 		logger.info("Call: postDay");
+		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
+	}
+	
+	@PostMapping(path="/dummydata",consumes="application/json")
+	public ResponseEntity<Day> dummyDay() {
+		planService.planDay(LocalDate.now());
+		logger.info("Call: dummyDay");
 		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
 	}
 	

@@ -10,9 +10,13 @@ import { DayListComponent } from './component/day-list/day-list.component';
 import { DayFormComponent } from './component/day-form/day-form.component';
 import { CinemaListComponent } from './component/cinema-list/cinema-list.component';
 import { CinemaFormComponent } from './component/cinema-form/cinema-form.component';
+import { MoviehallFormComponent } from './component/moviehall-form/moviehall-form.component';
+import { MoviehallListComponent } from './component/moviehall-list/moviehall-list.component';
 
 import { DayService } from './service/day-service.service';
 import { CinemaService } from './service/cinema-service.service';
+import { MoviehallService } from './service/moviehall-service.service';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +24,9 @@ import { CinemaService } from './service/cinema-service.service';
     DayListComponent,
     DayFormComponent,
     CinemaListComponent,
-    CinemaFormComponent
+    CinemaFormComponent,
+    MoviehallFormComponent,
+    MoviehallListComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +34,7 @@ import { CinemaService } from './service/cinema-service.service';
     HttpClientModule,
     FormsModule
   ],
-  providers: [DayService,CinemaService],
+  providers: [DayService,CinemaService,MoviehallService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
