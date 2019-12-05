@@ -30,9 +30,9 @@ public class MovieFlowServiceApplication {
 			logger.info("logger says hello...");
 			RestTemplate restTemplate  = new RestTemplate();
 			String planningUrl = "http://localhost:2223/planning";
-			ResponseEntity<String> response = restTemplate.getForEntity(planningUrl, String.class);
+			//ResponseEntity<String> response = restTemplate.getForEntity(planningUrl, String.class);
 			
-			logger.info("response: " + response);
+			//logger.info("response: " + response);
 			
 		};
 	}
