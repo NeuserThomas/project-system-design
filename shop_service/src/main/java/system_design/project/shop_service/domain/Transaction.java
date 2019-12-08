@@ -22,6 +22,9 @@ public class Transaction {
 	private Map<Long,Long> soldItems;
 	
 	private LocalDateTime date;
+	
+	//In real life: Need register info
+	private long cinemaId;
 
 	public Transaction() {
 		soldItems=new HashMap<Long,Long>();
@@ -49,5 +52,13 @@ public class Transaction {
 
 	public void setDate(LocalDateTime date) {
 		this.date = date;
+	}
+
+	public long getCinemaId() {
+		return cinemaId;
+	}
+
+	public void setCinemaId(long cinemaId) {
+		this.cinemaId = cinemaId;
 	}
 }

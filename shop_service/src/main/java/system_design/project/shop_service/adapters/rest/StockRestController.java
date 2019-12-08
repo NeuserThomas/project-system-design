@@ -1,8 +1,7 @@
 package system_design.project.shop_service.adapters.rest;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -19,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import system_design.project.shop_service.domain.ShopItem;
 import system_design.project.shop_service.domain.Stock;
+import system_design.project.shop_service.persistence.ShopItemRepository;
 import system_design.project.shop_service.persistence.StockRepository;
-
 
 @RequestMapping("stock")
 @RestController
@@ -30,17 +30,16 @@ public class StockRestController {
 
 	@Autowired
 	private StockRepository stockRepo;
+	@Autowired
+	private ShopItemRepository shopRepo;
 	
 	final Logger logger = LoggerFactory.getLogger(StockRestController.class);
 	
 	@GetMapping
 	public @ResponseBody ResponseEntity<List<Stock>> getStocks() {
 		List<Stock> stocks = stockRepo.findAll();
-		if(!stocks.isEmpty()) {
-			return new ResponseEntity<List<Stock>>(stocks,HttpStatus.OK);
-		} else {
-			return new ResponseEntity<List<Stock>>(HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<List<Stock>>(stocks,HttpStatus.OK);
+
 	}
 	
 	@GetMapping("/{stockId}")
@@ -60,6 +59,25 @@ public class StockRestController {
 		return new ResponseEntity<Stock>(HttpStatus.ACCEPTED);
 	}
 	
-	
-	
+	//TODO: add calls to change treshhold.
+	/**
+	 * Method for testing
+	 * @return
+	 */
+	@GetMapping(path="/dummydata")
+	public @ResponseBody ResponseEntity<Stock> dummydata() {
+		Stock stock = new Stock();
+		stock.setCinemaId(1L);
+		Map<Long, Long> a = stock.getAmountPerProduct();
+		Map<Long, Long> b = stock.getThresholdPerProduct();
+		List<ShopItem> products = shopRepo.findAll();
+		for(ShopItem item: products) {
+			a.put(item.getId(),500L);
+			b.put(item.getId(),150L);
+		}
+		stock.setAmountPerProduct(a);
+		stock.setThresholdPerProduct(b);
+		stockRepo.save(stock);
+		return new ResponseEntity<Stock>(stock,HttpStatus.OK);
+	}
 }

@@ -42,25 +42,7 @@ public class Stock {
 		amountPerProduct=new HashMap<Long,Long>();
 		thresholdPerProduct=new HashMap<Long,Long>();
 	}
-	
-	/*
-	 * Returns how much items are sold. If enough items are present, it returns the same amount, if less, it returns how many are left.
-	 * If the product is not present, returns -1.
-	 */
-	public long sellItem(Long productId, long amount) {
-		if(amountPerProduct.containsKey(productId)) {
-			long amountLeft = amountPerProduct.get(productId);
-			if(amountLeft>=amount) {
-				amountPerProduct.replace(productId, amountLeft-amount);
-				return amount;
-			} else {
-				return amountLeft;
-			}
-		} else {
-			return -1;
-		}
-	}
-	
+		
 	public long getId() {
 		return id;
 	}

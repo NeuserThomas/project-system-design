@@ -28,6 +28,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=ThePassword
       - MYSQL_DATABASE=Day
+      - MYSQL_DATABASE=Shop
 
 
 # -------------Main services---------------
