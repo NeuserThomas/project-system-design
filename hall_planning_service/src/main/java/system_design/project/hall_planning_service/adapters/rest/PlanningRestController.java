@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
+import system_design.project.hall_planning_service.service.PlanningService;
 
 @RestController
 @RequestMapping("planning")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PlanningRestController {
 	
 	@Autowired
 	private PlanningRepository planRepo;
+	@Autowired
+	private PlanningService planService;
 	
 	final Logger logger = LoggerFactory.getLogger(PlanningRestController.class);
 
@@ -49,6 +54,13 @@ public class PlanningRestController {
 	public ResponseEntity<Day> postDay(@RequestBody Day day) {
 		planRepo.save(day);
 		logger.info("Call: postDay");
+		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
+	}
+	
+	@PostMapping(path="/dummydata",consumes="application/json")
+	public ResponseEntity<Day> dummyDay() {
+		planService.planDay(LocalDate.now());
+		logger.info("Call: dummyDay");
 		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
 	}
 	

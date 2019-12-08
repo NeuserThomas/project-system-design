@@ -43,7 +43,7 @@ public class MovieHall{
 	@Column(name = "projectorTypes", nullable = false)
     @ElementCollection(targetClass=ProjectorType.class)
 	@Enumerated(EnumType.STRING)
-	private List<ProjectorType> projector_types;
+	private List<ProjectorType> projectorTypes;
 	
 		
 	//------------ separation declarations and methods ------------------------
@@ -64,12 +64,12 @@ public class MovieHall{
 		this.hallId = hallId;
 	}
 	
-	public List<ProjectorType> getProjector_types() {
-		return projector_types;
+	public List<ProjectorType> getProjectorTypes() {
+		return projectorTypes;
 	}
 
-	public void setProjector_types(List<ProjectorType> projector_types) {
-		this.projector_types = projector_types;
+	public void setProjectorTypes(List<ProjectorType> projector_types) {
+		this.projectorTypes = projector_types;
 	}
 
 	public int getHall_number() {

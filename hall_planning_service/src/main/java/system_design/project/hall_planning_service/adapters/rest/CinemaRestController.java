@@ -1,5 +1,7 @@
 package system_design.project.hall_planning_service.adapters.rest;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Cinema;
+import system_design.project.hall_planning_service.domain.Day;
+import system_design.project.hall_planning_service.domain.MovieHall;
+import system_design.project.hall_planning_service.domain.Seat;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 
 @RequestMapping("cinema")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CinemaRestController {
 
 	@Autowired
@@ -54,5 +61,32 @@ public class CinemaRestController {
 		logger.info("Call: postCinema");
 		return new ResponseEntity<Cinema>(HttpStatus.ACCEPTED);
 	}
+	
+	@PostMapping(path="dummydata",consumes="application/json")
+	public ResponseEntity<Cinema> postDummyData() {
+		Cinema c = new Cinema();
+		c.setCinemaName("Cinema TIWI");
+		List<MovieHall> halls=new ArrayList<MovieHall>();
+		for(int i = 0;i<10;i++) {
+			MovieHall hall = new MovieHall();
+			hall.setHall_number(i+1);
+			List<Seat> seats = new ArrayList<Seat>();
+			for(int j = 0;j<100;j++) {
+				Seat seat = new Seat();
+				seat.setRow(j/10);
+				seat.setColumn((j%10)+1);
+				seat.setMovieHall(hall);
+				seats.add(seat);
+			}
+			hall.setSeats(seats);
+			hall.setCinema(c);
+			halls.add(hall);
+		}
+		c.setHalls(halls);
+		cinemaRepo.save(c);
+		logger.info("Dummy cinema loaded");
+	return new ResponseEntity<Cinema>(c,HttpStatus.ACCEPTED);
+	}
+	
 	
 }
