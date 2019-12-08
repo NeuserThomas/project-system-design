@@ -5,11 +5,15 @@ import java.time.format.DateTimeFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import system_design.project.adapters.messaging.channels.PlanningChannels;
+
 import java.net.URL;
 
 
@@ -45,5 +49,10 @@ public class MovieFlowService {
 		//TODO: parse movie planning
 	}
 		
+	
+	@StreamListener(PlanningChannels.PLANNING_UPDATED)
+	public void updatePlanning() {
+		logger.info("MovieflowService received PLANNING_UPDATED event!");
+	}
 		
 }
