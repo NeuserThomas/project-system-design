@@ -2,3 +2,5 @@
 \.project
 
 *.swp
+
+shop_service/\.mvn/
