@@ -57,11 +57,13 @@ public class PlanningRestController {
 		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping(path="/dummydata",consumes="application/json")
+	@GetMapping(path="/dummydata")
 	public ResponseEntity<Day> dummyDay() {
-		planService.planDay(LocalDate.now());
+		LocalDate date = LocalDate.now();
+		planService.planDay(date);
+		planRepo.findDaysAfterDate(date.minusDays(1));
 		logger.info("Call: dummyDay");
-		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<Day>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/cinema/{cinemaId}")
