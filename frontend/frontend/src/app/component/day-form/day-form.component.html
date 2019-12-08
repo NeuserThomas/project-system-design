@@ -1,0 +1,18 @@
+<div class="card my-5">
+  <div class="card-body">
+    <form (ngSubmit)="onSubmit()" #dayForm="ngForm">
+      <div class="form-group">
+        <label for="name">dayId</label>
+        <input type="text" [(ngModel)]="day.dayId"
+          class="form-control"
+          id="name"
+          name="dayId"
+          placeholder="Enter your name"
+          required #name="ngModel">
+      </div>
+      <div [hidden]="!name.pristine" class="alert alert-danger">Id is required</div>
+      <button type="submit" [disabled]="!dayForm.form.valid"
+        class="btn btn-info">Submit</button>
+    </form>
+  </div>
+</div>

@@ -28,7 +28,7 @@ public class HallPlanningServiceApplication {
 		SpringApplication.run(HallPlanningServiceApplication.class, args);
 	}
 
-	
+	/*
 	@Bean
 	CommandLineRunner testRepository(CinemaRepository cRep, PlanningService pServ) {
 		
@@ -57,5 +57,5 @@ public class HallPlanningServiceApplication {
 			pServ.planDay(LocalDate.now());
 			logger.info("Dummy data loaded");
 		};
-	}
+	}*/
 }
