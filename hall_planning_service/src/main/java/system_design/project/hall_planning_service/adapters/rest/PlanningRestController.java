@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,7 +41,7 @@ public class PlanningRestController {
 	}
 	
 	@GetMapping("/{date}")
-	public @ResponseBody ResponseEntity<List<Day>> getCinemasAfterDate(@PathVariable LocalDate date) {
+	public @ResponseBody ResponseEntity<List<Day>> getCinemasAfterDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		List<Day> days = planRepo.findDaysAfterDate(date);
 		if(!days.isEmpty()) {
 			return new ResponseEntity<List<Day>>(days,HttpStatus.OK);
@@ -56,11 +57,13 @@ public class PlanningRestController {
 		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping(path="/dummydata",consumes="application/json")
+	@GetMapping(path="/dummydata")
 	public ResponseEntity<Day> dummyDay() {
-		planService.planDay(LocalDate.now());
+		LocalDate date = LocalDate.now();
+		planService.planDay(date);
+		planRepo.findDaysAfterDate(date.minusDays(1));
 		logger.info("Call: dummyDay");
-		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<Day>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/cinema/{cinemaId}")
