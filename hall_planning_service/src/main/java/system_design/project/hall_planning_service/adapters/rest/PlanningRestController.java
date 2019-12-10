@@ -6,8 +6,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.persistence.PlanningRepository;
+import system_design.project.hall_planning_service.service.PlanningService;
 
 @RestController
 @RequestMapping("planning")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PlanningRestController {
 	
 	@Autowired
 	private PlanningRepository planRepo;
+	@Autowired
+	private PlanningService planService;
 	
 	final Logger logger = LoggerFactory.getLogger(PlanningRestController.class);
 
@@ -35,7 +41,7 @@ public class PlanningRestController {
 	}
 	
 	@GetMapping("/{date}")
-	public @ResponseBody ResponseEntity<List<Day>> getCinemasAfterDate(@PathVariable LocalDate date) {
+	public @ResponseBody ResponseEntity<List<Day>> getCinemasAfterDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		List<Day> days = planRepo.findDaysAfterDate(date);
 		if(!days.isEmpty()) {
 			return new ResponseEntity<List<Day>>(days,HttpStatus.OK);
@@ -49,6 +55,15 @@ public class PlanningRestController {
 		planRepo.save(day);
 		logger.info("Call: postDay");
 		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping(path="/dummydata")
+	public ResponseEntity<Day> dummyDay() {
+		LocalDate date = LocalDate.now();
+		planService.planDay(date);
+		planRepo.findDaysAfterDate(date.minusDays(1));
+		logger.info("Call: dummyDay");
+		return new ResponseEntity<Day>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/cinema/{cinemaId}")
