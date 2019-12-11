@@ -1,24 +1,10 @@
 package system_design.project;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.context.annotation.Bean;
 
 import system_design.project.hall_planning_service.adapters.messaging.Channels;
-import system_design.project.hall_planning_service.domain.Cinema;
-import system_design.project.hall_planning_service.domain.MovieHall;
-import system_design.project.hall_planning_service.domain.Day;
-import system_design.project.hall_planning_service.domain.Seat;
-import system_design.project.hall_planning_service.persistence.CinemaRepository;
-import system_design.project.hall_planning_service.service.PlanningService;
 
 @SpringBootApplication
 @EnableBinding(Channels.class)
