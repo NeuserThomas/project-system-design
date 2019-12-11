@@ -8,5 +8,5 @@ package system_design.project.publicity_service.domain;
  *
  */
 public enum Category {
-	Action, Children, Plus18, Thriller, Family, Sciencefiction, Other
+	Action, Children, Plus18, Thriller, Family, Sciencefiction, Other, All
 }

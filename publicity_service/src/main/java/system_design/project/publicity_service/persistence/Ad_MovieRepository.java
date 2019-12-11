@@ -12,6 +12,12 @@ import system_design.project.publicity_service.domain.Category;
 
 @Repository
 public interface Ad_MovieRepository extends JpaRepository<Ad_Movie, Long> {
+	/**
+	 * 
+	 * @param category category of the Ad_Movie
+	 * @param creationDate the Ad_Movie has to be created after creationDate
+	 * @return
+	 */
 	@Query("Select a from Ad_Movie a where a.category = ?1 and a.creationDate > ?2")
 	List<Ad_Movie> findAd_MovieByCategoryAndDate(Category category, LocalDate creationDate);
 	
