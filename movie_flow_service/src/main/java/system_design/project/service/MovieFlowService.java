@@ -27,32 +27,29 @@ public class MovieFlowService {
 	}
 		
 	
-	@Scheduled(cron = "0 * * * * *")
-	public void pullMoviePlanning() {
-		final int PLANNING_PORT = 2223;
-		
-		// starting from yesterday
-		final LocalDate startDate = LocalDate.now().minusDays(1);
-		// construct url
-		String planningUrl = String.format(
-				"http://localhost:%d/%s/%s",
-				PLANNING_PORT,
-				"planning",
-				startDate.format(DateTimeFormatter.ISO_DATE)
-				);
-		
-		logger.info("pullMoviePlanning()... @ " + LocalDate.now());
-		RestTemplate restTemplate  = new RestTemplate();
-		logger.info("planningUrl: "+planningUrl);
-		ResponseEntity<String> response = restTemplate.getForEntity(planningUrl, String.class);
-		logger.info("pullMoviePlanning() --> pull OK");
-		//TODO: parse movie planning
-	}
+//	@Scheduled(cron = "55 * * * * *")
+//	public void pullMoviePlanning() {
+//		final int PLANNING_PORT = 2223;
+//		
+//		// starting from yesterday
+//		final LocalDate startDate = LocalDate.now().minusDays(1);
+//		// construct url
+//		String planningUrl = String.format(
+//				"http://localhost:%d/%s/%s",
+//				PLANNING_PORT,
+//				"planning",
+//				startDate.format(DateTimeFormatter.ISO_DATE)
+//				);
+//		
+//		logger.info("pullMoviePlanning()... @ " + LocalDate.now());
+//		RestTemplate restTemplate  = new RestTemplate();
+//		logger.info("planningUrl: "+planningUrl);
+//		ResponseEntity<String> response = restTemplate.getForEntity(planningUrl, String.class);
+//		logger.info("pullMoviePlanning() --> pull OK");
+//		//TODO: parse movie planning
+//	}
 		
 	
-	@StreamListener(PlanningChannels.PLANNING_UPDATED)
-	public void updatePlanning() {
-		logger.info("MovieflowService received PLANNING_UPDATED event!");
-	}
+	
 		
 }
