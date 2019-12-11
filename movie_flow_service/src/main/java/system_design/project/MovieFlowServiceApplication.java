@@ -9,12 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import system_design.project.adapters.messaging.channels.PlanningChannels;
+
+
 
 @SpringBootApplication
+@EnableBinding(PlanningChannels.class)
 public class MovieFlowServiceApplication {
 
 	public static void main(String[] args) {
