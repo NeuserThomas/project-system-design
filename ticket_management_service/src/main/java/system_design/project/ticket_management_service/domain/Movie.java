@@ -1,22 +1,72 @@
 package system_design.project.ticket_management_service.domain;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Movie implements Serializable {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class Movie{
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private long id;
     private String name;
+    private long hallId;
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    //maybe duration is more interesting then using both start and endTime? we'll see later on
-    private double duration;
-    private int hallNumber;
-
-    public Movie(String name, LocalDateTime startTime, LocalDateTime endTime, int hallNumber){
+  
+    private Movie() {}
+    
+    public Movie(String name, long hallId){
         this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.hallNumber = hallNumber;
+        this.hallId = hallId;
+        //this.startTime = startTime;
     }
+    
+    public String toString() {
+    	return "" + this.id + ": " + this.name;
+    }
+
+
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public long getHallId() {
+		return hallId;
+	}
+
+
+	public void setHallId(long hallId) {
+		this.hallId = hallId;
+	}
+
+
+	public LocalDateTime getStartTime() {
+		return startTime;
+	}
+
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
 
 }
