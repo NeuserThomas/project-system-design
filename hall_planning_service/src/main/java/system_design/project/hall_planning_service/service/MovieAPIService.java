@@ -7,18 +7,33 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.stereotype.Service;
 
-import system_design.project.hall_planning_service.adapters.movieInfo.IMovieInfoAPI;
+import com.google.gson.Gson;
 
+import system_design.project.HallPlanningServiceApplication;
+import system_design.project.hall_planning_service.adapters.movieInfo.IMovieInfoAPI;
+import system_design.project.hall_planning_service.domain.Movie;
+
+/**
+ * @author robin
+ * Service Used to get information about movie.
+ */
 @Service("movieAPIService")
 public class MovieAPIService implements IMovieInfoAPI {
 	
 	@Value("${movie.api.key}")
 	private String apiKey="754be433";
 	
+	final private Gson gson = new Gson();
+	final Logger logger = LoggerFactory.getLogger(MovieAPIService.class);
+
 	final String baseURL;
 	
 	public MovieAPIService(){
@@ -26,32 +41,31 @@ public class MovieAPIService implements IMovieInfoAPI {
 	}
 	
 	@Override
-	public String FindMovieByName(String movieName) {
+	public Movie FindMovieByName(String movieName) {
 		String result="";
 		URL url;		
 		try {
-			url = new URL(baseURL+"&t="+movieName);
-			System.out.println(url.toString());
-			
+			String urlString =baseURL+"&t="+URLEncoder.encode(movieName, "UTF-8");
+			url = new URL(urlString);		
 			HttpURLConnection con;
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Accept", "application/json");
 			
 			if (con.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : "
+				logger.error("Failed : HTTP error code for <"+url.toString()+">: "
 					+ con.getResponseCode());
+			} else {
+				BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
+				StringBuilder ss=new StringBuilder("");
+				String output;
+				while ((output = br.readLine()) != null) {
+					ss.append(output);
+					System.out.println(output);
+				}
+				con.disconnect();
+				result=ss.toString();
 			}
-
-			BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
-			StringBuilder ss=new StringBuilder("");
-			String output;
-			while ((output = br.readLine()) != null) {
-				ss.append(output);
-				System.out.println(output);
-			}
-			con.disconnect();
-			result=ss.toString();
 		} catch (MalformedURLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -62,6 +76,10 @@ public class MovieAPIService implements IMovieInfoAPI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return result;
+		if(!result.contains("\"Response\":\"False\"")){
+			return gson.fromJson(result, Movie.class);
+		}
+		logger.error("Movie: <"+movieName+"> was not found!");
+		return null;
 	}
 }

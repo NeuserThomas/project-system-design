@@ -8,7 +8,8 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 /**
- * Class that describes how long a movie will take.
+ * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
+ * have more flexibility. (Paper already submitted, extra feature)
  * @author robin
  *
  */
@@ -23,13 +24,10 @@ public class TimeSlot implements Serializable {
 	
 	@Column(name = "stopTime", columnDefinition = "TIME")
 	private LocalTime stopTime;
-	/*@Id
-	@GeneratedValue
-	private long id;
-	*/
-	//Todo mapping
+	//remove when working with more than event.
+	@Column(nullable=false)
 	private long movieId;
-	
+		
 	//------------ separation declarations and methods ------------------------
 	public LocalTime getStartTime() {
 		return startTime;
@@ -50,11 +48,4 @@ public class TimeSlot implements Serializable {
 	public void setMovieId(long movieId) {
 		this.movieId = movieId;
 	}
-	/*public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	*/
 }

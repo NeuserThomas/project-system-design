@@ -58,11 +58,8 @@ public class MovieRestController {
 	
 	@GetMapping("/dummydata")
 	public @ResponseBody ResponseEntity<Movie> dummyData() {
-		String result = api.FindMovieByName("Avenger");
-		Movie m = gson.fromJson(result, Movie.class);
-		
-		result=api.FindMovieByName("Star Wars");
-		Movie m2 = gson.fromJson(result, Movie.class);
+		Movie m = api.FindMovieByName("Avenger");
+		Movie m2=api.FindMovieByName("Star Wars");
 		movieRepo.save(m);
 		movieRepo.save(m2);
 		return new ResponseEntity<Movie>(HttpStatus.OK);
@@ -78,15 +75,11 @@ public class MovieRestController {
 	
 	@GetMapping("/getMovieByName/{movieName}")
 	public @ResponseBody ResponseEntity<Movie> findNewMovieByName(@PathVariable String movieName) {
-		String result = api.FindMovieByName(movieName);
-		Movie m = gson.fromJson(result, Movie.class);
-		if(result.contentEquals("")) {
+		Movie m = api.FindMovieByName(movieName);
+		if(m!=null) {
 			return new ResponseEntity<Movie>(HttpStatus.BAD_REQUEST);
-
 		} else {
 			return new ResponseEntity<Movie>(m,HttpStatus.OK);
 		}	
-	}
-	
-	
+	}	
 }

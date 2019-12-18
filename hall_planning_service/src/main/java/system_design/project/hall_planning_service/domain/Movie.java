@@ -1,15 +1,18 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.util.List;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import org.bson.types.ObjectId;
+
+
 
 @Document
 public class Movie {
-
+	private ObjectId id;
+	
 	@SerializedName("Title")
 	@Expose
 	private String title;
@@ -284,6 +287,14 @@ public class Movie {
 
 	public void setResponse(String response) {
 		this.response = response;
+	}
+
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 }
