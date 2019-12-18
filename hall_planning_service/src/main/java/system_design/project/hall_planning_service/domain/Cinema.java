@@ -7,23 +7,37 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Cinema {
 	@Id
 	@GeneratedValue
-	private long id=0;
+	private long id;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cinema",cascade = CascadeType.ALL)
 	private List<MovieHall> halls;
 	
 	private String cinemaName;
 	
+	@OneToOne(cascade= CascadeType.ALL)
+	@JoinColumn(name="id")
+	private PlannedMovies plannedMovies;
+		
 	//TODO: Add address etc
 	
 	//-----------------------------------------------
 	
+	public PlannedMovies getPlannedMovies() {
+		return plannedMovies;
+	}
+
+	public void setPlannedMovies(PlannedMovies plannedMovies) {
+		this.plannedMovies = plannedMovies;
+	}
+
 	public long getId() {
 		return id;
 	}
