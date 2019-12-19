@@ -1,9 +1,13 @@
 package system_design.project.ticket_management_service.adapters;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.ticket_management_service.domain.Movie;
@@ -38,6 +42,27 @@ public class TicketRestController {
     @GetMapping("/movies")
     public Iterable<Movie> getMovies(){
     	return movieRepo.findAll();
+    }
+    
+    @RequestMapping(value="/validateParkingTicket/{ticketId}", method=RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity<Ticket> validateTicket(@PathVariable("ticketId") long ticketId){
+    	Ticket t = ticketRepo.findById(ticketId).get();
+    	
+    	if(t != null) {
+    		if(t.getParkingValidated() == false) {
+    			t.setParkingValidated(true);
+    			ticketRepo.save(t);
+    			return new ResponseEntity<Ticket>(t, HttpStatus.OK);
+    		}
+    		else {
+    			return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
+    		}
+    	}
+    	else {
+    		return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+    	
     }
     
 

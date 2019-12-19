@@ -1,5 +1,6 @@
 package system_design.project.ticket_management_service.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,8 @@ public class Ticket {
     //movie is a string atm, maybe change it to an Entity?
     private long movieId;
     private int seat;
+    
+    @Column(columnDefinition = "boolean default false")
     private boolean validatedParking;
 
     //default constructor used for JPA (is necessary)
@@ -66,6 +69,10 @@ public class Ticket {
     
     public boolean getParkingValidated() {
     	return this.validatedParking;
+    }
+    
+    public void setParkingValidated(boolean validated) {
+        this.validatedParking = validated;
     }
     
     public int getSeat() {
