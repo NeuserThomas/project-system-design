@@ -21,7 +21,7 @@ public class ParkingServiceApplication {
 		return args ->{
 			
 			if(parkingRepo.count() == 0) {
-				Parking p = new Parking(20);
+				Parking p = new Parking(2);
 				parkingRepo.save(p);
 			}
 		};
