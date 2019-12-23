@@ -1,5 +1,6 @@
 package system_design.project.hall_planning_service.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,13 +23,19 @@ public class Cinema {
 	
 	private String cinemaName;
 	
-	@OneToOne(cascade= CascadeType.ALL)
-	@JoinColumn(name="id")
+	@OneToOne(cascade=CascadeType.ALL, optional = false,fetch=FetchType.EAGER)
+	@JoinColumn(name="pId")
 	private PlannedMovies plannedMovies;
 		
 	//TODO: Add address etc
 	
 	//-----------------------------------------------
+	
+	public Cinema() {
+		//plannedMovies=new PlannedMovies();
+		halls = new ArrayList<>();
+	}
+	
 	
 	public PlannedMovies getPlannedMovies() {
 		return plannedMovies;

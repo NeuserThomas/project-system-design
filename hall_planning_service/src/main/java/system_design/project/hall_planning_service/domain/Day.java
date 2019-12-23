@@ -12,8 +12,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@Table(
+    uniqueConstraints=
+        @UniqueConstraint(columnNames={"date", "id"})
+)
 /**
  * The class uses 2 Id's, as we might later have multiple cinemas, that way we can use a different cinema
  * @author robin
@@ -42,6 +51,7 @@ public class Day {
 	 * Describes what Cinema it is mapped to.
 	 */
 	@JoinColumn(name="id")
+	@JsonIgnoreProperties("halls")
 	private Cinema cinema;
 	
 	//------------ separation declarations and methods ------------------------

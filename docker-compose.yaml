@@ -1,41 +1,17 @@
 version: "3"
 services:
-# ------------Support services-------------
-  zookeeper:
-    image: confluentinc/cp-zookeeper
-    environment:
-      - ZOOKEEPER_CLIENT_PORT=2181
-    expose:
-      - "2181"
-  kafka:
-    image: confluentinc/cp-kafka
-    depends_on: 
-      - zookeeper
-    environment: 
-      - KAFKA_BROKER_ID=1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-    expose:
-      - "9092"
-  mySQLdb:
+  ticket_db:
     image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password
     expose:
       - "3306"
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=ThePassword
-      - MYSQL_DATABASE=Day
-
-
-# -------------Main services---------------
-  hall_planning:
-    build: 
-      context: ./hall_planning_service
-    entrypoint: ["./wait-for-it.sh", "mySQLdb:3306", "--","./wait-for-it.sh", "kafka:9092", "--","java", "-jar", "/app/target/hall_planning_service-0.0.1-SNAPSHOT.jar"]
-#   TODO: wait for mySQLdb
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=Ticket
+  ticket_management:
+    build:
+      context: ./ticket_management_service
     deploy:
       restart_policy:
         condition: on-failure
@@ -43,17 +19,11 @@ services:
         max_attempts: 5
         window: 10s
     restart: on-failure
-    links:
-      - mySQLdb
-      - kafka
-      - zookeeper
     depends_on:
-      - mySQLdb
-      - kafka
-      - zookeeper
+      - ticket_db
+    links:
+      - ticket_db
     ports:
-      - "2223:2223"
-    expose:
-      - "2223"
-
-
+      - "2300:2300"
+    expose: 
+      - "2300"
