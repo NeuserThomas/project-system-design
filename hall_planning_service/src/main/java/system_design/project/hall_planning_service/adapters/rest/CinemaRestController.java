@@ -96,7 +96,7 @@ public class CinemaRestController {
 		
 	}
 	
-	@GetMapping("/getPlannedMovies/{cinemaId}")
+	@GetMapping("/plannedMovies/{cinemaId}")
 	public @ResponseBody ResponseEntity<List<Movie>> getPlannedMovies(@PathVariable long cinemaId) {
 		Optional<Cinema> cinema = cinemaRepo.findById(cinemaId);
 		if(cinema.isPresent()) {
@@ -105,7 +105,9 @@ public class CinemaRestController {
 				List<Movie> movies = movieRepo.findMoviesWithId(ids);
 				return new ResponseEntity<List<Movie>>(movies,HttpStatus.OK);
 			} else {
-				cinema.get().setPlannedMovies(new PlannedMovies());
+				PlannedMovies pm = new PlannedMovies();
+				pm.setCinema(cinema.get());
+				cinema.get().setPlannedMovies(pm);
 				List<Movie> movies = new ArrayList<Movie>();
 				return new ResponseEntity<List<Movie>>(movies,HttpStatus.OK);
 			}

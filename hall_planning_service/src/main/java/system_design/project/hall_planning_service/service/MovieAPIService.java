@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-
-import system_design.project.HallPlanningServiceApplication;
 import system_design.project.hall_planning_service.adapters.movieInfo.IMovieInfoAPI;
 import system_design.project.hall_planning_service.domain.Movie;
 
