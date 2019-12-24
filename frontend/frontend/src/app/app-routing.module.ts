@@ -6,6 +6,8 @@ import { CinemaListComponent } from './component/cinema-list/cinema-list.compone
 import { CinemaFormComponent } from './component/cinema-form/cinema-form.component'
 import { MoviehallListComponent } from './component/moviehall-list/moviehall-list.component'
 import { MoviehallFormComponent } from './component/moviehall-form/moviehall-form.component'
+import { HallPlanningServiceComponent } from './component/hall-planning-service/hall-planning-service.component';
+import { MovieListComponent } from './component/movie-list/movie-list.component';
 
 const routes: Routes = [
   {path: 'days',component: DayListComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   {path: 'addCinema',component: CinemaFormComponent },
   {path: 'moviehalls',component: MoviehallListComponent },
   {path: 'addmoviehall',component: MoviehallFormComponent },
+  {path: 'hallPlanningService',component: HallPlanningServiceComponent },
+  {path: 'movie',component: MovieListComponent }
 ];
 
 @NgModule({
