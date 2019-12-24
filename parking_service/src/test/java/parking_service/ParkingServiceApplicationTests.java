@@ -1,10 +1,10 @@
-package system_deisgn.project;
+package parking_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class HallPlanningServiceApplicationTests {
+class ParkingServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

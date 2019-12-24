@@ -26,6 +26,12 @@ public class KafkaTopicConfig {
 		logger.warn("--- Please make sure kafka and zookeeper are up! ---");
 		return TopicBuilder.name("planningMade").partitions(2).replicas(1).build();
 	}
+	
+	@Bean
+	public NewTopic newMovie() {
+		logger.warn("--- Please make sure kafka and zookeeper are up! ---");
+		return TopicBuilder.name("newMovie").partitions(2).replicas(1).build();
+	}
 	/*
 	@Bean
 	public ProducerFactory<String, String> producerFactory() {

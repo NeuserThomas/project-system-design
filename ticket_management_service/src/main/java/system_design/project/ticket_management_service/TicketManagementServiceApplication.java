@@ -7,8 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+
+import system_design.project.ticket_management_service.domain.Movie;
 import system_design.project.ticket_management_service.domain.MovieSchedule;
 import system_design.project.ticket_management_service.domain.Ticket;
+import system_design.project.ticket_management_service.persistence.MovieRepository;
 import system_design.project.ticket_management_service.persistence.TicketRepository;
 
 
@@ -28,22 +31,30 @@ public class TicketManagementServiceApplication {
 	}
 
 	@Bean
-	public CommandLineRunner populateDatabase(TicketRepository repo){
+	public CommandLineRunner populateDatabase(TicketRepository ticketRepo, MovieRepository movieRepo){
 
 		return args ->{
-			Ticket t1 = new Ticket(7.0, "Fast and the Furious 9");
-			Ticket t2 = new Ticket(7.5, "The conjuring");
+			Ticket t1 = new Ticket(7.0,76534);
+			Ticket t2 = new Ticket(7.5,76543);
 
-			repo.save(t1);
-			repo.save(t2);
+			ticketRepo.save(t1);
+			ticketRepo.save(t2);
+			
+			Movie m1 = new Movie("F&F", 1);
+			Movie m2 = new Movie("F&F2", 2);
+			
+			movieRepo.save(m1);
+			movieRepo.save(m2);
 		};
 
 	}
 
 	@Bean
-	public CommandLineRunner getAllTickets(TicketRepository repo){
+	public CommandLineRunner getAllTickets(TicketRepository ticketRepo, MovieRepository movieRepo){
 		return args -> {
-			repo.findAll().forEach(ticket -> {logger.info(ticket.toString());});
+			ticketRepo.findAll().forEach(ticket -> {logger.info(ticket.toString());});
+			logger.info("---------------------------------------------------------------------------------------");
+			movieRepo.findAll().forEach(movie -> {logger.info(movie.toString());});
 		};
 	}
 
