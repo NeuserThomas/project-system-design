@@ -21,6 +21,10 @@ import { MovieListComponent } from './component/common/movie-list/movie-list.com
 import { MovieService } from './service/movie-service.service';
 import { MovieDetailComponent } from './component/common/movie-detail/movie-detail.component';
 import { SearchMovieComponent } from './component/HallPlanning/search-movie/search-movie.component';
+import { ShowPlanningComponent } from './component/common/show-planning/show-planning.component';
+import { PlanningModule } from './planning/planning.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 
 @NgModule({
@@ -36,12 +40,14 @@ import { SearchMovieComponent } from './component/HallPlanning/search-movie/sear
     MovieListComponent,
     MovieDetailComponent,
     SearchMovieComponent
-  ],
+    ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    PlanningModule
   ],
   providers: [DayService,CinemaService,MoviehallService,MovieService],
   bootstrap: [AppComponent]

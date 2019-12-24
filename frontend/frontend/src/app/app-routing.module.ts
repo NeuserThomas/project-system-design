@@ -9,6 +9,7 @@ import { MoviehallFormComponent } from './component/common/moviehall-form/movieh
 import { HallPlanningServiceComponent } from './component/HallPlanning/hall-planning-service/hall-planning-service.component';
 import { MovieListComponent } from './component/common/movie-list/movie-list.component';
 import { SearchMovieComponent } from './component/HallPlanning/search-movie/search-movie.component';
+import { ShowPlanningComponent } from './component/common/show-planning/show-planning.component';
 
 const routes: Routes = [
   {path: 'days',component: DayListComponent },
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path: 'addmoviehall',component: MoviehallFormComponent },
   {path: 'hallPlanningService',component: HallPlanningServiceComponent },
   {path: 'movie',component: MovieListComponent },
-  {path: 'searchMovie',component: SearchMovieComponent}
+  {path: 'searchMovie',component: SearchMovieComponent},
+  {path: 'showPlanning',component: ShowPlanningComponent}
 ];
 
 @NgModule({
