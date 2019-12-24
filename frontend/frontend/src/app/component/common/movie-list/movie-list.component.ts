@@ -11,6 +11,17 @@ export class MovieListComponent implements OnInit {
 
   movies: Movie[];
 
+  selectedMovie: Movie;
+
+  hide = false;
+
+  changeHide(val: boolean) {
+    this.hide = val;
+    if(val===false){
+      this.selectedMovie=null;
+    }
+  }
+
   constructor(private movieService: MovieService) { }
 
   ngOnInit() {
@@ -19,4 +30,8 @@ export class MovieListComponent implements OnInit {
     })
   }
 
+  onSelect(movie:Movie): void{
+    this.selectedMovie=movie;
+    this.changeHide(true);
+  }
 }

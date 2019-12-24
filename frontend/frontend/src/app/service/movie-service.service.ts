@@ -19,4 +19,8 @@ export class MovieService {
   public save(movie: Movie) {
     return this.http.post<Movie>(this.movieUrl, movie);
   }
+
+  public search(title:String): Observable<Movie>{
+    return this.http.get<Movie>(this.movieUrl+"/getMovieByName/"+title);
+  }
 }
