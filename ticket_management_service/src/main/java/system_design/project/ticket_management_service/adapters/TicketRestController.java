@@ -1,5 +1,7 @@
 package system_design.project.ticket_management_service.adapters;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +34,27 @@ public class TicketRestController {
     @GetMapping
     public Iterable<Ticket> getAllTickets(){
         return ticketRepo.findAll();
+    }
+    
+    @GetMapping(value="/buyTicket")
+    public ResponseEntity sellTicket(@RequestParam(value = "movieId") String movieId){
+    	try {
+    		Movie m = movieRepo.findById(Long.valueOf(movieId)).get();
+    		
+    		if(m.getSoldTickets() < m.getNumberOfSeats()) {
+    			m.sellTicket();
+    			Ticket t = new Ticket(Long.valueOf(movieId));
+    			ticketRepo.save(t);
+    			return new ResponseEntity<Ticket>(t, HttpStatus.OK);
+    		}
+    		else {
+    			return new ResponseEntity<String>("No more tickets available", HttpStatus.BAD_REQUEST);
+    		}
+    	}
+    	catch(NoSuchElementException ne) {
+    		return new ResponseEntity<String>("Movie with that ID doesnt exist!", HttpStatus.BAD_REQUEST);
+    	}
+    	
     }
 
     //this call can be used for validateTicket: check if ticket is in db en is sold, check endTime etc
@@ -62,8 +86,5 @@ public class TicketRestController {
     	else {
     		return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
     	}
-    	
     }
-    
-
 }

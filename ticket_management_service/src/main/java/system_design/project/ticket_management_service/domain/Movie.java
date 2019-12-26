@@ -16,13 +16,21 @@ public class Movie{
     private String name;
     private long hallId;
     private LocalDateTime startTime;
+    private int numberOfSeats;
+    private int soldTickets;
   
     private Movie() {}
     
-    public Movie(String name, long hallId){
+    public Movie(String name, long hallId, int numberOfSeats){
         this.name = name;
         this.hallId = hallId;
+        this.soldTickets = 0;
+        this.numberOfSeats = numberOfSeats;
         //this.startTime = startTime;
+    }
+    
+    public void sellTicket() {
+    	this.soldTickets++;
     }
     
     public String toString() {
@@ -68,5 +76,23 @@ public class Movie{
 	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
+
+	public int getNumberOfSeats() {
+		return numberOfSeats;
+	}
+
+	public void setNumberOfSeats(int numberOfSeats) {
+		this.numberOfSeats = numberOfSeats;
+	}
+
+	public int getSoldTickets() {
+		return soldTickets;
+	}
+
+	public void setSoldTickets(int soldTickets) {
+		this.soldTickets = soldTickets;
+	}
+	
+	
 
 }
