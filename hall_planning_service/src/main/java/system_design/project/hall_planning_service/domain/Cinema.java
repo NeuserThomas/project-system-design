@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ public class Cinema {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cinema",cascade = CascadeType.ALL)
 	private List<MovieHall> halls;
 	
+	@Column(unique=true)
 	private String cinemaName;
 	
 	@OneToOne(cascade=CascadeType.ALL, optional = false,fetch=FetchType.EAGER)
@@ -35,7 +37,6 @@ public class Cinema {
 		//plannedMovies=new PlannedMovies();
 		halls = new ArrayList<>();
 	}
-	
 	
 	public PlannedMovies getPlannedMovies() {
 		return plannedMovies;

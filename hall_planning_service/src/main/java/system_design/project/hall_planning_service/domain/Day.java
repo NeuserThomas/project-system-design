@@ -1,18 +1,23 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -44,7 +49,11 @@ public class Day {
 	 * The hall number, is the same number it has in the array of Cinema.
 	 */
 	@ElementCollection
-	private Map<Integer,ArrayList<TimeSlot>> timeSlots;
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<HallDay> planning;
+	
+	private LocalTime startTime=LocalTime.of(14, 0);
+	private LocalTime stopTIme=LocalTime.of(23, 30);
 	
 	@ManyToOne
 	/**
@@ -56,6 +65,18 @@ public class Day {
 	
 	//------------ separation declarations and methods ------------------------
 	
+	public Day() {
+		planning = new ArrayList<HallDay>();
+	}
+	
+	public List<HallDay> getPlanning() {
+		return planning;
+	}
+
+	public void setPlanning(List<HallDay> planning) {
+		this.planning = planning;
+	}
+
 	public LocalDate getDate() {
 		return date;
 	}
@@ -64,14 +85,6 @@ public class Day {
 	}
 	public Long getCinemaId() {
 		return cinema.getId();
-	}
-
-	public Map<Integer,ArrayList<TimeSlot>> getTimeSlots() {
-		return timeSlots;
-	}
-
-	public void setTimeSlots(HashMap<Integer,ArrayList<TimeSlot>> timeslots) {
-		this.timeSlots = timeslots;
 	}
 	
 	public long getDayId() {
@@ -87,6 +100,18 @@ public class Day {
 
 	public void setCinema(Cinema cinema) {
 		this.cinema = cinema;
+	}
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+	public LocalTime getStopTIme() {
+		return stopTIme;
+	}
+	public void setStopTIme(LocalTime stopTIme) {
+		this.stopTIme = stopTIme;
 	}
 	
 	

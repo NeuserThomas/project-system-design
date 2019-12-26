@@ -29,12 +29,6 @@ public class HallRestController {
 
 	final Logger logger = LoggerFactory.getLogger(HallRestController.class);
 	
-	/*
-	@RequestMapping(path="/{cinema}/{date}",produces="application/json",method=RequestMethod.GET)
-	public @ResponseBody Day getPlanningForDay(@PathVariable LocalDate date, @PathVariable Cinema cine) {
-		return planRepo.findDayByDateAndCinema(date,cine);
-	}*/
-	
 	@GetMapping
 	public @ResponseBody ResponseEntity<List<MovieHall>> getAllHalls() {
 		logger.info("Call: GetAllHalls");
