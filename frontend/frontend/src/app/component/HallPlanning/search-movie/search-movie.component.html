@@ -1,0 +1,11 @@
+<p>Movie Title</p>
+<input type="text" #titleInput>
+<div [hidden]="!error" class="alert alert-danger">An error has occured. Either no movie has been found, or the service is unreachable.</div>
+<button type="submit" (click) = "search(titleInput.value)">search</button>
+
+<div *ngIf="movie">
+    <button type="submit" (click) = "save()">Plan this movie!</button>
+    <app-movie-detail [movie]="movie">
+
+    </app-movie-detail>
+</div>
