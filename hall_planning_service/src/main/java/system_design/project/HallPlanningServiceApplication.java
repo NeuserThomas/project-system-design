@@ -130,7 +130,7 @@ public class HallPlanningServiceApplication {
 		List<MovieHall> halls=new ArrayList<MovieHall>();
 		for(int i = 0;i<10;i++) {
 			MovieHall hall = new MovieHall();
-			hall.setHall_number(i+1);
+			hall.setHallNumber(i+1);
 			List<Seat> seats = new ArrayList<Seat>();
 			for(int j = 0;j<100;j++) {
 				Seat seat = new Seat();

@@ -35,7 +35,7 @@ public class PlanningRestController {
 	final Logger logger = LoggerFactory.getLogger(PlanningRestController.class);
 
 	@GetMapping
-	public @ResponseBody ResponseEntity<List<Day>> getCinemas() {
+	public @ResponseBody ResponseEntity<List<Day>> getPlanning() {
 		return new ResponseEntity<List<Day>>(planRepo.findAll(),HttpStatus.OK);
 	}
 	
@@ -62,6 +62,14 @@ public class PlanningRestController {
 		planService.planDay(date);
 		planRepo.findDaysAfterDate(date.minusDays(1));
 		logger.info("Call: dummyDay");
+		return new ResponseEntity<Day>(HttpStatus.OK);
+	}
+	
+	@GetMapping(path="/planDays")
+	public ResponseEntity<Day> planDays() {
+		LocalDate date = LocalDate.now().plusDays(7);
+		planService.planDays(LocalDate.now(), LocalDate.now().plusDays(7));
+		logger.info("Call: planDays");
 		return new ResponseEntity<Day>(HttpStatus.OK);
 	}
 	

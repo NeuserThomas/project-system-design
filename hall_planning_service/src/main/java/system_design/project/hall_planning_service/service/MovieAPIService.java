@@ -59,7 +59,7 @@ public class MovieAPIService implements IMovieInfoAPI {
 				String output;
 				while ((output = br.readLine()) != null) {
 					ss.append(output);
-					System.out.println(output);
+					//System.out.println(output);
 				}
 				con.disconnect();
 				result=ss.toString();
