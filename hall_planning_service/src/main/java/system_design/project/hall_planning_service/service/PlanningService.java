@@ -1,11 +1,19 @@
 package system_design.project.hall_planning_service.service;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +25,7 @@ import org.springframework.stereotype.Service;
 import system_design.project.hall_planning_service.adapters.messaging.MessageGateway;
 import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
+import system_design.project.hall_planning_service.domain.HallDay;
 import system_design.project.hall_planning_service.domain.Movie;
 import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.PlannedMovies;
@@ -62,22 +71,18 @@ public class PlanningService {
 	}
 
 	/**
-	 * Will calculate the schedule for every cinema, for a certain date.
+	 * Will calculate the schedule for every cinema, for to a certain date.
 	 * 
 	 * @param date
 	 */
 	public void planDay(LocalDate date) {
 		List<Cinema> cinemas = cinemaRepo.findAll();
 		boolean updated = false;
-		for (Cinema c : cinemas) {
-			List<Day> days = planRepo.findDaysOnDateForCinema(date, c.getId());
-			if (days == null) {
-				days = new ArrayList<Day>();
-			}
-			//TODO: only fill in empty days
-			if (days.isEmpty()) {
-				// Initialise needed variables.
-				PlannedMovies pm = c.getPlannedMovies();
+		for(Cinema cinema : cinemas){
+			//check if a day is already planned
+			Optional<Day> day = planRepo.findDaysOnDateForCinema(date, cinema.getId());
+			if(!day.isPresent()) {
+				PlannedMovies pm = cinema.getPlannedMovies();
 				List<Movie> movies = movieRepo.findMoviesWithId(pm.getMovieIds());
 				Map<Integer, Double> wantStatus = pm.getMovieWantStatus();
 				List<Double> wStatus = new ArrayList<>();
@@ -88,43 +93,101 @@ public class PlanningService {
 						wStatus.add(wantStatus.get(i));
 					}
 				}
-				// TODO: make dynamic
-				planCinema(c,movies,wStatus);
-				dummyImplementation(c);
+				planCinemaForDay(cinema,movies,wStatus,date);
 				updated = true;
-			} // else nothing has to be done, since it's planned already
-			if (updated) {
-				publish("Updated schedule!");
 			}
+		}
+		if (updated) {
+			publish("Updated schedule!");
 		}
 	}
 	
-	private void planCinema(Cinema c,List<Movie> movies,List<Double> wStatus) {
-		
-	}
-
-	private void dummyImplementation(Cinema c) {
+	/**
+	 * Version 0.1 Rudementary planning algorithm. Next version should be PERT.
+	 * @param c
+	 * @param movies
+	 * @param wStatus
+	 * @param date
+	 * @return
+	 */
+	private void planCinemaForDay(Cinema c,List<Movie> movies,List<Double> wStatus, LocalDate date) {
 		Day day = new Day();
 		day.setCinema(c);
-		day.setDate(LocalDate.now());
-		LocalTime startTime = LocalTime.of(20, 0);
-		LocalTime stopTime = LocalTime.of(22, 30);
-		HashMap<Integer, ArrayList<TimeSlot>> timeSlots = new HashMap<Integer, ArrayList<TimeSlot>>();
-		// Creation of time schedule
-		for (MovieHall h : c.getHalls()) {
-			TimeSlot t = new TimeSlot();
-			t.setStartTime(startTime);
-			t.setStopTime(stopTime);
-			if (!timeSlots.containsKey(h.getHall_number())) {
-				timeSlots.put(h.getHall_number(), new ArrayList<TimeSlot>());
-			}
-			timeSlots.get(h.getHall_number()).add(t);
-
+		day.setDate(date);
+		List<HallDay> planning = day.getPlanning();
+		//prevent nulls
+		if(planning==null) {
+			planning = new ArrayList<HallDay>();
 		}
-		day.setTimeSlots(timeSlots);
+		/**
+		 * For each movie, count how many tickets are sold.
+		 */
+		List<Long> amountPlanned = new ArrayList<Long>();
+		for(int j = 0;j<wStatus.size();j++) {
+			amountPlanned.add(0L);
+		}
+		Long totalAmount=0L;
+		for(int i = 0;i<c.getHalls().size();i++) {
+			LocalTime lastTime=day.getStartTime();
+			HallDay hallDay= new HallDay();
+			long amountOfSeats=c.getHalls().get(i).getSeatCount();
+			
+			while(lastTime.compareTo(day.getStopTIme())<0) {
+				int chosenMovie = chooseMovie(wStatus,amountPlanned,totalAmount);
+				TimeSlot timeSlot = new TimeSlot();
+				timeSlot.setMovieId(movies.get(chosenMovie).getId());
+				timeSlot.setStartTime(lastTime);
+				
+				int minutes = Integer.parseInt(movies.get(chosenMovie).getRuntime().replaceAll("\\D", "")); 
+				timeSlot.setStopTime(timeSlot.getStartTime().plusMinutes(minutes));
+				lastTime = timeSlot.getStopTime().plusMinutes(30);
+				// Round to 15 minutes
+				int unroundedMinutes = lastTime.getMinute();
+				int mod = unroundedMinutes % 15;
+				lastTime.plusMinutes(mod);
+
+				hallDay.addTimeSlot(timeSlot);
+				amountPlanned.set(chosenMovie,amountPlanned.get(chosenMovie)+amountOfSeats);
+			}
+			planning.add(hallDay);
+		}
+		day.setPlanning(planning);
 		planRepo.save(day);
 	}
-
+	/*
+	 * Algorithm that chooses what the next movie will be. Right now, it is random by chance. If no movie has a preference number, it will assign them all with the same chance.
+	 */
+	private int chooseMovie(List<Double> wStatus,List<Long> amountPlanned, Long totalAmount) {
+		assert(wStatus.size()==amountPlanned.size());
+		Random rand = new Random();
+		List<Integer> results = new ArrayList<Integer>();
+		results.add((int) (wStatus.get(0)*1000));
+		for(int i = 1;i<wStatus.size();i++) {
+			//chance *1000 (to cast to int)
+			amountPlanned.get(i);
+			double thisThreshHold = wStatus.get(i)*1000;
+			//thisThreshHold*=(0.25+1-(double)(amountPlanned.get(i))/totalAmount); //average chances out to plan movie. 
+			results.add( (int) (thisThreshHold+wStatus.get(i-1)));
+		}
+		int chance = rand.nextInt(results.get(wStatus.size()-1));
+		int j = 0;
+		while(chance>results.get(j)) {
+			j++;
+		}
+		return j;		
+	}
+	
+	private Properties getProperty(String pr) {
+		try (InputStream input = new FileInputStream(pr)) {
+	            Properties prop = new Properties();
+	            prop.load(input);
+	            return prop;
+	        } catch (IOException io) {
+	            io.printStackTrace();
+	            return new Properties();
+	        }
+	}
+	
 	/**
 	 * Will remove all days on certain date, for all cinemas
 	 * 
@@ -134,9 +197,9 @@ public class PlanningService {
 		List<Cinema> cinemas = cinemaRepo.findAll();
 		boolean updated = false;
 		for (Cinema c : cinemas) {
-			List<Day> days = planRepo.findDaysOnDateForCinema(date, c.getId());
-			for (Day d : days) {
-				planRepo.delete(d);
+			Optional<Day> day = planRepo.findDaysOnDateForCinema(date, c.getId());
+			if(day.isPresent()) {
+				planRepo.delete(day.get());
 				updated = true;
 			}
 		}
@@ -146,7 +209,7 @@ public class PlanningService {
 	}
 
 	public void planDays(LocalDate start, LocalDate stop) {
-		for (LocalDate i = start; i.isBefore(stop); i.plusDays(1)) {
+		for (LocalDate i = start; i.isBefore(stop); i=i.plusDays(1)) {
 			planDay(i);
 		}
 	}
@@ -154,7 +217,6 @@ public class PlanningService {
 	private void publish(String message) {
 		logger.info("--- Sending kafka message: " + message + " ---");
 		gateway.updateDay(message);
-
 		// simpleProducer.send("planningMade",message);
 	}
 }

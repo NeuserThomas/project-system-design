@@ -6,6 +6,8 @@ import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.bson.types.ObjectId;
+
 @Embeddable
 /**
  * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
@@ -26,7 +28,7 @@ public class TimeSlot implements Serializable {
 	private LocalTime stopTime;
 	//remove when working with more than event.
 	@Column(nullable=false)
-	private long movieId;
+	private ObjectId movieId;
 		
 	//------------ separation declarations and methods ------------------------
 	public LocalTime getStartTime() {
@@ -42,10 +44,10 @@ public class TimeSlot implements Serializable {
 		this.stopTime = stopTime;
 	}
 
-	public long getMovieId() {
+	public ObjectId getMovieId() {
 		return movieId;
 	}
-	public void setMovieId(long movieId) {
-		this.movieId = movieId;
+	public void setMovieId(ObjectId objectId) {
+		this.movieId = objectId;
 	}
 }
