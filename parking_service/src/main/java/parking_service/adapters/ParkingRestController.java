@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import parking_service.persistence.ParkingRepository;
 import parking_service.persistence.ParkingTicketRepository;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("parking")
 public class ParkingRestController {
 
@@ -111,7 +113,7 @@ public class ParkingRestController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/getticket", method = RequestMethod.POST)
+	@RequestMapping(value = "/getTicket", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity postParkingTicket() {
 

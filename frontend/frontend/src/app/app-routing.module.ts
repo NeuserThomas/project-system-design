@@ -11,6 +11,7 @@ import { MovieListComponent } from './component/common/movie-list/movie-list.com
 import { SearchMovieComponent } from './component/HallPlanning/search-movie/search-movie.component';
 import { ShowPlanningComponent } from './component/common/show-planning/show-planning.component';
 import { TicketServiceComponent } from './component/ticket-service/ticket-service.component';
+import { ParkingServiceComponent } from './component/parking-service/parking-service.component';
 
 const routes: Routes = [
   {path: 'days',component: DayListComponent },
@@ -23,7 +24,8 @@ const routes: Routes = [
   {path: 'movie',component: MovieListComponent },
   {path: 'searchMovie',component: SearchMovieComponent},
   {path: 'showPlanning',component: ShowPlanningComponent},
-  {path: 'ticketService',component: TicketServiceComponent}
+  {path: 'ticketService',component: TicketServiceComponent},
+  {path: 'parkingService',component: ParkingServiceComponent},
 ];
 
 @NgModule({

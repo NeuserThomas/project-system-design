@@ -26,6 +26,7 @@ import { PlanningModule } from './planning/planning.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { TicketServiceComponent } from './component/ticket-service/ticket-service.component';
+import { ParkingServiceComponent } from './component/parking-service/parking-service.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { TicketServiceComponent } from './component/ticket-service/ticket-servic
     MovieListComponent,
     MovieDetailComponent,
     SearchMovieComponent,
-    TicketServiceComponent
+    TicketServiceComponent,
+    ParkingServiceComponent
     ],
   imports: [
     BrowserModule,
