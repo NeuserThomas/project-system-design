@@ -1,39 +1,33 @@
-<div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card bg-dark my-5">
-          <div class="card-body">
-            <h2 class="card-title text-center text-white py-3">{{ title }}</h2>
-            <ul class="text-center list-inline py-3">
-              <li class="list-inline-item">
-                <a routerLink="/days" class="btn btn-info">List Days</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/cinemas" class="btn btn-info">List cinemas</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/addCinema" class="btn btn-info">Add Cinema</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/moviehalls" class="btn btn-info">List movie halls</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/addmoviehall" class="btn btn-info">Add movie hall</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/movie" class="btn btn-info">List Movies</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/searchMovie" class="btn btn-info">Add Movie</a>
-              </li>
-              <li class="list-inline-item">
-                <a routerLink="/showPlanning" class="btn btn-info">show Planning</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <button (click)="onSelect('list days')" class="btn btn-light">list days</button>
+      </li>
+      <li class="nav-item active">
+        <button (click)="onSelect('list movie')" class="btn btn-light">list movie</button>
+      </li>
+      <li class="nav-item active">
+        <button (click)="onSelect('list planning')" class="btn btn-light">planning</button>
+      </li>
+    </ul>
   </div>
+</nav>
+
+<div [ngSwitch]="selectedComponent">
+  <!-- the same view can be shown in more than one case -->
+  <div *ngSwitchCase="'list days'">
+    <app-day-list ></app-day-list>
+  </div>
+  <div *ngSwitchCase="'list planning'">
+    <app-show-planning ></app-show-planning>
+  </div>
+  <div *ngSwitchCase="'list movie'">
+    <app-movie-list ></app-movie-list>
+  </div>
+</div>
   
