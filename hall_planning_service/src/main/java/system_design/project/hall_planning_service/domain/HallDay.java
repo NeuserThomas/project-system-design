@@ -20,7 +20,7 @@ public class HallDay {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private long hallDayId;
 	
 	@ElementCollection
 	private List<TimeSlot> timeSlots;
@@ -36,18 +36,9 @@ public class HallDay {
 		if(timeSlots==null) {
 			timeSlots= new ArrayList<TimeSlot>();
 		}
-		timeSlots.add(timeSlot);
-		
+		timeSlots.add(timeSlot);		
 	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
+	
 	public List<TimeSlot> getTimeSlots() {
 		return timeSlots;
 	}
@@ -55,7 +46,12 @@ public class HallDay {
 	public void setTimeSlots(List<TimeSlot> timeSlots) {
 		this.timeSlots = timeSlots;
 	}
+	
+	public long getHallDayId() {
+		return hallDayId;
+	}
 
-	
-	
+	public void setHallDayId(long hallDayId) {
+		this.hallDayId = hallDayId;
+	}
 }

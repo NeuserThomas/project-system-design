@@ -6,15 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,8 +87,9 @@ public class PlanningService {
 			//check if a day is already planned
 			Optional<Day> day = planRepo.findDaysOnDateForCinema(date, cinema.getId());
 			if(!day.isPresent()) {
+				logger.info("--- Planning movie for date: "+date+" ---");
 				PlannedMovies pm = cinema.getPlannedMovies();
-				List<Movie> movies = movieRepo.findMoviesWithId(pm.getMovieIds());
+				List<Movie> movies = movieRepo.findMoviesWithId(pm.getMongoMovieIds());
 				Map<Integer, Double> wantStatus = pm.getMovieWantStatus();
 				List<Double> wStatus = new ArrayList<>();
 				for (int i = 0; i < movies.size(); i++) {
@@ -114,6 +120,9 @@ public class PlanningService {
 		Day day = new Day();
 		day.setCinema(c);
 		day.setDate(date);
+		day.setStartTime(date, day.getStartTime().toLocalTime());
+		day.setStopTime(date, day.getStopTime().toLocalTime());
+
 		List<HallDay> planning = day.getPlanning();
 		//prevent nulls
 		if(planning==null) {
@@ -127,25 +136,33 @@ public class PlanningService {
 			amountPlanned.add(0L);
 		}
 		Long totalAmount=0L;
-		for(int i = 0;i<c.getHalls().size();i++) {
-			LocalTime lastTime=day.getStartTime();
+		for(int i = 0;i<c.getHalls().size();i++) {			
+			LocalDateTime lastTime=LocalDateTime.of(date, day.getStartTime().toLocalTime());
+			//logger.info("Lasttime: "+lastTime);
 			HallDay hallDay= new HallDay();
 			long amountOfSeats=c.getHalls().get(i).getSeatCount();
 			
-			while(lastTime.compareTo(day.getStopTIme())<0) {
+			while(lastTime.compareTo(day.getStopTime())<=0) {
 				int chosenMovie = chooseMovie(wStatus,amountPlanned,totalAmount);
 				TimeSlot timeSlot = new TimeSlot();
 				timeSlot.setMovieId(movies.get(chosenMovie).getId());
 				timeSlot.setStartTime(lastTime);
-				
-				int minutes = Integer.parseInt(movies.get(chosenMovie).getRuntime().replaceAll("\\D", "")); 
+				//logger.info("timeslot start: "+timeSlot.getStartTime());
+				String temp = movies.get(chosenMovie).getRuntime().replaceAll("\\D", "");
+				if(temp.equals("")) {
+					temp="120";
+					logger.error("Movie has no time! "+movies.get(chosenMovie).getTitle());
+					Movie m = movies.get(chosenMovie);
+					m.setRuntime("120");
+					movieRepo.save(m);
+				}
+				int minutes = Integer.parseInt(temp);
 				timeSlot.setStopTime(timeSlot.getStartTime().plusMinutes(minutes));
-				lastTime = timeSlot.getStopTime().plusMinutes(30);
+				lastTime = timeSlot.getStopTime().plusMinutes(30); //give employees time to clean
 				// Round to 15 minutes
 				int unroundedMinutes = lastTime.getMinute();
 				int mod = unroundedMinutes % 15;
-				lastTime.plusMinutes(mod);
-
+				lastTime=lastTime.plusMinutes(15-mod);
 				hallDay.addTimeSlot(timeSlot);
 				amountPlanned.set(chosenMovie,amountPlanned.get(chosenMovie)+amountOfSeats);
 			}
@@ -164,14 +181,14 @@ public class PlanningService {
 		results.add((int) (wStatus.get(0)*1000));
 		for(int i = 1;i<wStatus.size();i++) {
 			//chance *1000 (to cast to int)
-			amountPlanned.get(i);
+			//amountPlanned.get(i);
 			double thisThreshHold = wStatus.get(i)*1000;
-			//thisThreshHold*=(0.25+1-(double)(amountPlanned.get(i))/totalAmount); //average chances out to plan movie. 
-			results.add( (int) (thisThreshHold+wStatus.get(i-1)));
+			//thisThreshHold*=(0.25+1-(double)(amountPlanned.get(i))/totalAmount); //average chances out to plan movie.
+			results.add((int)(thisThreshHold+results.get(i-1)));
 		}
-		int chance = rand.nextInt(results.get(wStatus.size()-1));
+		int chance = rand.nextInt(results.get(results.size()-1));
 		int j = 0;
-		while(chance>results.get(j)) {
+		while(chance>results.get(j) && j<results.size()) {
 			j++;
 		}
 		return j;		
@@ -218,5 +235,26 @@ public class PlanningService {
 		logger.info("--- Sending kafka message: " + message + " ---");
 		gateway.updateDay(message);
 		// simpleProducer.send("planningMade",message);
+	}
+
+	/**
+	 * @param cinemaId
+	 * @param date
+	 * @return
+	 */
+	public List<Movie> findPlannedMoviesForCinema(long cinemaId, LocalDate date) {
+		List<Movie> movies = new ArrayList<Movie>();
+		List<Day> days = planRepo.findDaysForCinema(cinemaId, date);
+		Set<ObjectId> movieIds=new TreeSet<ObjectId>();
+		for(Day d :days) {
+			for(HallDay hd: d.getPlanning()) {
+				for(TimeSlot ts: hd.getTimeSlots()) {
+					movieIds.add(new ObjectId(ts.getMovieId()));
+				}
+			}
+		}
+		List<ObjectId> ids = new ArrayList<ObjectId>(movieIds);
+		movieRepo.findMoviesWithId(ids);
+		return movies;
 	}
 }

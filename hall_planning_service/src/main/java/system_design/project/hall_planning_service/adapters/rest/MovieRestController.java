@@ -37,7 +37,7 @@ public class MovieRestController {
 	
 	@Autowired
 	private MovieRepository movieRepo;
-	
+
 	final Logger logger = LoggerFactory.getLogger(MovieRestController.class);
 	
 	@GetMapping
@@ -47,7 +47,7 @@ public class MovieRestController {
 	}
 	
 	@GetMapping("/{movieId}")
-	public @ResponseBody ResponseEntity<Movie> getMovieById(@PathVariable long movieId) {
+	public @ResponseBody ResponseEntity<Movie> getMovieById(@PathVariable String movieId) {
 		Optional<Movie> movie = movieRepo.findById(movieId);
 		if(movie.isPresent()) {
 			return new ResponseEntity<Movie>(movie.get(),HttpStatus.OK);
@@ -76,7 +76,7 @@ public class MovieRestController {
 	@GetMapping("/getMovieByName/{movieName}")
 	public @ResponseBody ResponseEntity<Movie> findNewMovieByName(@PathVariable String movieName) {
 		Movie m = api.FindMovieByName(movieName);
-		if(m!=null) {
+		if(m==null) {
 			return new ResponseEntity<Movie>(HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<Movie>(m,HttpStatus.OK);

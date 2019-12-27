@@ -1,11 +1,10 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,9 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -52,8 +49,10 @@ public class Day {
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<HallDay> planning;
 	
-	private LocalTime startTime=LocalTime.of(14, 0);
-	private LocalTime stopTIme=LocalTime.of(23, 30);
+	//@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime startTime;
+	//@Column(columnDefinition = "TIMESTAMP")
+	private LocalDateTime stopTime;
 	
 	@ManyToOne
 	/**
@@ -67,6 +66,8 @@ public class Day {
 	
 	public Day() {
 		planning = new ArrayList<HallDay>();
+		startTime=LocalDateTime.of(LocalDate.now(), LocalTime.of(14, 00));
+		stopTime=LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 30));
 	}
 	
 	public List<HallDay> getPlanning() {
@@ -101,18 +102,24 @@ public class Day {
 	public void setCinema(Cinema cinema) {
 		this.cinema = cinema;
 	}
-	public LocalTime getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(LocalTime startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
-	public LocalTime getStopTIme() {
-		return stopTIme;
-	}
-	public void setStopTIme(LocalTime stopTIme) {
-		this.stopTIme = stopTIme;
+	public void setStartTime(LocalDate date, LocalTime startTime) {
+		this.startTime=LocalDateTime.of(date, startTime);
 	}
 	
+	public LocalDateTime getStopTime() {
+		return stopTime;
+	}
+	public void setStopTime(LocalDateTime stopTime) {
+		this.stopTime = stopTime;
+	}
+	public void setStopTime(LocalDate date, LocalTime stopTime) {
+		this.stopTime=LocalDateTime.of(date, stopTime);
+	}
 	
 }

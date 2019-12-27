@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import system_design.project.hall_planning_service.domain.Movie;
 
 
-public interface MovieRepository extends MongoRepository<Movie, Long>{
+public interface MovieRepository extends MongoRepository<Movie, String>{
 
 	@Query("{_id: { $in: ?0 } })")
 	public List<Movie> findMoviesWithId(List<ObjectId> ids);

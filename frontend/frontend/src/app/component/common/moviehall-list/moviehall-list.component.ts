@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Moviehall } from "../../model/moviehall"
-import { MoviehallService } from "../../service/moviehall-service.service"
+import { Moviehall } from "../../../model/moviehall"
+import { MoviehallService } from "../../../service/moviehall-service.service"
+import { Movie } from 'src/app/model/movie';
 
 @Component({
   selector: 'app-moviehall-list',
@@ -18,5 +19,9 @@ export class MoviehallListComponent implements OnInit {
       console.log(data);
       this.moviehalls = data;
     })
+  }
+
+  onWaitListSubmit(movie:Movie){
+    
   }
 }

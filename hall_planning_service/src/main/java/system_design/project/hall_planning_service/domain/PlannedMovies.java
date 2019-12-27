@@ -26,7 +26,7 @@ public class PlannedMovies {
 		
 	@ElementCollection
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<ObjectId> movieIds;
+	private List<String> movieIds;
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
 	//Can't seem to work with ObjectId and map.
@@ -42,7 +42,7 @@ public class PlannedMovies {
 	private Cinema cinema;
 	
 	public PlannedMovies(){
-		movieIds= new ArrayList<ObjectId>();
+		movieIds= new ArrayList<String>();
 		movieWantStatus = new HashMap<Integer,Double>();
 	}
 	
@@ -62,15 +62,31 @@ public class PlannedMovies {
 		this.movieWantStatus = movieWantStatus;
 	}
 	
-	public List<ObjectId> getMovieIds() {
+	public List<ObjectId> getMongoMovieIds(){
+		List<ObjectId> obj = new ArrayList<ObjectId>();
+		for(String movId: movieIds) {
+			obj.add(new ObjectId(movId));
+		}
+		return obj;
+	}
+	
+	public List<String> getMovieIds() {
 		if(movieIds==null) {
-			movieIds=new ArrayList<ObjectId>();
+			movieIds=new ArrayList<String>();
 		}
 		return movieIds;
 	}
 
-	public void setMovieIds(List<ObjectId> movieIds) {
+	public void setMovieIds(List<String> movieIds) {
 		this.movieIds = movieIds;
+	}
+	
+	public void setMongoMovieIds(List<ObjectId> movIds) {
+		List<String> ids = new ArrayList<String>();
+		for(ObjectId id: movIds) {
+			ids.add(id.toHexString());
+		}
+		this.movieIds=ids;
 	}
 	
 	public void addPlannedMovie(Movie m) {

@@ -74,7 +74,7 @@ public class HallPlanningServiceApplication {
 			if(pm==null) {
 				logger.warn("No PlannedMovies object. Adding them now. Amount to add: "+ids.size());
 				pm=new PlannedMovies();
-				pm.setMovieIds(ids);
+				pm.setMongoMovieIds(ids);
 				c.setPlannedMovies(pm);
 				pm.setCinema(c);
 				pRepo.save(pm);
@@ -84,7 +84,7 @@ public class HallPlanningServiceApplication {
 			} else {
 				if(pm.getMovieIds().isEmpty()) {
 					logger.warn("No movies planned. Adding them now. Amount to add: "+ids.size());
-					pm.setMovieIds(ids);
+					pm.setMongoMovieIds(ids);
 					pm.setCinema(c);
 					pRepo.save(pm);
 					c.setPlannedMovies(pm);
@@ -113,13 +113,13 @@ public class HallPlanningServiceApplication {
 				Movie m = api.FindMovieByName(t);
 				if(m!=null) {
 					mRepo.save(m);
-					movieIds.add(m.getId());
+					movieIds.add(m.getMongoId());
 				}
 			}
 		} else {
 			logger.info("Movies were found in the db, no intervention needed.");
 			for(Movie m: mRepo.findAll()) {
-				movieIds.add(m.getId());
+				movieIds.add(m.getMongoId());
 			}
 		}
 		return movieIds;
