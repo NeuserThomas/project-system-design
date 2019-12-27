@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CommonModule } from '@angular/common';
+import { CalenderComponent } from '../component/common/calender-component/calendar.component';
 import { ShowPlanningComponent } from '../component/common/show-planning/show-planning.component';
 
 @NgModule({
@@ -12,7 +13,7 @@ import { ShowPlanningComponent } from '../component/common/show-planning/show-pl
       useFactory: adapterFactory
     })
   ],
-  declarations: [ShowPlanningComponent],
-  exports: [ShowPlanningComponent]
+  declarations: [CalenderComponent],
+  exports: [CalenderComponent]
 })
 export class PlanningModule { }

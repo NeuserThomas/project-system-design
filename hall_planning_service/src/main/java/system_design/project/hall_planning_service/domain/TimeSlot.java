@@ -1,13 +1,9 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.io.Serializable;
-import java.time.LocalTime;
-
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
-import org.bson.types.ObjectId;
-
 @Embeddable
 /**
  * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
@@ -21,33 +17,37 @@ public class TimeSlot implements Serializable {
 	 * Version number?
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column(name = "startTime", columnDefinition = "TIME")
-	private LocalTime startTime;
+	//@Column(name = "startTime", columnDefinition = "TIMESTAMP")
+	private LocalDateTime startTime;
 	
-	@Column(name = "stopTime", columnDefinition = "TIME")
-	private LocalTime stopTime;
+	//@Column(name = "stopTime", columnDefinition = "TIMESTAMP")
+	private LocalDateTime stopTime;
 	//remove when working with more than event.
 	@Column(nullable=false)
-	private ObjectId movieId;
+	/*
+	 * Maps to the string representation of movieId
+	 */
+	private String movieId;
 		
 	//------------ separation declarations and methods ------------------------
-	public LocalTime getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(LocalTime startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
-	public LocalTime getStopTime() {
+	
+	public LocalDateTime getStopTime() {
 		return stopTime;
 	}
-	public void setStopTime(LocalTime stopTime) {
+	public void setStopTime(LocalDateTime stopTime) {
 		this.stopTime = stopTime;
 	}
 
-	public ObjectId getMovieId() {
+	public String getMovieId() {
 		return movieId;
 	}
-	public void setMovieId(ObjectId objectId) {
+	public void setMovieId(String objectId) {
 		this.movieId = objectId;
 	}
 }

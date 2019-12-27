@@ -130,7 +130,7 @@ public class CinemaRestController {
 		Optional<Cinema> cinema = cinemaRepo.findById(cinemaId);
 		if (cinema.isPresent()) {
 			if (cinema.get().getPlannedMovies() != null) {
-				List<ObjectId> ids = cinema.get().getPlannedMovies().getMovieIds();
+				List<ObjectId> ids = cinema.get().getPlannedMovies().getMongoMovieIds();
 				List<Movie> movies = movieRepo.findMoviesWithId(ids);
 				return new ResponseEntity<List<Movie>>(movies, HttpStatus.OK);
 			} else {

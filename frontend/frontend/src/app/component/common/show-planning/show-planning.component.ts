@@ -1,70 +1,58 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  OnDestroy,
-  ChangeDetectorRef
-} from '@angular/core';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { CalendarView } from 'angular-calendar';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, Output } from '@angular/core';
+import { Cinema } from 'src/app/model/cinema';
+import { CinemaService } from 'src/app/service/cinema-service.service';
+import { CalendarEvent } from 'angular-calendar';
+import { DayService } from 'src/app/service/day-service.service';
+import { Day } from 'src/app/model/day';
+import { MovieService } from 'src/app/service/movie-service.service';
+import { Moviehall } from 'src/app/model/moviehall';
+import { Movie } from 'src/app/model/movie';
 
 @Component({
   selector: 'app-show-planning',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './show-planning.component.html',
   styleUrls: ['./show-planning.component.css']
 })
-export class ShowPlanningComponent implements OnInit, OnDestroy {
-  view: CalendarView = CalendarView.Week;
-  viewDate: Date = new Date();
-  daysInWeek = 7;
+export class ShowPlanningComponent implements OnInit {
 
-  //events = [];
-
-  private destroy$ = new Subject();
-
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private cd: ChangeDetectorRef
-  ) {}
+  cinemaNames: String[];
+  cinema:Cinema;
+  hall: Moviehall;
+  days: Day[];
+  @Output() events: CalendarEvent[] = [];
+  movies = new Map<String, Movie>();
+  constructor(private cinemaService: CinemaService,private dayService: DayService,private movieService: MovieService) { }
 
   ngOnInit() {
-    const CALENDAR_RESPONSIVE = {
-      small: {
-        breakpoint: '(max-width: 576px)',
-        daysInWeek: 2
-      },
-      medium: {
-        breakpoint: '(max-width: 768px)',
-        daysInWeek: 3
-      },
-      large: {
-        breakpoint: '(max-width: 960px)',
-        daysInWeek: 5
-      }
-    };
-
-    this.breakpointObserver
-      .observe(
-        Object.values(CALENDAR_RESPONSIVE).map(({ breakpoint }) => breakpoint)
-      )
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((state: BreakpointState) => {
-        const foundBreakpoint = Object.values(CALENDAR_RESPONSIVE).find(
-          ({ breakpoint }) => !!state.breakpoints[breakpoint]
-        );
-        if (foundBreakpoint) {
-          this.daysInWeek = foundBreakpoint.daysInWeek;
-        } else {
-          this.daysInWeek = 7;
-        }
-        this.cd.markForCheck();
-      });
+    this.cinemaService.findAllNames().subscribe(data => {
+      this.cinemaNames = data;
+      console.log(this.cinemaNames);
+    })
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
+  selectCinema(cinemaName:String){
+    this.cinemaService.findOneByName(cinemaName).subscribe(data => {
+      this.cinema = data;
+      for(let id of this.cinema.plannedMovies.movieIds){
+        this.movieService.findById(id).subscribe(data=>{
+          this.movies.set(id,data);
+        });
+      }
+    })
+  }
+
+  selectHall(hall:Moviehall){
+    this.hall=null;
+    this.hall=hall;
+    this.events=[];
+    this.dayService.findDaysForCinema(this.cinema).subscribe(data => {
+      this.days=data;
+      for(let d of this.days){
+        for(let timeSlot of d.planning[this.hall.hallNumber-1].timeSlots){
+          let event:CalendarEvent={"start":new Date(timeSlot.startTime),"end":new Date(timeSlot.stopTime),"title":this.movies.get(timeSlot.movieId).title};
+          this.events.push(event);
+        }
+  }
+    });
   }
 }

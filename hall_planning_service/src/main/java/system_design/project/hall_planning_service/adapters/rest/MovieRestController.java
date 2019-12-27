@@ -47,7 +47,7 @@ public class MovieRestController {
 	}
 	
 	@GetMapping("/{movieId}")
-	public @ResponseBody ResponseEntity<Movie> getMovieById(@PathVariable long movieId) {
+	public @ResponseBody ResponseEntity<Movie> getMovieById(@PathVariable String movieId) {
 		Optional<Movie> movie = movieRepo.findById(movieId);
 		if(movie.isPresent()) {
 			return new ResponseEntity<Movie>(movie.get(),HttpStatus.OK);

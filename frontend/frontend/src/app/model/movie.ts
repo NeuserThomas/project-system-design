@@ -1,5 +1,6 @@
 export class Movie {
-        id: number;
+        id:String;
+        mongoId:Object;
         title: string;
         year: string;
         rated: string;

@@ -14,18 +14,9 @@ import { TicketServiceComponent } from './component/ticket-service/ticket-servic
 import { ParkingServiceComponent } from './component/parking-service/parking-service.component';
 
 const routes: Routes = [
-  {path: 'days',component: DayListComponent },
-  {path: 'addDay',component: DayFormComponent },
-  {path: 'cinemas',component: CinemaListComponent },
-  {path: 'addCinema',component: CinemaFormComponent },
-  {path: 'moviehalls',component: MoviehallListComponent },
-  {path: 'addmoviehall',component: MoviehallFormComponent },
   {path: 'hallPlanningService',component: HallPlanningServiceComponent },
-  {path: 'movie',component: MovieListComponent },
-  {path: 'searchMovie',component: SearchMovieComponent},
-  {path: 'showPlanning',component: ShowPlanningComponent},
   {path: 'ticketService',component: TicketServiceComponent},
-  {path: 'parkingService',component: ParkingServiceComponent},
+  {path: 'parkingService',component: ParkingServiceComponent}
 ];
 
 @NgModule({

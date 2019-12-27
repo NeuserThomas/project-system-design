@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {CommonModule} from '@angular/common'
 @Component({
   selector: 'app-hall-planning-service',
   templateUrl: './hall-planning-service.component.html',
@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HallPlanningServiceComponent implements OnInit {
 
+  selectedComponent: String;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  onSelect(selectedComponent:String){
+    this.selectedComponent=selectedComponent;
+    console.log(this.selectedComponent);
+  }
 }

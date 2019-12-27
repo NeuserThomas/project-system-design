@@ -21,12 +21,11 @@ import { MovieListComponent } from './component/common/movie-list/movie-list.com
 import { MovieService } from './service/movie-service.service';
 import { MovieDetailComponent } from './component/common/movie-detail/movie-detail.component';
 import { SearchMovieComponent } from './component/HallPlanning/search-movie/search-movie.component';
-import { ShowPlanningComponent } from './component/common/show-planning/show-planning.component';
 import { PlanningModule } from './planning/planning.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { TicketServiceComponent } from './component/ticket-service/ticket-service.component';
 import { ParkingServiceComponent } from './component/parking-service/parking-service.component';
+import { ShowPlanningComponent } from './component/common/show-planning/show-planning.component';
 
 
 @NgModule({
@@ -43,7 +42,9 @@ import { ParkingServiceComponent } from './component/parking-service/parking-ser
     MovieDetailComponent,
     SearchMovieComponent,
     TicketServiceComponent,
-    ParkingServiceComponent
+    ParkingServiceComponent,
+    SearchMovieComponent,
+    ShowPlanningComponent
     ],
   imports: [
     BrowserModule,
