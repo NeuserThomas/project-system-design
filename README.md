@@ -45,19 +45,6 @@ chmod +x ../hall_planning_service/mvnw
 
 chmod +x ./run_mysqlcontainer.sh
 ```
-
-
-### **Rest Calls (WIP)**
-Available rest calls:
-- /cinema						: Returns all Cinemas
-- /cinema/{cinemaId}			: Returns cinema with id
-- /hall/cinema/{cinemaId}	: Returns all halls from a certain cinema
-- /halls/{cinemaId}/{hallId}	: Return the hall with hallId
-- /planning						: Return all days
-- /planning/{date}				: Return all days after date
-- /planning/cinema/{cinemaId}		: Return all planned days from today for cinema
-- /planning/{cinemaId}/{day}	: Return planning for certain day (WIP)
-
 ## **frontend**
 To run the frontend, go to the direcotry /frontent/frontend in the terminal, and run:
 ```bash
