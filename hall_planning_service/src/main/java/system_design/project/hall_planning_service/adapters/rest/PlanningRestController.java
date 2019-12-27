@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.Movie;
+import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.DayRepository;
 import system_design.project.hall_planning_service.service.PlanningService;
 
@@ -85,7 +86,8 @@ public class PlanningRestController {
 	}
 	
 	@GetMapping("/plannedMovies/{cinemaId}/{date}")
-	public @ResponseBody ResponseEntity<List<Movie>> getMoviesForCinema(@PathVariable long cinemaId,@PathVariable LocalDate date) {
+	public @ResponseBody ResponseEntity<List<Movie>> getMoviesForCinema(@PathVariable long cinemaId,@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		logger.info("getMoviesForCinema call");
 		List<Movie> movies = planService.findPlannedMoviesForCinema(cinemaId,date);
 		if(!movies.isEmpty()) {
 			return new ResponseEntity<List<Movie>>(movies,HttpStatus.OK);

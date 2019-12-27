@@ -38,6 +38,7 @@ import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.persistence.DayRepository;
 import system_design.project.hall_planning_service.persistence.MovieRepository;
+import system_design.project.hall_planning_service.persistence.TimeSlotRepository;
 
 /**
  * @author robin
@@ -53,6 +54,9 @@ public class PlanningService {
 	public CinemaRepository cinemaRepo;
 	@Autowired
 	public MovieRepository movieRepo;
+	@Autowired
+	public TimeSlotRepository timeSlotRepo;
+	
 	// @Autowired
 	// private KafkaTemplate<String, String> simpleProducer;
 
@@ -145,6 +149,7 @@ public class PlanningService {
 			while(lastTime.compareTo(day.getStopTime())<=0) {
 				int chosenMovie = chooseMovie(wStatus,amountPlanned,totalAmount);
 				TimeSlot timeSlot = new TimeSlot();
+				timeSlot.setHall(c.getHalls().get(i));
 				timeSlot.setMovieId(movies.get(chosenMovie).getId());
 				timeSlot.setStartTime(lastTime);
 				//logger.info("timeslot start: "+timeSlot.getStartTime());
@@ -254,7 +259,8 @@ public class PlanningService {
 			}
 		}
 		List<ObjectId> ids = new ArrayList<ObjectId>(movieIds);
-		movieRepo.findMoviesWithId(ids);
+		logger.info("Hierzo: aantal films: "+ids.size());
+		movies=movieRepo.findMoviesWithId(ids);
 		return movies;
 	}
 }

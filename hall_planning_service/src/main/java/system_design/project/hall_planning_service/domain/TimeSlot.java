@@ -4,7 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-@Embeddable
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+@Entity
 /**
  * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
  * have more flexibility. (Paper already submitted, extra feature)
@@ -17,6 +24,11 @@ public class TimeSlot implements Serializable {
 	 * Version number?
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue
+	private long Tid;
+	
 	//@Column(name = "startTime", columnDefinition = "TIMESTAMP")
 	private LocalDateTime startTime;
 	
@@ -29,6 +41,11 @@ public class TimeSlot implements Serializable {
 	 */
 	private String movieId;
 		
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name="hallId",nullable=false)
+	private MovieHall hall;
+	
 	//------------ separation declarations and methods ------------------------
 	public LocalDateTime getStartTime() {
 		return startTime;
@@ -49,5 +66,18 @@ public class TimeSlot implements Serializable {
 	}
 	public void setMovieId(String objectId) {
 		this.movieId = objectId;
+	}
+	
+	public long getTid() {
+		return Tid;
+	}
+	public void setTid(long tid) {
+		Tid = tid;
+	}
+	public MovieHall getHall() {
+		return hall;
+	}
+	public void setHall(MovieHall hall) {
+		this.hall = hall;
 	}
 }
