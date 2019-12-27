@@ -44,6 +44,7 @@ localhost:2223/movie/getMovieByName/{name}	: Search for a movie through external
 localhost:2223/planning						: Get all day objects
 localhost:2223/planning						: Post one day object
 localhost:2223/planning/planDays			: Plan for every cinema, for the next week (if days are already planned, they are not replaced)
+localhost:2223/planning/plannedMovies/{cinemaId}/{date} : Returns a list of movies that play on that day.
 localhost:2223/planning/cinema/{id}		: Get all day for a cinema, after today (so for the next week)
 localhost:2223/planning/days/clear			: Testing purposes (remove all). Not meant to be on production.
 ```
