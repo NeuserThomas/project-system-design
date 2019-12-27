@@ -16,6 +16,14 @@ export class CinemaService {
     return this.http.get<Cinema[]>(this.cinemaUrl);
   }
 
+  public findAllNames(): Observable<String[]> {
+    return this.http.get<String[]>(this.cinemaUrl+"/getAllByName");
+  }
+
+  public findOneByName(name:String): Observable<Cinema> {
+    return this.http.get<Cinema>(this.cinemaUrl+"/getOneByName/"+name);
+  }
+
   public save(cinema: Cinema) {
     return this.http.post<Cinema>(this.cinemaUrl, cinema);
   }

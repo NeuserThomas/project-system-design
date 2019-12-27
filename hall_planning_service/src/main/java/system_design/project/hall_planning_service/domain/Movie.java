@@ -11,7 +11,7 @@ import org.bson.types.ObjectId;
 
 @Document
 public class Movie {
-	private ObjectId id;
+	private ObjectId _id;
 	
 	@SerializedName("Title")
 	@Expose
@@ -89,6 +89,8 @@ public class Movie {
 	@Expose
 	private String response;
 
+	private double price=14.5;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -289,12 +291,23 @@ public class Movie {
 		this.response = response;
 	}
 
-	public ObjectId getId() {
-		return id;
+	public String getId() {
+		return _id.toHexString();
 	}
 
+	public ObjectId getMongoId() {
+		return _id;
+	}
+	
 	public void setId(ObjectId id) {
-		this.id = id;
+		this._id = id;
 	}
 
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 }

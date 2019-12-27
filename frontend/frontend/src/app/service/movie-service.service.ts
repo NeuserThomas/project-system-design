@@ -16,6 +16,11 @@ export class MovieService {
     return this.http.get<Movie[]>(this.movieUrl);
   }
 
+  public findById(id): Observable<Movie> {
+    console.log(id);
+    return this.http.get<Movie>(this.movieUrl+"/"+id);
+  }
+
   public save(movie: Movie) {
     return this.http.post<Movie>(this.movieUrl, movie);
   }

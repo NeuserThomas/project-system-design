@@ -24,8 +24,8 @@ public interface DayRepository extends JpaRepository<Day,Long>{
 	public Optional<Day> findDaysOnDateForCinema(LocalDate date, long cinemaId);
 	
 	
-	@Query("Select d from Day d where d.cinema.id=?1")
-	public List<Day> findDaysForCinema(long cinemaId);
+	@Query("Select d from Day d where d.cinema.id=?1 and d.date>=?2")
+	public List<Day> findDaysForCinema(long cinemaId,LocalDate d);
 	
 	@Query("Select d from Day d where d.date>?1")
 	public List<Day> findDaysAfterDate(LocalDate date);

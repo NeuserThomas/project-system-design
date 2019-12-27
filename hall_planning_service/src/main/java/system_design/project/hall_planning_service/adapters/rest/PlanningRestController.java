@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
+import system_design.project.hall_planning_service.domain.Movie;
 import system_design.project.hall_planning_service.persistence.DayRepository;
 import system_design.project.hall_planning_service.service.PlanningService;
 
@@ -75,11 +76,30 @@ public class PlanningRestController {
 	
 	@GetMapping("/cinema/{cinemaId}")
 	public @ResponseBody ResponseEntity<List<Day>> getDaysForCinema(@PathVariable long cinemaId) {
-		List<Day> days = planRepo.findDaysForCinema(cinemaId);
+		List<Day> days = planRepo.findDaysForCinema(cinemaId,LocalDate.now());
 		if(!days.isEmpty()) {
 			return new ResponseEntity<List<Day>>(days,HttpStatus.OK);
 		} else {
 			return new ResponseEntity<List<Day>>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping("/plannedMovies/{cinemaId}/{date}")
+	public @ResponseBody ResponseEntity<List<Movie>> getMoviesForCinema(@PathVariable long cinemaId,@PathVariable LocalDate date) {
+		List<Movie> movies = planService.findPlannedMoviesForCinema(cinemaId,date);
+		if(!movies.isEmpty()) {
+			return new ResponseEntity<List<Movie>>(movies,HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<Movie>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/days/clear")
+	/*
+	 * Testing purposes. TODO: remove on production
+	 */
+	public @ResponseBody ResponseEntity<String> clear() {
+		planRepo.deleteAll();
+		return new ResponseEntity<String>("Done",HttpStatus.OK);
 	}
 }
