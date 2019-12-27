@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import system_design.project.hall_planning_service.domain.Day;
-import system_design.project.hall_planning_service.persistence.PlanningRepository;
+import system_design.project.hall_planning_service.domain.Movie;
+import system_design.project.hall_planning_service.domain.TimeSlot;
+import system_design.project.hall_planning_service.persistence.DayRepository;
 import system_design.project.hall_planning_service.service.PlanningService;
 
 @RestController
@@ -28,15 +30,14 @@ import system_design.project.hall_planning_service.service.PlanningService;
 public class PlanningRestController {
 	
 	@Autowired
-	private PlanningRepository planRepo;
+	private DayRepository planRepo;
 	@Autowired
 	private PlanningService planService;
 	
 	final Logger logger = LoggerFactory.getLogger(PlanningRestController.class);
 
-	
 	@GetMapping
-	public @ResponseBody ResponseEntity<List<Day>> getCinemas() {
+	public @ResponseBody ResponseEntity<List<Day>> getPlanning() {
 		return new ResponseEntity<List<Day>>(planRepo.findAll(),HttpStatus.OK);
 	}
 	
@@ -66,13 +67,41 @@ public class PlanningRestController {
 		return new ResponseEntity<Day>(HttpStatus.OK);
 	}
 	
+	@GetMapping(path="/planDays")
+	public ResponseEntity<Day> planDays() {
+		LocalDate date = LocalDate.now().plusDays(7);
+		planService.planDays(LocalDate.now(), LocalDate.now().plusDays(7));
+		logger.info("Call: planDays");
+		return new ResponseEntity<Day>(HttpStatus.OK);
+	}
+	
 	@GetMapping("/cinema/{cinemaId}")
 	public @ResponseBody ResponseEntity<List<Day>> getDaysForCinema(@PathVariable long cinemaId) {
-		List<Day> days = planRepo.findDaysForCinema(cinemaId);
+		List<Day> days = planRepo.findDaysForCinema(cinemaId,LocalDate.now());
 		if(!days.isEmpty()) {
 			return new ResponseEntity<List<Day>>(days,HttpStatus.OK);
 		} else {
 			return new ResponseEntity<List<Day>>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping("/plannedMovies/{cinemaId}/{date}")
+	public @ResponseBody ResponseEntity<List<Movie>> getMoviesForCinema(@PathVariable long cinemaId,@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		logger.info("getMoviesForCinema call");
+		List<Movie> movies = planService.findPlannedMoviesForCinema(cinemaId,date);
+		if(!movies.isEmpty()) {
+			return new ResponseEntity<List<Movie>>(movies,HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<Movie>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/days/clear")
+	/*
+	 * Testing purposes. TODO: remove on production
+	 */
+	public @ResponseBody ResponseEntity<String> clear() {
+		planRepo.deleteAll();
+		return new ResponseEntity<String>("Done",HttpStatus.OK);
 	}
 }
