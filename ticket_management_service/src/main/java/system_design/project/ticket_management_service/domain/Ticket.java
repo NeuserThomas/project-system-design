@@ -23,14 +23,14 @@ public class Ticket {
 
     //default constructor used for JPA (is necessary)
     public Ticket(){
-        this.price = null;
+        this.price = 7.5;
         this.movieId = 0;
         this.validatedParking = false;
     }
 
     //ticket is made, not yet sold
-    public Ticket(Double price, long movieId){
-        this.price = price;
+    public Ticket(long movieId){
+        this.price = 7.5;
         this.movieId = movieId;
         this.validatedParking = false;
     }
