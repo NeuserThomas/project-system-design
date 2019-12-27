@@ -1,12 +1,12 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { Cinema } from 'src/app/model/cinema';
-import { CinemaService } from 'src/app/service/cinema-service.service';
+import { Cinema } from 'src/app/model/hall-planning-service/cinema';
+import { CinemaService } from 'src/app/service/hall-planning-service/cinema-service.service';
 import { CalendarEvent } from 'angular-calendar';
-import { DayService } from 'src/app/service/day-service.service';
-import { Day } from 'src/app/model/day';
-import { MovieService } from 'src/app/service/movie-service.service';
-import { Moviehall } from 'src/app/model/moviehall';
-import { Movie } from 'src/app/model/movie';
+import { DayService } from 'src/app/service/hall-planning-service/day-service.service';
+import { Day } from 'src/app/model/hall-planning-service/day';
+import { MovieService } from 'src/app/service/hall-planning-service/movie-service.service';
+import { Moviehall } from 'src/app/model/hall-planning-service/moviehall';
+import { Movie } from 'src/app/model/hall-planning-service/movie';
 
 @Component({
   selector: 'app-show-planning',

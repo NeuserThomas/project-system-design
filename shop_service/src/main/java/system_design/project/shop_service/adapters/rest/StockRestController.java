@@ -30,8 +30,6 @@ public class StockRestController {
 
 	@Autowired
 	private StockRepository stockRepo;
-	@Autowired
-	private ShopItemRepository shopRepo;
 	
 	final Logger logger = LoggerFactory.getLogger(StockRestController.class);
 	
@@ -39,12 +37,31 @@ public class StockRestController {
 	public @ResponseBody ResponseEntity<List<Stock>> getStocks() {
 		List<Stock> stocks = stockRepo.findAll();
 		return new ResponseEntity<List<Stock>>(stocks,HttpStatus.OK);
-
 	}
 	
-	@GetMapping("/{stockId}")
+	@GetMapping("/getStockId/{stockId}")
 	public @ResponseBody ResponseEntity<Stock> getStockById(@PathVariable long stockId) {
 		Optional<Stock> stock = stockRepo.findById(stockId);
+		if(stock.isPresent()) {
+			return new ResponseEntity<Stock>(stock.get(),HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Stock>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/names")
+	public @ResponseBody ResponseEntity<List<String>> getNames() {
+		List<String> names = stockRepo.findAllNames();
+		if(!names.isEmpty()) {
+			return new ResponseEntity<List<String>>(names,HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/getByName/{name}")
+	public @ResponseBody ResponseEntity<Stock> getStockById(@PathVariable String name) {
+		Optional<Stock> stock = stockRepo.findStockByName(name);
 		if(stock.isPresent()) {
 			return new ResponseEntity<Stock>(stock.get(),HttpStatus.OK);
 		} else {
@@ -57,27 +74,5 @@ public class StockRestController {
 		stockRepo.save(stock);
 		logger.info("Call: postStock");
 		return new ResponseEntity<Stock>(HttpStatus.ACCEPTED);
-	}
-	
-	//TODO: add calls to change treshhold.
-	/**
-	 * Method for testing
-	 * @return
-	 */
-	@GetMapping(path="/dummydata")
-	public @ResponseBody ResponseEntity<Stock> dummydata() {
-		Stock stock = new Stock();
-		stock.setCinemaId(1L);
-		Map<Long, Long> a = stock.getAmountPerProduct();
-		Map<Long, Long> b = stock.getThresholdPerProduct();
-		List<ShopItem> products = shopRepo.findAll();
-		for(ShopItem item: products) {
-			a.put(item.getId(),500L);
-			b.put(item.getId(),150L);
-		}
-		stock.setAmountPerProduct(a);
-		stock.setThresholdPerProduct(b);
-		stockRepo.save(stock);
-		return new ResponseEntity<Stock>(stock,HttpStatus.OK);
 	}
 }

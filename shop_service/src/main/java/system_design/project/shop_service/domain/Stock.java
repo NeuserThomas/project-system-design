@@ -3,6 +3,7 @@ package system_design.project.shop_service.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,8 @@ public class Stock {
 	/*
 	 * Maps the stock to a certain cinema
 	 */
-	private long cinemaId;
+	@Column(unique=true)
+	private String name;
 	
 	/**
 	 * How many products there are in stock
@@ -43,20 +45,18 @@ public class Stock {
 		thresholdPerProduct=new HashMap<Long,Long>();
 	}
 		
+	
+	public void addProduct(ShopItem s,long amount, long threshold) {
+		thresholdPerProduct.put(s.getId(),threshold);
+		amountPerProduct.put(s.getId(), threshold);
+	}
+	
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public long getCinemaId() {
-		return cinemaId;
-	}
-
-	public void setCinemaId(long cinemaId) {
-		this.cinemaId = cinemaId;
 	}
 
 	public Map<Long, Long> getAmountPerProduct() {
@@ -73,5 +73,13 @@ public class Stock {
 
 	public void setThresholdPerProduct(Map<Long,Long> thresholdPerProduct) {
 		this.thresholdPerProduct = thresholdPerProduct;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

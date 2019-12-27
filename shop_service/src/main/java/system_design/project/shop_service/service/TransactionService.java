@@ -33,19 +33,18 @@ public class TransactionService {
 	 * Returns -2 if product is not present
 	 */
 	public synchronized boolean viableTransaction(Transaction transaction) {
-		long cinemaId = transaction.getCinemaId();
-		Stock stock = stockService.stockRepo.findStockByCinemaId(cinemaId);
-		if(stock != null) {
+		Optional<Stock> stock = stockService.stockRepo.findById(transaction.getStock().getId());
+		if(stock.isPresent()) {
 			boolean possible = true;
 			for(long productId: transaction.getSoldItems().keySet()) {
-				long amount = stockService.canSellProduct(stock.getId(), productId, transaction.getSoldItems().get(productId));
+				long amount = stockService.canSellProduct(stock.get().getId(), productId, transaction.getSoldItems().get(productId));
 				if(amount != transaction.getSoldItems().get(productId)) {
 					possible=false;
 				}
 			}
 			if(possible) {
 				for(long productId: transaction.getSoldItems().keySet()) {
-					stockService.sellProduct(stock.getId(), productId, transaction.getSoldItems().get(productId));
+					stockService.sellProduct(stock.get().getId(), productId, transaction.getSoldItems().get(productId));
 				}
 				transactionRepo.save(transaction);
 				return true;

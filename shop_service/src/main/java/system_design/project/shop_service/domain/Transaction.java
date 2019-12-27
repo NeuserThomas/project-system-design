@@ -24,7 +24,8 @@ public class Transaction {
 	private LocalDateTime date;
 	
 	//In real life: Need register info
-	private long cinemaId;
+	@ManyToOne
+	private Stock stock;
 
 	public Transaction() {
 		soldItems=new HashMap<Long,Long>();
@@ -53,12 +54,13 @@ public class Transaction {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-
-	public long getCinemaId() {
-		return cinemaId;
+	
+	public Stock getStock() {
+		return stock;
 	}
 
-	public void setCinemaId(long cinemaId) {
-		this.cinemaId = cinemaId;
+	public void setStock(Stock stock) {
+		this.stock = stock;
 	}
+
 }

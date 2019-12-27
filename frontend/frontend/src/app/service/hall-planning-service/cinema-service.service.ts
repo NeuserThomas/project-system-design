@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Cinema } from '../model/cinema';
+import { Cinema } from '../../model/hall-planning-service/cinema';
 import { Observable } from 'rxjs/Observable';
 
 

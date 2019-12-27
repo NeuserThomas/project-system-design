@@ -1,8 +1,6 @@
 package system_design.project.shop_service.adapters.rest;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import system_design.project.shop_service.domain.ShopItem;
 import system_design.project.shop_service.domain.Transaction;
 import system_design.project.shop_service.persistence.ShopItemRepository;
 import system_design.project.shop_service.persistence.TransactionRepository;
@@ -35,17 +31,18 @@ public class TransactionRestController {
 	private TransactionRepository transactionRepo;
 	@Autowired
 	private TransactionService transactionService;
-	
-	@Autowired
-	//TESTING PURPOSES (Filling in dummy data)
-	private ShopItemRepository shopRepo;
-	
+		
 	final Logger logger = LoggerFactory.getLogger(TransactionRestController.class);
 	
 	@GetMapping
 	public @ResponseBody ResponseEntity<List<Transaction>> getTransactions() {
 		List<Transaction> transactions = transactionRepo.findAll();
 		return new ResponseEntity<List<Transaction>>(transactions,HttpStatus.OK);
+	}
+	
+	@GetMapping("/getNewTransaction")
+	public @ResponseBody ResponseEntity<Transaction> getTransaction() {
+		return new ResponseEntity<Transaction>(new Transaction(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{transactionId}")
@@ -71,23 +68,5 @@ public class TransactionRestController {
 		} else {
 			return new ResponseEntity<Transaction>(HttpStatus.CONFLICT);
 		}
-		
-	}
-	
-	@GetMapping("/dummydata")
-	public @ResponseBody ResponseEntity<Transaction> dummyData() {
-		Transaction transaction = new Transaction();
-		transaction.setDate(LocalDateTime.now());
-		transaction.setCinemaId(1L);
-		Map<Long, Long> map = transaction.getSoldItems();
-		List<ShopItem> list = shopRepo.findAll();
-		for(ShopItem item: list) {
-			map.put(item.getId(), 1L);
-		}
-		transaction.setSoldItems(map);
-		transactionRepo.save(transaction);
-		return new ResponseEntity<Transaction>(HttpStatus.OK);
-	}
-	
-	
+	}	
 }

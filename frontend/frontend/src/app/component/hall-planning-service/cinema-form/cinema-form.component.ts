@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CinemaService } from '../../../service/cinema-service.service';
-import { Cinema } from '../../../model/cinema';
+import { CinemaService } from '../../../service/hall-planning-service/cinema-service.service';
+import { Cinema } from '../../../model/hall-planning-service/cinema';
 
 
 @Component({

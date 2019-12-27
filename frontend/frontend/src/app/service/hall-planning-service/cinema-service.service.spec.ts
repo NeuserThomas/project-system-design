@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DayServiceService } from './day-service.service';
+import { CinemaService } from './cinema-service.service';
 
-describe('DayServiceService', () => {
+describe('CinemaService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DayServiceService = TestBed.get(DayServiceService);
+    const service: CinemaService = TestBed.get(CinemaService);
     expect(service).toBeTruthy();
   });
 });

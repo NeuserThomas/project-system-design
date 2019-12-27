@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Day } from '../model/day';
+import { Day } from '../../model/hall-planning-service/day';
 import { Observable } from 'rxjs/Observable';
-import { Cinema } from '../model/cinema';
+import { Cinema } from '../../model/hall-planning-service/cinema';
 
 
 @Injectable()

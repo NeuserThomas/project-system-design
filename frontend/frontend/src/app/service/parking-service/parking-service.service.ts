@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { ParkingTicket } from '../model/parking-ticket';
+import { ParkingTicket } from '../../model/parking-service/parking-ticket';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ParkingServiceService {
+export class ParkingService {
   private parkingUrl: string;
 
   constructor(private http: HttpClient) { 

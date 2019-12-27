@@ -1,0 +1,16 @@
+<Button class="btn btn-primary" (click)="onSelect('list stock') ">list stock</Button>
+<Button class="btn btn-primary" (click)="onSelect('transaction') ">New Transaction</Button>
+<Button class="btn btn-primary" (click)="onSelect('show products')">show products</Button>
+
+<div [ngSwitch]="selectedComponent">
+    <!-- the same view can be shown in more than one case -->
+    <div *ngSwitchCase="'list stock'">
+      <app-list-stock></app-list-stock>
+    </div>
+    <div *ngSwitchCase="'transaction'">
+      <app-new-transaction></app-new-transaction>
+    </div>
+    <div *ngSwitchCase="'show products'">
+      <app-shop-item-list></app-shop-item-list>
+    </div>
+  </div>
