@@ -30,27 +30,9 @@ Added a RestController (that can later be used for validateTicket)
   - Zookeeper
   - Kafka
   - MySQL
+- mongo
 
-### **Running Hall Planning Service**
-
-Two ways to run this service:
-
-1. From IDE
-2. Using Docker
-
-#### From IDE:
-Make sure Zookeeper, Kafka and MySQL (container) is running, or change to H2.
-#### Docker:
-- There are 2 dockerfiles one to build, and one to run
-
-- There also is a script that builds with the Dockerfile\_build. One just uses the jar, and the other one builds from scratch
-
-Make sure that for docker compose these are enabled in settings properties:
-
-```
-spring.cloud.stream.kafka.binder.brokers=kafka
-spring.cloud.stream.kafka.binder.zkNodes=zookeeper
-```
+link to full file: [hallPlanningService](hall_planning_service/readme.md)
 
 ##### Bash: `build_docker.sh` & `run_mysqlcontainer.sh`
 ###### Permission denied errors 
