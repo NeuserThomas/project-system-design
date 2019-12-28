@@ -1,0 +1,44 @@
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Stock
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+        <div *ngIf="names; else loading">
+            <button *ngFor="let name of names" class="dropdown-item" (click)="selectName(name)" type="button">{{name}}</button>
+        </div>
+        <ng-template #loading>
+            <div class="dropdown-item">
+              <i class="fa fa-spin fa-spinner fa-5x"></i>
+            </div>
+          </ng-template>
+    </div>
+    <div *ngIf="(prods | keyvalue)?.length">
+        <h2>{{stock.name}}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product name</th>
+                    <th># in stock</th>
+                    <th>threshold for restock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of prodIds">
+                    <td>{{item}}</td>
+                    <td>{{getProd(item).name}}</td>
+                    <td><input type="number" name="amount" [(ngModel)]="stock.amountPerProduct[item]"></td>
+                    <td><input type="number" name="threshold" [(ngModel)]="stock.thresholdPerProduct[item]"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button  class="btn btn-primary"  (click)="save()">save</button>
+        
+        <div *ngIf="show && good" (click)="closeAlert()" class="alert alert-success" dismiss-on-timeout="4000" role="alert">
+            {{message}}
+        </div>
+        <div *ngIf="show && !good" (click)="closeAlert()" class="alert alert-danger" dismiss-on-timeout="4000" role="alert">
+            {{message}}
+        </div>
+    </div>
+</div>

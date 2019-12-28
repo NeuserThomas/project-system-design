@@ -6,10 +6,12 @@ package system_design.project.hall_planning_service.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * @author robin
@@ -23,6 +25,7 @@ public class HallDay {
 	private long hallDayId;
 	
 	@ElementCollection
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<TimeSlot> timeSlots;
 
 	public HallDay() {

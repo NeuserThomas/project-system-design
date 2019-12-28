@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { Movie } from 'src/app/model/movie';
+import { Movie } from 'src/app/model/hall-planning-service/movie';
 import { EventEmitter } from '@angular/core';
 
 @Component({

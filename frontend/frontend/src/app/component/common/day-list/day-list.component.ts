@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Day } from "../../../model/day"
-import { DayService } from "../../../service/day-service.service"
+import { Day } from "../../../model/hall-planning-service/day"
+import { DayService } from "../../../service/hall-planning-service/day-service.service"
 
 @Component({
   selector: 'app-day-list',

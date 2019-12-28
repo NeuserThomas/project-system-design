@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Moviehall } from "../../../model/moviehall"
-import { MoviehallService } from "../../../service/moviehall-service.service"
-import { Movie } from 'src/app/model/movie';
+import { Moviehall } from "../../../model/hall-planning-service/moviehall"
+import { MoviehallService } from "../../../service/hall-planning-service/moviehall-service.service"
+import { Movie } from 'src/app/model/hall-planning-service/movie';
 
 @Component({
   selector: 'app-moviehall-list',

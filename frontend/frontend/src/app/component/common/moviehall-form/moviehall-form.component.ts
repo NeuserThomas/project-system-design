@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MoviehallService } from '../../../service/moviehall-service.service';
-import { Moviehall } from '../../../model/moviehall';
+import { MoviehallService } from '../../../service/hall-planning-service/moviehall-service.service';
+import { Moviehall } from '../../../model/hall-planning-service/moviehall';
 
 
 @Component({
