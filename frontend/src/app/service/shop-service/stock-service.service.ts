@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ShopItem } from 'src/app/model/shop-service/shop-item';
 import { Observable } from 'rxjs/Observable';
 import { Stock } from 'src/app/model/shop-service/stock';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class StockService {
   private stockUrl: string;
 
   constructor(private http: HttpClient) {
-    this.stockUrl = 'http://localhost:2230/stock';
-    this.shopUrl = 'http://localhost:2230/shopItem';
+    this.stockUrl = environment.shopServiceURL+'/stock';
+    this.shopUrl = environment.shopServiceURL+'/shopItem';
   }
 
   public findProducts(): Observable<ShopItem[]> {

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Day } from '../../model/hall-planning-service/day';
 import { Observable } from 'rxjs/Observable';
 import { Cinema } from '../../model/hall-planning-service/cinema';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable()
@@ -10,7 +11,7 @@ export class DayService {
   private dayUrl: string;
 
   constructor(private http: HttpClient) {
-    this.dayUrl = 'http://localhost:2223/planning';
+    this.dayUrl = environment.hallPlanningServiceURL+'/planning';
   }
 
   public findAll(): Observable<Day[]> {
