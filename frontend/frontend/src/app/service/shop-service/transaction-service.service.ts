@@ -11,7 +11,7 @@ export class TransactionService {
   private shopUrl: string;
 
   constructor(private http: HttpClient) {
-    this.shopUrl = 'http://localhost:2223/planning';
+    this.shopUrl = 'http://localhost:2230/transaction';
   }
 
   public tryAndSell(transaction: Transaction): Observable<Transaction> {

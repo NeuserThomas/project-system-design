@@ -1,7 +1,5 @@
 package system_design.project.shop_service;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -26,15 +24,19 @@ public class ShopServiceApplication {
 			final Logger logger = LoggerFactory.getLogger(ShopItemRepository.class);
 			if(shopRepo.count()==0) {
 				ShopItem a = new ShopItem();
+				a.setName("Water");
 				a.setDescription("Water: Be a HydroHomie!");
 				a.setPrice(1);
 				ShopItem b = new ShopItem();
+				b.setName("Coca Cola");
 				b.setDescription("Coca Cola: Live the american dream!");
 				b.setPrice(2);
 				ShopItem c = new ShopItem();
 				c.setDescription("Popcorn: Be a bit corny!");
+				c.setName("Popcorn sugar medium");
 				c.setPrice(5);
 				ShopItem d = new ShopItem();
+				d.setName("Doritos Sweet Chili 200g");
 				d.setDescription("Doritos: Be the best version of yourself!");
 				d.setPrice(2.5);
 				shopRepo.save(a);

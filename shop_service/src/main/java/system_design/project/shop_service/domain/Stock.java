@@ -48,7 +48,7 @@ public class Stock {
 	
 	public void addProduct(ShopItem s,long amount, long threshold) {
 		thresholdPerProduct.put(s.getId(),threshold);
-		amountPerProduct.put(s.getId(), threshold);
+		amountPerProduct.put(s.getId(), amount);
 	}
 	
 	public long getId() {

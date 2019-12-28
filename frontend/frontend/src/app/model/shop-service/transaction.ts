@@ -1,7 +1,8 @@
+import { Stock } from './stock';
 
 export class Transaction {
     id:number;
-    soldItems:Map<number,number>;
+    soldItems={};
     date:Date = new Date();
-    stock:Object;
+    stockId:number;
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,8 +25,11 @@ public class Transaction {
 	private LocalDateTime date;
 	
 	//In real life: Need register info
-	@ManyToOne
-	private Stock stock;
+
+	@Column(nullable=false)
+	private long stockId;
+
+	
 
 	public Transaction() {
 		soldItems=new HashMap<Long,Long>();
@@ -55,12 +59,11 @@ public class Transaction {
 		this.date = date;
 	}
 	
-	public Stock getStock() {
-		return stock;
+	public long getStockId() {
+		return stockId;
 	}
 
-	public void setStock(Stock stock) {
-		this.stock = stock;
+	public void setStockId(long stockId) {
+		this.stockId = stockId;
 	}
-
 }

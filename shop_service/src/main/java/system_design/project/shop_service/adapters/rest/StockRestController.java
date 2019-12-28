@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import system_design.project.shop_service.domain.ShopItem;
 import system_design.project.shop_service.domain.Stock;
-import system_design.project.shop_service.persistence.ShopItemRepository;
 import system_design.project.shop_service.persistence.StockRepository;
 
 @RequestMapping("stock")
@@ -69,10 +68,29 @@ public class StockRestController {
 		}
 	}
 	
-	@PostMapping(consumes="application/json")
-	public ResponseEntity<Stock> postStock(@RequestBody Stock stock) {
-		stockRepo.save(stock);
-		logger.info("Call: postStock");
-		return new ResponseEntity<Stock>(HttpStatus.ACCEPTED);
+	@PostMapping
+	public ResponseEntity<Stock> postStock(@RequestBody Stock stock) {		
+		Stock s = stockRepo.save(stock);
+		if(s.equals(stock)) {
+			return new ResponseEntity<Stock>(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<Stock>(HttpStatus.CONFLICT);
+		}
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> putStock(@RequestBody Stock stock) {
+		Optional<Stock> s = stockRepo.findById(stock.getId());
+		if(s.isPresent()) {
+			Stock temp = s.get();
+			temp.setName(stock.getName());
+			temp.setAmountPerProduct(stock.getAmountPerProduct());
+			temp.setThresholdPerProduct(stock.getThresholdPerProduct());
+			stockRepo.save(temp);
+			logger.info("Temp id: "+temp.getId());
+			return new ResponseEntity<Object>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>("No stock with that id found",HttpStatus.I_AM_A_TEAPOT);
+		}
 	}
 }

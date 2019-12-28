@@ -55,14 +55,14 @@ public class TransactionRestController {
 		}
 	}
 	
-	@PostMapping(consumes="application/json")
 	/**
 	 * The method when selling items. Since each transaction can have multiple items.
 	 * @param transaction
 	 * @return
 	 */
-	//NOT TESTED YET
+	@PostMapping
 	public ResponseEntity<Transaction> postTransaction(@RequestBody Transaction transaction) {
+		logger.info("postTransaction!");
 		if(transactionService.viableTransaction(transaction)) {
 			return new ResponseEntity<Transaction>(HttpStatus.ACCEPTED);
 		} else {

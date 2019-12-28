@@ -1,6 +1,5 @@
 package system_design.project.shop_service.service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import system_design.project.shop_service.domain.ShopItem;
 import system_design.project.shop_service.domain.Stock;
-import system_design.project.shop_service.persistence.ShopItemRepository;
 import system_design.project.shop_service.persistence.StockRepository;
 
 
@@ -29,15 +26,26 @@ public class StockService {
 	 * If the product is not present, returns -1 if stock not present.
 	 * Returns -2 if product is not present
 	 */
-	public long sellProduct(Long stockId, Long productId, long amount) {
-		Optional<Stock> stock = stockRepo.findById(stockId);
-		if(stock.isPresent()) {
-			Stock s =stock.get();
-			Map<Long,Long> map = s.getAmountPerProduct();
+	public long sellProduct(Stock stock, Long productId, long amount) {
+		if(stock!=null) {
+			Map<Long,Long> map = stock.getAmountPerProduct();
 			if(map.containsKey(productId)) {
 				long amountLeft = map.get(productId);
 				if(amountLeft>=amount) {
+					if(amountLeft-amount<stock.getThresholdPerProduct().get(productId)) {
+						logger.warn("Restocking! value below threshold!");
+						/*
+						 * In real life this would mail a manager to order restockings, or do it programatically.
+						 */
+						long a = stock.getThresholdPerProduct().get(productId);
+						a*=5;
+						Map<Long, Long> b = stock.getThresholdPerProduct();
+						b.replace(productId, a);
+						stock.setThresholdPerProduct(b);
+					}
 					map.replace(productId, amountLeft-amount);
+					stock.setAmountPerProduct(map);
+					stockRepo.save(stock);
 					return amount;
 				} else {
 					return amountLeft;

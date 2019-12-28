@@ -4,13 +4,22 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Descrition</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
             <th scope="col">Price</th>
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>#</td>
+            <td><input type="text" name="name" [(ngModel)]="name"></td>
+            <td><input type="text" name="description" [(ngModel)]="description"></td>
+            <td><input type="text" name="price" [(ngModel)]="price"></td>
+            <td><button class="btn btn-primary" (click)=add()>add</button></td>
+          </tr>
           <tr *ngFor="let item of items">
             <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.price }}</td>
           </tr>

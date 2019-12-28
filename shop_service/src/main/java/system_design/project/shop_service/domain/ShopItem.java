@@ -1,5 +1,6 @@
 package system_design.project.shop_service.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +12,9 @@ public class ShopItem {
 	@GeneratedValue
 	private long id;
 
+	@Column(unique=true)
+	private String name;
+	
 	private String description;
 	
 	private double price;
@@ -37,5 +41,14 @@ public class ShopItem {
 
 	public void setPrice(double price) {
 		this.price = price;
-	}	
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

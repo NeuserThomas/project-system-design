@@ -1,1 +1,55 @@
-<p>new-transaction works!</p>
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Stock
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+        <div *ngIf="names; else loading">
+            <button *ngFor="let name of names" class="dropdown-item" (click)="selectName(name)" type="button">{{name}}</button>
+        </div>
+        <ng-template #loading>
+            <div class="dropdown-item">
+              <i class="fa fa-spin fa-spinner fa-5x"></i>
+            </div>
+          </ng-template>
+    </div>
+</div>
+
+<Button class="btn btn-primary" [disabled]="!stockId" (click)="newTransaction()">New Transaction</Button>
+<Button class="btn btn-primary" [disabled]="!stockId" (click)="cancel()">Cancel</Button>
+<Button class="btn btn-primary" [disabled]="!stockId" (click)="save()">Save</Button>
+
+<div *ngIf="transaction">
+    <table>
+        <tr>
+            <td><input type="number" name="prodId" [(ngModel)]="prodId"></td>
+            <td><input type="number" name="amount" [(ngModel)]="amount"></td>
+            <td><button class="btn btn-secondary" (click)="add()">add</button></td>
+        </tr>
+    </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Id</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of transaction.soldItems | keyvalue">
+                <td>{{item.key}}</td>
+                <td>{{item.value}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="dropdown-item" *ngIf=loading>
+    <i class="fa fa-spin fa-spinner fa-5x"></i>
+  </div>
+<br>
+
+<div *ngIf="showAlert && good" (click)="closeAlert()" class="alert alert-success" dismiss-on-timeout="4000" role="alert">
+    {{message}}
+</div>
+<div *ngIf="showAlert && !good" (click)="closeAlert()" class="alert alert-danger" dismiss-on-timeout="4000" role="alert">
+    {{message}}
+</div>

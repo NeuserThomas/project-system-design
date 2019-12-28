@@ -48,6 +48,16 @@ public class ShopItemRestController {
 		}
 	}
 	
+	@GetMapping("/getNames")
+	public @ResponseBody ResponseEntity<?> getShopItemById(@RequestBody List<Long> ids) {
+		List<String> items = shopItemRepo.findNamesById(ids);
+		if(!items.isEmpty()) {
+			return new ResponseEntity<List<String>>(items,HttpStatus.OK);
+		} else {
+			return new ResponseEntity<ShopItem>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping(consumes="application/json")
 	public ResponseEntity<ShopItem> postShopItem(@RequestBody ShopItem shopItem) {
 		shopItemRepo.save(shopItem);
