@@ -38,12 +38,11 @@ public class StockService {
 						 * In real life this would mail a manager to order restockings, or do it programatically.
 						 */
 						long a = stock.getThresholdPerProduct().get(productId);
-						a*=5;
-						Map<Long, Long> b = stock.getThresholdPerProduct();
-						b.replace(productId, a);
-						stock.setThresholdPerProduct(b);
+						map.replace(productId, amountLeft-amount+5*stock.getThresholdPerProduct().get(productId));
+					} else {
+						map.replace(productId, amountLeft-amount);
+
 					}
-					map.replace(productId, amountLeft-amount);
 					stock.setAmountPerProduct(map);
 					stockRepo.save(stock);
 					return amount;

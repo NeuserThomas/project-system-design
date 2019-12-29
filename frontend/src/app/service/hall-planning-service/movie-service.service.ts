@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Movie } from '../../model/hall-planning-service/movie';
 import { Observable } from 'rxjs/Observable';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class MovieService {
@@ -9,7 +10,7 @@ export class MovieService {
   private movieUrl: string;
 
   constructor(private http: HttpClient) {
-    this.movieUrl = 'http://localhost:2223/movie';
+    this.movieUrl = environment.hallPlanningServiceURL+'/movie';
   }
 
   public findAll(): Observable<Movie[]> {
