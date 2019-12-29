@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker start mySQLdb
+docker start mysqldb
