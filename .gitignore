@@ -1,6 +1,14 @@
 
 \.project
 
+frontend/frontend/.settings/
+
+movie_flow_service/target/
+
+movie_flow_service/.settings/
+
+movie_flow_service/.classpath
+
 *.swp
 
 shop_service/bin/
