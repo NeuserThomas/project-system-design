@@ -54,7 +54,7 @@ services:
      - MONGO_INITDB_ROOT_PASSWORD=ThePassword
      - MONGO_INITDB_DATABASE=movie
 # -------------Main services---------------
-  hall_planning:
+  hall-planning:
     build: 
       context: ./hall_planning_service
    # entrypoint: ["java","-jar", "/app/target/hall_planning_service-0.0.1-SNAPSHOT.jar"]
@@ -97,7 +97,7 @@ services:
 #      - "2300:2300"
 #    expose: 
 #      - "2300"
-  shop_service:
+  shop-service:
     build:
       context: ./shop_service
     #entrypoint: ["java", "-jar", "/app/target/shop_service-0.0.1-SNAPSHOT.jar"]
