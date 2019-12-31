@@ -1,5 +1,9 @@
 package system_design.project.publicity_service.service;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import system_design.project.PublicityServiceApplication;
+import system_design.project.publicity_service.domain.AMovie;
 import system_design.project.publicity_service.domain.Ad_Movie;
 import system_design.project.publicity_service.domain.Category;
 import system_design.project.publicity_service.persistence.Ad_MovieRepository;
@@ -37,6 +42,18 @@ public class PublicityService {
 	}
 	
 	private void generateByCategory(Category category) {
-		Ad_Movie ad_Movie = new Ad_Movie();
+		List<AMovie> playlist = new ArrayList<AMovie>();
+		Duration duration = Duration.ZERO;
+		//minimal 25 minutes
+		while(duration.toMinutes() < 25) {
+			AMovie a = getNewAMovie(category);
+			playlist.add(a);
+			duration = duration.plus(a.getDuration());
+		}
+	}
+	
+	private AMovie getNewAMovie(Category category) {
+		return null;
+		
 	}
 }
