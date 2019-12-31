@@ -2,6 +2,7 @@ package system_design.project;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Duration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +32,10 @@ public class PublicityServiceApplication {
 	CommandLineRunner testAd_MovieRepository(Ad_MovieRepository repository) {
 		return (args) -> {
 			logger.info("Adding 2 Ad_Movies:");
-			Ad_Movie ad_Movie1 = new Ad_Movie(1, LocalTime.parse("00:30:00"), Category.Children, "Ad_MovieChildren1", null, LocalDate.now());
-			Ad_Movie ad_Movie2 = new Ad_Movie(2, LocalTime.parse("00:20:00"), Category.Action, "Ad_MovieAction1", null, LocalDate.now());
+			Ad_Movie ad_Movie1 = new Ad_Movie(1, Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
+					Category.Children, "Ad_MovieChildren1", null, LocalDate.now());
+			Ad_Movie ad_Movie2 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+					Category.Action, "Ad_MovieAction1", null, LocalDate.now());
 			
 			logger.info(ad_Movie1.toString());
 			logger.info(ad_Movie2.toString());
@@ -65,9 +68,12 @@ public class PublicityServiceApplication {
 	CommandLineRunner testAdvertisementRepository(AdvertisementRepository repository) {
 		return (args) -> {
 			logger.info("Adding 2 Ad_Movies:");
-			Advertisement advertisement1 = new Advertisement(3, LocalTime.parse("00:03:00"), Category.All, "Belgiëbankreclame", "belgiëbank nv");
-			Trailer trailer1 = new Trailer(4, LocalTime.parse("00:05:00"), Category.Plus18, "TrailerBoy");
-			Ad_Movie ad_Movie3 = new Ad_Movie(2, LocalTime.parse("00:20:00"), Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
+			Advertisement advertisement1 = new Advertisement(3, Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
+					Category.All, "Belgiëbankreclame", "belgiëbank nv");
+			Trailer trailer1 = new Trailer(4, Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
+					Category.Plus18, "TrailerBoy");
+			Ad_Movie ad_Movie3 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
 			
 			logger.info(advertisement1.toString());
 			logger.info(trailer1.toString());
@@ -92,9 +98,12 @@ public class PublicityServiceApplication {
 	CommandLineRunner testTrailerRepository(TrailerRepository repository) {
 		return (args) -> {
 			logger.info("Adding 2 Ad_Movies:");
-			Advertisement advertisement1 = new Advertisement(3, LocalTime.parse("00:03:00"), Category.All, "Belgiëbankreclame", "belgiëbank nv");
-			Trailer trailer1 = new Trailer(4, LocalTime.parse("00:05:00"), Category.Plus18, "TrailerBoy");
-			Ad_Movie ad_Movie3 = new Ad_Movie(2, LocalTime.parse("00:20:00"), Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
+			Advertisement advertisement1 = new Advertisement(3, Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
+					Category.All, "Belgiëbankreclame", "belgiëbank nv");
+			Trailer trailer1 = new Trailer(4, Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
+					Category.Plus18, "TrailerBoy");
+			Ad_Movie ad_Movie3 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
 			
 			logger.info(advertisement1.toString());
 			logger.info(trailer1.toString());

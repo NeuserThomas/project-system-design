@@ -1,7 +1,7 @@
 package system_design.project.publicity_service.domain;
 
 import java.text.MessageFormat;
-import java.time.LocalTime;
+import java.time.Duration;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -26,7 +26,7 @@ public abstract class AMovie {
 	@Id
 	@GeneratedValue
 	private long id;
-	private LocalTime duration;
+	private Duration duration;
 	private Category category;
 	private String name;
 	
@@ -40,7 +40,7 @@ public abstract class AMovie {
 	 * @param duration
 	 * @param category
 	 */
-	public AMovie(long id, LocalTime duration, Category category, String name) {
+	public AMovie(long id, Duration duration, Category category, String name) {
 		super();
 		this.id = id;
 		this.setDuration(duration);
@@ -48,10 +48,10 @@ public abstract class AMovie {
 		this.name = name;
 	}
 	
-	public LocalTime getDuration() {
+	public Duration getDuration() {
 		return duration;
 	}
-	public void setDuration(LocalTime duration) {
+	public void setDuration(Duration duration) {
 		this.duration = duration;
 	}
 	

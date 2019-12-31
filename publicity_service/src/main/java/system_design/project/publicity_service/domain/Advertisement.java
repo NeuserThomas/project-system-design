@@ -1,6 +1,6 @@
 package system_design.project.publicity_service.domain;
 
-import java.time.LocalTime;
+import java.time.Duration;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public class Advertisement extends AMovie {
 		super(0, null, null, null);
 	}
 	
-	public Advertisement(long id, LocalTime duration, Category category, String name, String company) {
+	public Advertisement(long id, Duration duration, Category category, String name, String company) {
 		super(id, duration, category, name);
 		// TODO Auto-generated constructor stub
 		this.company = company;

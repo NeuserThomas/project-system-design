@@ -1,9 +1,7 @@
 package system_design.project.publicity_service.domain;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.TemporalAmount;
+import java.time.Duration;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -29,7 +27,7 @@ public class Ad_Movie extends AMovie {
 		super(0, null, null, null);
 	}
 
-	public Ad_Movie(long id, LocalTime duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
+	public Ad_Movie(long id, Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
 		super(id, duration, category, name);
 		// TODO Auto-generated constructor stub
 		this.setPlaylist(playlist);
