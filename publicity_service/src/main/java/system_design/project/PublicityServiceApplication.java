@@ -35,18 +35,20 @@ public class PublicityServiceApplication {
 	CommandLineRunner testAd_MovieRepository(Ad_MovieRepository repository) {
 		return (args) -> {
 			logger.info("Adding 2 Ad_Movies:");
-			Duration duration = Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00"));
-			logger.info("duration: " + duration.toString());
-			Ad_Movie ad_Movie1 = new Ad_Movie(1, duration,
+			Ad_Movie ad_Movie1 = new Ad_Movie(1, Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
 					Category.Children, "Ad_MovieChildren1", null, LocalDate.now());
 			Ad_Movie ad_Movie2 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
 					Category.Action, "Ad_MovieAction1", null, LocalDate.now());
+			Ad_Movie ad_Movie3 = new Ad_Movie(3, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
 			
 			logger.info(ad_Movie1.toString());
 			logger.info(ad_Movie2.toString());
+			logger.info(ad_Movie3.toString());
 			
 			repository.save(ad_Movie1);
 			repository.save(ad_Movie2);
+			repository.save(ad_Movie3);
 			logger.info("saved");
 		};
 	}
@@ -72,21 +74,13 @@ public class PublicityServiceApplication {
 	@Bean
 	CommandLineRunner testAdvertisementRepository(AdvertisementRepository repository) {
 		return (args) -> {
-			logger.info("Adding 2 Ad_Movies:");
-			Advertisement advertisement1 = new Advertisement(3, Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
+			logger.info("Adding an advertisement:");
+			Advertisement advertisement1 = new Advertisement(4, Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
 					Category.All, "Belgiëbankreclame", "belgiëbank nv");
-			Trailer trailer1 = new Trailer(4, Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
-					Category.Plus18, "TrailerBoy");
-			Ad_Movie ad_Movie3 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
-					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
 			
 			logger.info(advertisement1.toString());
-			logger.info(trailer1.toString());
-			logger.info(ad_Movie3.toString());
 			
 			repository.save(advertisement1);
-			//repository.save(trailer1);
-			//repository.save(ad_Movie3);
 			logger.info("saved");
 		};
 	}
@@ -102,21 +96,12 @@ public class PublicityServiceApplication {
 	@Bean
 	CommandLineRunner testTrailerRepository(TrailerRepository repository) {
 		return (args) -> {
-			logger.info("Adding 2 Ad_Movies:");
-			Advertisement advertisement1 = new Advertisement(3, Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
-					Category.All, "Belgiëbankreclame", "belgiëbank nv");
-			Trailer trailer1 = new Trailer(4, Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
+			logger.info("Adding a trailer:");
+			Trailer trailer1 = new Trailer(5, Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
 					Category.Plus18, "TrailerBoy");
-			Ad_Movie ad_Movie3 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
-					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
-			
-			logger.info(advertisement1.toString());
 			logger.info(trailer1.toString());
-			logger.info(ad_Movie3.toString());
 			
-			//repository.save(advertisement1);
 			repository.save(trailer1);
-			//repository.save(ad_Movie3);
 			logger.info("saved");
 		};
 	}
@@ -139,11 +124,20 @@ public class PublicityServiceApplication {
 			playlist.add(een.get(0));
 			playlist.add(twee.get(0));
 			logger.info("get movie");
-			aRepository.getOne((long)1).setPlaylist(playlist);;
-			logger.info("setPlaylist");
-			//a.setPlaylist(playlist);
-			logger.info("save");
-			//aRepository.save(a);
+			Ad_Movie a = aRepository.getOne((long)1);
+			a.setPlaylist(playlist);
+			logger.info(a.getDuration().toString());//8 minuten
+			
+			List<Ad_Movie> ad_Movies = aRepository.findAd_MovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
+			ad_Movies.forEach((adMovie) -> logger.info(adMovie.toString()));
+		};
+	}
+	
+	@Bean
+	CommandLineRunner testGetUpdate(Ad_MovieRepository aRepository, TrailerRepository tRepository, AdvertisementRepository adRepository) {
+		return (args) -> {
+			List<Ad_Movie> ad_Movies = aRepository.findAd_MovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
+			ad_Movies.forEach((adMovie) -> logger.info(adMovie.toString()));
 		};
 	}
 }

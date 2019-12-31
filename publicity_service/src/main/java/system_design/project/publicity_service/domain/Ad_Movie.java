@@ -43,14 +43,15 @@ public class Ad_Movie extends AMovie {
 
 	public void setPlaylist(List<AMovie> playlist) {
 		this.playlist = playlist;
+		
+		//recalculate duration
+		Duration newDuration = Duration.ZERO;
 		if(playlist != null) {
-			//recalculate duration
-			Duration newDuration = Duration.ZERO;
 			for(AMovie aMovie : playlist) {
 				newDuration = newDuration.plus(aMovie.getDuration());
 			}
-			this.setDuration(newDuration);
 		}
+		this.setDuration(newDuration);
 	}
 
 	public LocalDate getCreationDate() {

@@ -71,7 +71,7 @@ public abstract class AMovie {
 	
 	@Override
 	public String toString() {
-		return MessageFormat.format("Id: {0}\t Name: {1} \t Category: {2}" ,
-				this.id, this.name, this.category.name());
+		return MessageFormat.format("Id: {0}\t Name: {1} \t Category: {2} \t Duration: {3}" ,
+				this.id, this.name, this.category.name(), this.duration.toString());
 	}
 }
