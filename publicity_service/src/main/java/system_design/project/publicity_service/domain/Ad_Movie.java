@@ -1,7 +1,9 @@
 package system_design.project.publicity_service.domain;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAmount;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
