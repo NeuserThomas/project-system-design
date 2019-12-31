@@ -67,11 +67,11 @@ export class ListStockComponent implements OnInit {
     this.show=false;
   }
 
-  getProd(id:number) {
+  getProd(id:number):object {
     var obj = this.prods.filter(function(node) {
         return node.id==id;
     });
-    return obj;   
+    return obj;
   }
 
 

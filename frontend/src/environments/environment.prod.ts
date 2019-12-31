@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  hallPlanningServiceURL:"hall_planning_service:2223",
-  shopServiceURL:"shop_service:2230",
+  hallPlanningServiceURL: "api-gateway:2223",
+  shopServiceURL: "api-gateway:2230",
 };

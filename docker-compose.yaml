@@ -79,6 +79,17 @@ services:
       - "2223:2223"
     expose:
       - "2223"
+#---- API gateway ------
+  api-gateway:
+    build:
+      context: ./API-Gateway
+    restart: on-failure
+    links:
+      - hall-planning
+    ports: 
+      - "8080"
+    expose:
+      - "8080:8080"
 #  ticket_management:
 #    build:
 #      context: ./ticket_management_service

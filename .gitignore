@@ -12,3 +12,7 @@ movie_flow_service/.classpath
 *.swp
 
 shop_service/bin/
+
+.metadata/
+
+parking_service/.settings/
