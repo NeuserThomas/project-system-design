@@ -19,15 +19,16 @@ import system_design.project.hall_planning_service.domain.TimeSlot;
  */
 public interface TimeSlotRepository extends JpaRepository<TimeSlot,Long> {
 	
-	@Query("Select t from TimeSlot t where t.hall.cinema.id=?1 and t.movieId=?2 and CONVERT(t.startTime,23)=?3")
-	public List<TimeSlot> findByCinemaIdAndMovieAndDate(long cinemaId,String movidId,LocalDate date);
+	@Query("Select t from TimeSlot t where t.hall.cinema.id=:cinemaId and t.movieId=:movieId and YEAR(t.startTime)=YEAR(:date) and MONTH(t.startTime)=MONTH(:date) and DAY(t.startTime)=DAY(:date)")
+	public List<TimeSlot> findByCinemaIdAndMovieAndDate(long cinemaId,String movieId,LocalDate date);
 
-	@Query("Select t from TimeSlot t where CONVERT(t.startTime,23)=?1")
+	//@Query("Select t from TimeSlot t where YEAR(t.startTime)=YEAR(:date) and MONTH(t.startTime)=MONTH(:date) and DAY(t.startTime)=DAY(:date)")
+	@Query("Select t from TimeSlot t where DATE(t.startTime)=DATE(:date)")
 	public List<TimeSlot> findbyDate(LocalDate date);
 
-	@Query("Select t from TimeSlot t where t.hall.cinema.id=?1 and CONVERT(t.startTime,23)=?2")
+	@Query("Select t from TimeSlot t where t.hall.cinema.id=:cinemaId and YEAR(t.startTime)=YEAR(:date) and MONTH(t.startTime)=MONTH(:date) and DAY(t.startTime)=DAY(:date)")
 	public List<TimeSlot> findForCinemaAndDate(long cinemaId, LocalDate date);
 	
-	@Query("Select t from TimeSlot t where t.hall.cinema.name=?1 and CONVERT(t.startTime,23)=?2")
+	@Query("Select t from TimeSlot t where t.hall.cinema.cinemaName=:cinemaName and YEAR(t.startTime)=YEAR(:date) and MONTH(t.startTime)=MONTH(:date) and DAY(t.startTime)=DAY(:date)")
 	public List<TimeSlot> findForCinemaAndDate(String cinemaName, LocalDate date);
 }
