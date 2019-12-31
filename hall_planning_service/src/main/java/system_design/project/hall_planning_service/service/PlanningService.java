@@ -108,7 +108,7 @@ public class PlanningService {
 			}
 		}
 		if (updated) {
-			publish("Updated schedule!");
+			publish(date.toString());
 		}
 	}
 	
