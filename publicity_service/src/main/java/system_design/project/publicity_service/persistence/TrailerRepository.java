@@ -13,4 +13,6 @@ import system_design.project.publicity_service.domain.Category;
 public interface TrailerRepository extends JpaRepository<Trailer, Long> {
 	@Query("select a from Trailer a where a.category = ?1")
 	List<Trailer> findTrailerByCategory(Category category);
+	
+	List<Trailer> findTrailerByName(String Name);
 }

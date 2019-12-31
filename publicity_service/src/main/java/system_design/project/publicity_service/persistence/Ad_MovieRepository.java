@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import system_design.project.publicity_service.domain.Ad_Movie;
 import system_design.project.publicity_service.domain.Category;
+import system_design.project.publicity_service.domain.Trailer;
 
 @Repository
 public interface Ad_MovieRepository extends JpaRepository<Ad_Movie, Long> {
@@ -23,4 +24,6 @@ public interface Ad_MovieRepository extends JpaRepository<Ad_Movie, Long> {
 	
 	@Query("Select a from Ad_Movie a where a.category = 1")
 	List<Ad_Movie> findAd_MovieByCategoryIsChildren();
+
+	List<Ad_Movie> findAd_MovieByName(String Name);
 }

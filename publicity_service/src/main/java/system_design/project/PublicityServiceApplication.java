@@ -2,6 +2,8 @@ package system_design.project;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.time.Duration;
 
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import system_design.project.publicity_service.domain.AMovie;
 import system_design.project.publicity_service.domain.Ad_Movie;
 import system_design.project.publicity_service.domain.Advertisement;
 import system_design.project.publicity_service.domain.Category;
@@ -32,7 +35,9 @@ public class PublicityServiceApplication {
 	CommandLineRunner testAd_MovieRepository(Ad_MovieRepository repository) {
 		return (args) -> {
 			logger.info("Adding 2 Ad_Movies:");
-			Ad_Movie ad_Movie1 = new Ad_Movie(1, Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
+			Duration duration = Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00"));
+			logger.info("duration: " + duration.toString());
+			Ad_Movie ad_Movie1 = new Ad_Movie(1, duration,
 					Category.Children, "Ad_MovieChildren1", null, LocalDate.now());
 			Ad_Movie ad_Movie2 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
 					Category.Action, "Ad_MovieAction1", null, LocalDate.now());
@@ -121,6 +126,24 @@ public class PublicityServiceApplication {
 		return (args) -> {
 			logger.info("get all Plus18 Trailers:");
 			repository.findTrailerByCategory(Category.Plus18).forEach((aMovie) -> logger.info(aMovie.toString()));
+		};
+	}
+	
+	@Bean
+	CommandLineRunner testPlaylistUpdate(Ad_MovieRepository aRepository, TrailerRepository tRepository, AdvertisementRepository adRepository) {
+		return (args) -> {
+			logger.info("Adding playlist to Ad_Movie");
+			List<AMovie> playlist = new ArrayList<AMovie>();
+			List<Advertisement> een = adRepository.findAdvertisementByName("Belgiëbankreclame");
+			List<Trailer> twee = tRepository.findTrailerByName("TrailerBoy");
+			playlist.add(een.get(0));
+			playlist.add(twee.get(0));
+			logger.info("get movie");
+			aRepository.getOne((long)1).setPlaylist(playlist);;
+			logger.info("setPlaylist");
+			//a.setPlaylist(playlist);
+			logger.info("save");
+			//aRepository.save(a);
 		};
 	}
 }

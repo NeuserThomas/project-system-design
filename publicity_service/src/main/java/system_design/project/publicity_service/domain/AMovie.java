@@ -43,7 +43,7 @@ public abstract class AMovie {
 	public AMovie(long id, Duration duration, Category category, String name) {
 		super();
 		this.id = id;
-		this.setDuration(duration);
+		this.duration = duration;
 		this.category = category;
 		this.name = name;
 	}

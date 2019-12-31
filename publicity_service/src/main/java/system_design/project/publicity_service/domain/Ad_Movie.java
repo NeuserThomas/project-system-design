@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.Duration;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.transaction.Transactional;
 
 /**
  * 
@@ -19,7 +22,7 @@ import javax.persistence.OneToMany;
 @Entity
 @DiscriminatorValue("P")
 public class Ad_Movie extends AMovie {
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AMovie> playlist;
 	private LocalDate creationDate;
 	
@@ -30,7 +33,7 @@ public class Ad_Movie extends AMovie {
 	public Ad_Movie(long id, Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
 		super(id, duration, category, name);
 		// TODO Auto-generated constructor stub
-		this.setPlaylist(playlist);
+		this.playlist = playlist;
 		this.creationDate = creationDate;
 	}
 
@@ -40,6 +43,14 @@ public class Ad_Movie extends AMovie {
 
 	public void setPlaylist(List<AMovie> playlist) {
 		this.playlist = playlist;
+		if(playlist != null) {
+			//recalculate duration
+			Duration newDuration = Duration.ZERO;
+			for(AMovie aMovie : playlist) {
+				newDuration = newDuration.plus(aMovie.getDuration());
+			}
+			this.setDuration(newDuration);
+		}
 	}
 
 	public LocalDate getCreationDate() {
