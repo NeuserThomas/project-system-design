@@ -1,17 +1,63 @@
 version: "3"
 services:
-  ticket_db:
-    image: mysql:5.7
+# ------------Support services-------------
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    expose:
+      - "2181"
+  kafka:
+    image: confluentinc/cp-kafka
+    depends_on: 
+      - zookeeper
+    environment: 
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    expose:
+      - "9092"
+#--- mysql dbs ----      
+  mysqldb:
+    build:
+      context: ./mysql
+    #image: mysql:5.7
+    #entrypoint:  sh -c "echo 'CREATE DATABASE IF NOT EXISTS HallPlanningService; CREATE DATABASE IF NOT EXISTS Shop;' > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    #command: --default-authentication-plugin=mysql_native_password
     expose:
       - "3306"
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=Ticket
-  ticket_management:
-    build:
-      context: ./ticket_management_service
+      - MYSQL_ROOT_PASSWORD=ThePassword
+#      - MYSQL_DATABASE=Shop
+#      - MYSQL_DATABASE=HallPlanningService
+#    ticket_db:
+#        image: mysql:5.7
+#        expose:
+#          - "3307"
+#        ports:
+#          - "3306:3307"
+#        environment:
+#          - MYSQL_ROOT_PASSWORD=root
+#          - MYSQL_DATABASE=Ticket
+#---- mongo dbs -------
+  moviedb:
+   image: mongo:4.2
+   expose:
+     - "27017"
+   ports:
+     - "27017:27017" 
+   environment:
+     - MONGO_INITDB_ROOT_USERNAME=root
+     - MONGO_INITDB_ROOT_PASSWORD=ThePassword
+     - MONGO_INITDB_DATABASE=movie
+# -------------Main services---------------
+  hall-planning:
+    build: 
+      context: ./hall_planning_service
+   # entrypoint: ["java","-jar", "/app/target/hall_planning_service-0.0.1-SNAPSHOT.jar"]
     deploy:
       restart_policy:
         condition: on-failure
@@ -19,11 +65,65 @@ services:
         max_attempts: 5
         window: 10s
     restart: on-failure
-    depends_on:
-      - ticket_db
     links:
-      - ticket_db
+      - mysqldb
+      - kafka
+      - zookeeper
+      - moviedb
+    depends_on:
+      - mysqldb
+      - kafka
+      - zookeeper
+      - moviedb
     ports:
-      - "2300:2300"
-    expose: 
-      - "2300"
+      - "2223:2223"
+    expose:
+      - "2223"
+#---- API gateway ------
+  api-gateway:
+    build:
+      context: ./API-Gateway
+    restart: on-failure
+    links:
+      - hall-planning
+    ports: 
+      - "8080"
+    expose:
+      - "8080:8080"
+#  ticket_management:
+#    build:
+#      context: ./ticket_management_service
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        delay: 20s
+#        max_attempts: 5
+#        window: 10s
+#    restart: on-failure
+#    depends_on:
+#      - ticket_db
+#    links:
+#      - ticket_db
+#    ports:
+#      - "2300:2300"
+#    expose: 
+#      - "2300"
+  shop-service:
+    build:
+      context: ./shop_service
+    #entrypoint: ["java", "-jar", "/app/target/shop_service-0.0.1-SNAPSHOT.jar"]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 5
+        window: 10s
+    restart: on-failure
+    links:
+      - mysqldb
+    depends_on:
+      - mysqldb
+    ports:
+      - "2230:2230"
+    expose:
+      - "2230"
