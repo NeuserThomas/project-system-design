@@ -40,6 +40,7 @@ public class TimeSlotRestController {
 
 	@GetMapping("/getByDate/{date}")
 	public @ResponseBody ResponseEntity<List<TimeSlot>> getCinemaById(@PathVariable  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		logger.info(date.toString());
 		List<TimeSlot> list = timeRepo.findbyDate(date);
 		if (!list.isEmpty()) {
 			return new ResponseEntity<List<TimeSlot>>(list, HttpStatus.OK);
