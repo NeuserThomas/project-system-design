@@ -12,31 +12,32 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ApiGatewayApplication {
 
-	@Value(value="${connection.hall_container}")
-	private String hall_planning; 
-	
+	@Value(value = "${connection.hall_container}")
+	private String hall_planning;
+
 	final Logger logger = LoggerFactory.getLogger(ApiGatewayApplication.class);
 
-	
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
-	
-	@Bean public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-		String hallConnectionString="http://"+hall_planning+":2223";
+
+	@Bean
+	public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+		String hallConnectionString = "http://" + hall_planning + ":2223";
 		logger.info(hallConnectionString);
 		return builder.routes()
-		//hall_planning_service
-		.route(r ->r.host("*").and().path("/planning/**").uri(hallConnectionString))
-		.route(r ->r.host("*").and().path("/hall/**").uri(hallConnectionString))
-		.route(r ->r.host("*").and().path("/Cinema/**").uri(hallConnectionString))
-		//Ticketing:
-		
-		//etc
-		
-		.build();
-		
+				// hall_planning_service
+				.route(r -> r.host("*").and().path("/planning/**").uri(hallConnectionString))
+				.route(r -> r.host("*").and().path("/hall/**").uri(hallConnectionString))
+				.route(r -> r.host("*").and().path("/cinema/**").uri(hallConnectionString))
+				.route(r -> r.host("*").and().path("/movie/**").uri(hallConnectionString))
+				// Ticketing:
+
+				// etc
+
+				.build();
+
 		// add your other routes here.build();}
 	}
-	
+
 }
