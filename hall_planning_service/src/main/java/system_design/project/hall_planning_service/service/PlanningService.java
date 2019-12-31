@@ -108,7 +108,7 @@ public class PlanningService {
 			}
 		}
 		if (updated) {
-			publish("Updated schedule!");
+			publish(date.toString());
 		}
 	}
 	
@@ -263,4 +263,8 @@ public class PlanningService {
 		movies=movieRepo.findMoviesWithId(ids);
 		return movies;
 	}
+	/*
+	public List<TimeSlot> findPlannedMoviesForCinema(long cinemaId, LocalDate date, String movieId) {
+		return timeSlotRepo.findByCinemaIdAndMovie(cinemaId, movieId,date);
+	}*/
 }
