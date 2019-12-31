@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 /**
  * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
@@ -42,7 +43,7 @@ public class TimeSlot implements Serializable {
 	private String movieId;
 		
 	@ManyToOne
-	@JsonIgnore
+	@JsonIgnoreProperties(value = { "cinema","seats" })
 	@JoinColumn(name="hallId",nullable=false)
 	private MovieHall hall;
 	
