@@ -1,6 +1,5 @@
 package system_design.project.staff_service;
 
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,10 +15,9 @@ import system_design.project.staff_service.persistence.CinemaRepository;
 import system_design.project.staff_service.persistence.EmployeeRepository;
 import system_design.project.staff_service.persistence.TimeSlotRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -29,7 +27,6 @@ public class StaffServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StaffServiceApplication.class, args);
 	}
-
 
 	@ConditionalOnProperty(value="populateCinemaRepository.enabled")
 	@Bean
@@ -46,6 +43,7 @@ public class StaffServiceApplication {
 
 		};
 	}
+
 	@ConditionalOnProperty(value="populateEmployeeRepository.enabled")
 	@Bean
 	public CommandLineRunner populateEmployeeRepository(EmployeeRepository repo){
@@ -60,8 +58,8 @@ public class StaffServiceApplication {
 			logger.info("nr of employees: " + employees.size());
 
 			System.out.println("Adding 2 employees...");
-			repo.save(new Employee("Geralt"));
-			repo.save(new Employee("Evans"));
+			repo.save(new Employee("Geralt","Of Rivia"));
+			repo.save(new Employee("Joris", "Moreau"));
 			System.out.println("employees are added.");
 
 			logger.info("employeerepo.findAll(): ");
@@ -70,86 +68,31 @@ public class StaffServiceApplication {
 		};
 	}
 
-
-	@ConditionalOnProperty(value="populateTimeSlotRepositoryBasic.enabled")
-	@Bean
-	public CommandLineRunner populateTimeSlotRepositoryBasic(TimeSlotRepository repo, EmployeeRepository employeeRepository, CinemaRepository cinemaRepository) {
-		return (args) -> {
-
-			logger.info("populateTimeSlotRepositoryBasic()");
-			repo.deleteAll();
-
-//			repo.save(new TimeSlot());
-//			repo.save(new TimeSlot());
-//			repo.save(new TimeSlot());
-
-			Cinema cinemaGent = cinemaRepository.findCinemaByName("Gent").get(0);
-			logger.info("found cinema !" + cinemaGent);
-
-			Employee employeeGeralt =employeeRepository.findEmployeeByFirstName("Geralt").get(0);
-
-			repo.save(
-					new TimeSlot(
-							cinemaGent.getId(), employeeGeralt.getId(), LocalDate.now(), LocalTime.now(), 0
-					)
-			);
-
-
-			//repo.save(new TimeSlot("hla",LocalDateTime.now().toLocalDate(),LocalDateTime.now().toLocalTime(),0));
-
-		};
-	}
-
 	@ConditionalOnProperty(value="populateTimeSlotRepository.enabled")
-	@Bean()
-	public CommandLineRunner populateTimeSlotRepository(TimeSlotRepository repo, EmployeeRepository employeeRepository, CinemaRepository cinemaRepository){
+	@Bean
+	public CommandLineRunner experimentSimpleTimeSlot(TimeSlotRepository repo, EmployeeRepository employeeRepository, CinemaRepository cinemaRepository){
 		return (args)->{
-			logger.info("populateTimeSlotRepository()");
-			logger.info("LocalDateTime.now().toLocalDate(): " + LocalDateTime.now().toLocalDate());
-			repo.deleteAll();
-
-			Cinema cinemaGent = cinemaRepository.findCinemaByName("Gent").get(0);
+			logger.info("populateTimeSlotRepository() called!");
 
 
-			ArrayList<Employee> employees = (ArrayList<Employee>) employeeRepository.findAll();
-			ArrayList<Pair<Integer, Integer>> dummySlots = new ArrayList<>();
-			dummySlots.add(new Pair<>(18,0));
-			dummySlots.add(new Pair<>(18,15));
-			dummySlots.add(new Pair<>(18,30));
-			dummySlots.add(new Pair<>(18,45));
 
-			dummySlots.add(new Pair<>(19, 0));
-			dummySlots.add(new Pair<>(19,15));
-			dummySlots.add(new Pair<>(19,30));
-			dummySlots.add(new Pair<>(19,45));
+			UUID geraltUUID = employeeRepository.findEmployeeByFirstName("Geralt").get(0).getId();
+			//employeeRepository.findEmployeeByFirstName("Geralt").get(0).getId();
+			UUID evansUUID = employeeRepository.findEmployeeByFirstName("Joris").get(0).getId();
 
-			for(Employee e : employees){
+			UUID dummyCinemaId = cinemaRepository.findCinemaByName("Gent").get(0).getId();
 
-				for (Pair<Integer,Integer> s : dummySlots){
+			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,00), geraltUUID,0));
+			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,15), geraltUUID,0));
+			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,30), geraltUUID,0));
 
-					repo.save(
-							new TimeSlot(
-									cinemaGent.getId(), e.getId(), LocalDate.now(), LocalTime.of(s.getKey(), s.getValue()), 0
-							)
-					);
-//					repo.save(
-//							new TimeSlot(
-//									//"GENT",
-//									e.getId(),
-//									LocalDate.of(2020, 1,1),
-//									,
-//									0
-//							)
-//					);
-				}
+			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,00), evansUUID,0));
+			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,15), evansUUID,0));
+			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,30), evansUUID,0));
 
-
-			}
-
+//
 
 		};
 	}
-
-
 
 }

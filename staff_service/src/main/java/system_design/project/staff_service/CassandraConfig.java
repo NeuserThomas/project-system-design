@@ -37,7 +37,6 @@ import java.util.List;
  */
 @Configuration
 @EnableCassandraRepositories(basePackages = {"system_design.project.staff_service.persistence"})
-
 public class CassandraConfig extends AbstractCassandraConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(CassandraConfig.class);
     private static final String CONTACT_POINTS = "localhost";
