@@ -15,6 +15,7 @@ import system_design.project.staff_service.persistence.CinemaRepository;
 import system_design.project.staff_service.persistence.EmployeeRepository;
 import system_design.project.staff_service.persistence.TimeSlotRepository;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -38,8 +39,8 @@ public class StaffServiceApplication {
 			logger.info("called: populateCinemaRepository()");
 
 			System.out.println("Adding 2 employees...");
-			repo.save(new Cinema("Gent"));
-			repo.save(new Cinema("Brussel"));
+			repo.save(new Cinema((long)0,"Gent"));
+			repo.save(new Cinema((long) 1,"Brussel"));
 
 		};
 	}
@@ -52,18 +53,15 @@ public class StaffServiceApplication {
 			// start clean
 			repo.deleteAll();
 
-			logger.info("called: populateEmployeeRepository()");
-			logger.info("employeerepo.findAll(): ");
-			ArrayList<Employee> employees = (ArrayList<Employee>) repo.findAll();
-			logger.info("nr of employees: " + employees.size());
 
-			System.out.println("Adding 2 employees...");
+			System.out.println("Adding employees...");
 			repo.save(new Employee("Geralt","Of Rivia"));
 			repo.save(new Employee("Joris", "Moreau"));
-			System.out.println("employees are added.");
+			repo.save(new Employee("Jan", "Cnops"));
 
-			logger.info("employeerepo.findAll(): ");
-			employees = (ArrayList<Employee>) repo.findAll();
+
+
+			ArrayList<Employee> employees = (ArrayList<Employee>) repo.findAll();
 			logger.info("nr of employees: " + employees.size());
 		};
 	}
@@ -76,21 +74,38 @@ public class StaffServiceApplication {
 
 
 
-			UUID geraltUUID = employeeRepository.findEmployeeByFirstName("Geralt").get(0).getId();
-			//employeeRepository.findEmployeeByFirstName("Geralt").get(0).getId();
-			UUID evansUUID = employeeRepository.findEmployeeByFirstName("Joris").get(0).getId();
+			UUID gID = employeeRepository.findEmployeeByFirstName("Geralt").get(0).getId();
+			UUID jID = employeeRepository.findEmployeeByFirstName("Joris").get(0).getId();
+			UUID cnopsID= employeeRepository.findEmployeeByFirstName("Jan").get(0).getId();
 
-			UUID dummyCinemaId = cinemaRepository.findCinemaByName("Gent").get(0).getId();
+			Long idCinemaGent = cinemaRepository.findCinemaByName("Gent").get(0).getId();
+			Long idCinemaBrussel = cinemaRepository.findCinemaByName("Brussel").get(0).getId();
 
-			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,00), geraltUUID,0));
-			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,15), geraltUUID,0));
-			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,30), geraltUUID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,00), gID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,15), gID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(12,30), gID,0));
 
-			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,00), evansUUID,0));
-			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,15), evansUUID,0));
-			repo.save(new TimeSlot(dummyCinemaId, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,30), evansUUID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,00), jID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,15), jID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,1), LocalTime.of(18,30), jID,0));
 
-//
+
+
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1, LocalDate.now().getDayOfMonth()), LocalTime.of(12,00), gID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(12,15), gID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(12,30), gID,0));
+
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(18,00), jID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1, LocalDate.now().getDayOfMonth()), LocalTime.of(18,15), jID,0));
+			repo.save(new TimeSlot(idCinemaGent, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(18,30), jID,0));
+
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1, LocalDate.now().getDayOfMonth()), LocalTime.of(12,00), cnopsID,0));
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(12,15), cnopsID,0));
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(12,30), cnopsID,0));
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1, LocalDate.now().getDayOfMonth()), LocalTime.of(12,45), cnopsID,0));
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1, LocalDate.now().getDayOfMonth()), LocalTime.of(13,00), cnopsID,0));
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(13,15), cnopsID,0));
+			repo.save(new TimeSlot(idCinemaBrussel, com.datastax.driver.core.LocalDate.fromYearMonthDay(2020,1,LocalDate.now().getDayOfMonth()), LocalTime.of(13,30), cnopsID,0));
 
 		};
 	}

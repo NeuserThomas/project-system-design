@@ -1,11 +1,8 @@
 package system_design.project.staff_service.domain;
 
-import com.datastax.driver.core.utils.UUIDs;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
-
-import java.util.UUID;
 
 
 @Table(value="cinema")
@@ -13,12 +10,12 @@ public class Cinema {
 
 	@Id
 	@PrimaryKey("cinema_id")
-	private UUID id;
+	private Long id;
 
 	private String name;
 
-	public Cinema(String name){
-		this.id = UUIDs.timeBased();
+	public Cinema(Long id, String name){
+		this.id = id;
 		this.name = name;
 	}
 
@@ -29,11 +26,11 @@ public class Cinema {
 		return name;
 	}
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
