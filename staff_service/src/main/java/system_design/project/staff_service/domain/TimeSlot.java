@@ -17,7 +17,7 @@ public class TimeSlot {
     UUID id;
 
     @PrimaryKeyColumn(value="cinema_id", type = PrimaryKeyType.PARTITIONED, ordinal = 0)
-    UUID cinemaId;
+    Long cinemaId;
 
     @PrimaryKeyColumn(value="day", type = PrimaryKeyType.PARTITIONED, ordinal = 1)
     LocalDate day;
@@ -31,7 +31,7 @@ public class TimeSlot {
     @Column("availibility_code")
     int availabilityCode;
 
-    public TimeSlot(UUID cinemaId, LocalDate day, LocalTime timeslot, UUID employeeId, int availabilityCode){
+    public TimeSlot(Long cinemaId, LocalDate day, LocalTime timeslot, UUID employeeId, int availabilityCode){
         this.id = UUIDs.timeBased();
         this.cinemaId = cinemaId;
         this.day = day;
@@ -44,7 +44,7 @@ public class TimeSlot {
     }
 
 
-    public UUID getCinemaId() {
+    public Long getCinemaId() {
         return cinemaId;
     }
 
@@ -72,7 +72,7 @@ public class TimeSlot {
         this.id = id;
     }
 
-    public void setCinemaId(UUID cinemaId) {
+    public void setCinemaId(Long cinemaId) {
         this.cinemaId = cinemaId;
     }
 
