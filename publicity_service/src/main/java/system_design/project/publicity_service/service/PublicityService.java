@@ -60,7 +60,7 @@ public class PublicityService {
 			duration = duration.plus(a.getDuration());
 		}
 		LocalDate now = LocalDate.now();
-		Ad_Movie ad_Movie = new Ad_Movie(1, duration, category, "Ad_Movie"+category.name()+now.toString(), playlist, now);
+		Ad_Movie ad_Movie = new Ad_Movie(duration, category, "Ad_Movie"+category.name()+now.toString(), playlist, now);
 		logger.info("Save " + ad_Movie.toString());
 		ad_MovieRepo.save(ad_Movie);
 	}

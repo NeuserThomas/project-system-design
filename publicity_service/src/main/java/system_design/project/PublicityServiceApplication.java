@@ -35,11 +35,11 @@ public class PublicityServiceApplication {
 	CommandLineRunner testAd_MovieRepository(Ad_MovieRepository repository) {
 		return (args) -> {
 			logger.info("Adding 2 Ad_Movies:");
-			Ad_Movie ad_Movie1 = new Ad_Movie(1, Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
+			Ad_Movie ad_Movie1 = new Ad_Movie(Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
 					Category.Children, "Ad_MovieChildren1", null, LocalDate.now());
-			Ad_Movie ad_Movie2 = new Ad_Movie(2, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+			Ad_Movie ad_Movie2 = new Ad_Movie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
 					Category.Action, "Ad_MovieAction1", null, LocalDate.now());
-			Ad_Movie ad_Movie3 = new Ad_Movie(3, Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+			Ad_Movie ad_Movie3 = new Ad_Movie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
 					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
 			
 			logger.info(ad_Movie1.toString());
@@ -75,7 +75,7 @@ public class PublicityServiceApplication {
 	CommandLineRunner testAdvertisementRepository(AdvertisementRepository repository) {
 		return (args) -> {
 			logger.info("Adding an advertisement:");
-			Advertisement advertisement1 = new Advertisement(4, Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
+			Advertisement advertisement1 = new Advertisement(Duration.between(LocalTime.MIN, LocalTime.parse("00:03:00")),
 					Category.All, "Belgiëbankreclame", "belgiëbank nv");
 			
 			logger.info(advertisement1.toString());
@@ -97,8 +97,8 @@ public class PublicityServiceApplication {
 	CommandLineRunner testTrailerRepository(TrailerRepository repository) {
 		return (args) -> {
 			logger.info("Adding a trailer:");
-			Trailer trailer1 = new Trailer(5, Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
-					Category.Plus18, "TrailerBoy");
+			Trailer trailer1 = new Trailer(Duration.between(LocalTime.MIN, LocalTime.parse("00:05:00")),
+					Category.Plus18, "TrailerBoy", 0);//no film_id
 			logger.info(trailer1.toString());
 			
 			repository.save(trailer1);

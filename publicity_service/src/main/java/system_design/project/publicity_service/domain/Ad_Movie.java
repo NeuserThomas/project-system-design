@@ -2,6 +2,7 @@ package system_design.project.publicity_service.domain;
 
 import java.time.LocalDate;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,11 +27,12 @@ public class Ad_Movie extends AMovie {
 	private LocalDate creationDate;
 	
 	public Ad_Movie() {
-		super(0, null, null, null);
+		super(null, null, null);
+		this.playlist = new ArrayList<AMovie>();
 	}
 
-	public Ad_Movie(long id, Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
-		super(id, duration, category, name);
+	public Ad_Movie(Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
+		super(duration, category, name);
 		// TODO Auto-generated constructor stub
 		this.playlist = playlist;
 		this.creationDate = creationDate;

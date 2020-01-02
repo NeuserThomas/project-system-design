@@ -18,12 +18,13 @@ public class Trailer extends AMovie {
 	private long id_Movie; //id of the corresponding movie
 
 	public Trailer() {
-		super(0, null, null, null);
+		super(null, null, null);
 	}
 	
-	public Trailer(long id, Duration duration, Category category, String name) {
-		super(id, duration, category, name);
+	public Trailer(Duration duration, Category category, String name, long id_Movie) {
+		super(duration, category, name);
 		// TODO Auto-generated constructor stub
+		this.id_Movie = id_Movie;
 	}
 
 	public long getId_Movie() {

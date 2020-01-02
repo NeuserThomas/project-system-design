@@ -40,9 +40,8 @@ public abstract class AMovie {
 	 * @param duration
 	 * @param category
 	 */
-	public AMovie(long id, Duration duration, Category category, String name) {
+	public AMovie(Duration duration, Category category, String name) {
 		super();
-		this.id = id;
 		this.duration = duration;
 		this.category = category;
 		this.name = name;

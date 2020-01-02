@@ -18,11 +18,11 @@ public class Advertisement extends AMovie {
 	private String company;
 
 	public Advertisement() {
-		super(0, null, null, null);
+		super(null, null, null);
 	}
 	
-	public Advertisement(long id, Duration duration, Category category, String name, String company) {
-		super(id, duration, category, name);
+	public Advertisement(Duration duration, Category category, String name, String company) {
+		super(duration, category, name);
 		// TODO Auto-generated constructor stub
 		this.company = company;
 	}
