@@ -20,6 +20,8 @@ public interface Ad_MovieRepository extends JpaRepository<Ad_Movie, Long> {
 	 */
 	@Query("Select a from Ad_Movie a where a.category = ?1 and a.creationDate > ?2")
 	List<Ad_Movie> findAd_MovieByCategoryAndDate(Category category, LocalDate creationDate);
+
+	List<Ad_Movie> findAd_MovieByCategory(Category category);
 	
 	@Query("Select a from Ad_Movie a where a.category = 1")
 	List<Ad_Movie> findAd_MovieByCategoryIsChildren();
