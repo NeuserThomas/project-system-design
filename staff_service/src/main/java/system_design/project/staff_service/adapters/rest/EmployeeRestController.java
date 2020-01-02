@@ -1,8 +1,10 @@
 package system_design.project.staff_service.adapters.rest;
 
+import com.datastax.driver.core.utils.UUIDs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import system_design.project.staff_service.domain.Employee;
 import system_design.project.staff_service.persistence.EmployeeRepository;
@@ -37,6 +39,15 @@ public class EmployeeRestController {
     @GetMapping("/getEmployeeByFirstName/{firstName}")
     public Iterable<Employee> getEmployeeByFirstName(@PathVariable String firstName){
         return this.employeeRepository.findEmployeeByFirstName(firstName);
+    }
+
+    @PostMapping(consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee createEmployee(@RequestBody Employee e){
+        logger.info("creatingEmployee...");
+        e.setId(UUIDs.timeBased());
+        this.employeeRepository.save(e);
+        return e;
     }
 
 
