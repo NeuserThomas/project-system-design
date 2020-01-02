@@ -26,7 +26,7 @@ Because our domain repository extends CrudRepository, it provides you with basic
 
 
 ## References
-- [Sprint Data for Apache Cassandra](https://docs.spring.io/spring-data/cassandra/docs/current/reference/html/#reference)
+- [Spring Data for Apache Cassandra](https://docs.spring.io/spring-data/cassandra/docs/current/reference/html/#reference)
 - https://github.com/spring-projects/spring-data-cassandra/blob/master/src/main/asciidoc/reference/cassandra.adoc
 - [Spring IOC ](https://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/beans.html)
 - Defining entities: https://docs.spring.io/spring-data/cassandra/docs/current/reference/html/#cassandra-repo-usage
