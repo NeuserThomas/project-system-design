@@ -8,9 +8,11 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class MoviehallService {
   private moviehallUrl: string;
+  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
+
 
   constructor(private http: HttpClient) {
-    this.moviehallUrl = environment.hallPlanningServiceURL+':2223/hall';
+    this.moviehallUrl = this.URL + 'hall';
   }
 
   public findAll(): Observable<Moviehall[]> {

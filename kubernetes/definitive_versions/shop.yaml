@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: shop
+    app: shop
+  name: shop
+spec:
+  containers:
+  - image: shop-service
+    imagePullPolicy: Never
+    name: shop-service
+    ports:
+    - containerPort: 2230
+    resources: {}
+  restartPolicy: OnFailure
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: shop
+    app: shop
+  name: shop
+spec:
+  ports:
+  - name: "2230"
+    port: 2230
+    targetPort: 2230
+  selector:
+    io.kompose.service: shop
+    tier: backend
+status:
+  loadBalancer: {}

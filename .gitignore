@@ -18,3 +18,4 @@ shop_service/bin/
 parking_service/.settings/
 
 *.tar
+node_modules

@@ -10,16 +10,19 @@ import { environment } from 'src/environments/environment';
 export class DayService {
   private dayUrl: string;
 
+  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
+
+
   constructor(private http: HttpClient) {
-    this.dayUrl = environment.hallPlanningServiceURL+'/planning';
+    this.dayUrl = this.URL + 'planning';
   }
 
   public findAll(): Observable<Day[]> {
     return this.http.get<Day[]>(this.dayUrl);
   }
 
-  public findDaysForCinema(cinema:Cinema){
-    return this.http.get<Day[]>(this.dayUrl+"/cinema/"+cinema.id);
+  public findDaysForCinema(cinema: Cinema) {
+    return this.http.get<Day[]>(this.dayUrl + "/cinema/" + cinema.id);
   }
 
   public save(day: Day) {

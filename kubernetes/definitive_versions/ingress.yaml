@@ -12,18 +12,18 @@ spec:
     serviceName: default-http-backend
     servicePort: 8080
   rules:
-  - host: test.domain
+  - host: localhost
     http:
       paths:
-      - path: /stock
+      - path: /stock*
         backend:
           serviceName: shop
           servicePort: 2230
-      - path: /shopItem
+      - path: /shopItem*
         backend:
           serviceName: shop
           servicePort: 2230
-      - path: /transaction
+      - path: /transaction*
         backend:
           serviceName: shop
           servicePort: 2230

@@ -8,18 +8,13 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TransactionService {
-  
-  private shopUrl: string;
+
+  SHOP_URL = `http://${process.env.SHOP_SERVICE_HOST}:${process.env.SHOP_SERVICE_PORT}/transaction`;
 
   constructor(private http: HttpClient) {
-    this.shopUrl = environment.shopServiceURL+'/transaction';
   }
 
   public tryAndSell(transaction: Transaction): Observable<Transaction> {
-    return this.http.post<Transaction>(this.shopUrl,transaction);
+    return this.http.post<Transaction>(this.SHOP_URL, transaction);
   }
-  
-  
-
-
 }

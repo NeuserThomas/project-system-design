@@ -8,9 +8,10 @@ import { environment } from 'src/environments/environment';
 export class MovieService {
 
   private movieUrl: string;
+  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
 
   constructor(private http: HttpClient) {
-    this.movieUrl = environment.hallPlanningServiceURL+'/movie';
+    this.movieUrl = this.URL+'movie';
   }
 
   public findAll(): Observable<Movie[]> {

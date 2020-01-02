@@ -1,16 +1,11 @@
 package system_design.project.hall_planning_service.service;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +27,6 @@ import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.HallDay;
 import system_design.project.hall_planning_service.domain.Movie;
-import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.PlannedMovies;
 import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;

@@ -9,8 +9,10 @@ import { environment } from 'src/environments/environment';
 export class CinemaService {
   private cinemaUrl: string;
 
+  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
+
   constructor(private http: HttpClient) {
-    this.cinemaUrl = environment.hallPlanningServiceURL+'/cinema';
+    this.cinemaUrl = this.URL + 'cinema';
   }
 
   public findAll(): Observable<Cinema[]> {
@@ -18,11 +20,11 @@ export class CinemaService {
   }
 
   public findAllNames(): Observable<String[]> {
-    return this.http.get<String[]>(this.cinemaUrl+"/getAllByName");
+    return this.http.get<String[]>(this.cinemaUrl + "/getAllByName");
   }
 
-  public findOneByName(name:String): Observable<Cinema> {
-    return this.http.get<Cinema>(this.cinemaUrl+"/getOneByName/"+name);
+  public findOneByName(name: String): Observable<Cinema> {
+    return this.http.get<Cinema>(this.cinemaUrl + "/getOneByName/" + name);
   }
 
   public save(cinema: Cinema) {
