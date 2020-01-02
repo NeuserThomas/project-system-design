@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import system_design.project.publicity_service.domain.Advertisement;
 import system_design.project.publicity_service.domain.Category;
-import system_design.project.publicity_service.domain.Trailer;
 
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {

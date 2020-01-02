@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import system_design.project.publicity_service.domain.Ad_Movie;
 import system_design.project.publicity_service.domain.Category;
-import system_design.project.publicity_service.domain.Trailer;
 
 @Repository
 public interface Ad_MovieRepository extends JpaRepository<Ad_Movie, Long> {
