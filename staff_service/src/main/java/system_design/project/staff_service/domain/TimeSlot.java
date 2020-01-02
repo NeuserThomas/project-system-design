@@ -8,23 +8,20 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.UUID;
 
 
-@Table(value ="timeslots")
+@Table(value ="timeslot")
 public class TimeSlot {
 
 
-    // TODO: create cinema entity
     @PrimaryKeyColumn(name="cinema_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String cinemaId;
 
-    @PrimaryKeyColumn(name="employee_id", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
-    private String employeeId;
-
-
-    @PrimaryKeyColumn(name="day", ordinal = 2, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name="day", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
     private LocalDate day;
+
+    @PrimaryKeyColumn(name="employee_id", ordinal = 2, type = PrimaryKeyType.CLUSTERED)
+    private String employeeId;
 
     @PrimaryKeyColumn(value = "time", ordinal = 3, type=PrimaryKeyType.CLUSTERED, ordering = Ordering.ASCENDING)
     private LocalTime timeslot;
@@ -32,10 +29,9 @@ public class TimeSlot {
     @Column("availability_code")
     private int availabilityCode;
 
-
-    public TimeSlot(String cinemaId, UUID employeeId, LocalDate day, LocalTime timeslot, int availabilityCode) {
+    public TimeSlot(String cinemaId, String employeeId, LocalDate day, LocalTime timeslot, int availabilityCode) {
         this.cinemaId = cinemaId;
-        this.employeeId = employeeId.toString();
+        this.employeeId = employeeId;
         this.day = day;
         this.timeslot = timeslot;
         this.availabilityCode = availabilityCode;
