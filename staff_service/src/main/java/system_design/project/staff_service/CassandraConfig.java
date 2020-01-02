@@ -41,10 +41,10 @@ import java.util.List;
 public class CassandraConfig extends AbstractCassandraConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(CassandraConfig.class);
     private static final String CONTACT_POINTS = "localhost";
-    private static final String KEYSPACE_NAME = "mykeyspace";
+    private static final String KEYSPACE_NAME = "staffservice_dev";
 
 
-    private static final SchemaAction SCHEMA_ACTION = SchemaAction.CREATE_IF_NOT_EXISTS;
+    private static final SchemaAction SCHEMA_ACTION = SchemaAction.RECREATE;
 
     @Override
     protected boolean getMetricsEnabled() {

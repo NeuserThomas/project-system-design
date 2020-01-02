@@ -1,32 +1,33 @@
 package system_design.project.staff_service.domain;
 
 import com.datastax.driver.core.utils.UUIDs;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-import java.util.UUID;
-
-@Table(value="employees")
+@Table(value="employee")
 public class Employee {
 
-    @PrimaryKey("employee_id") private UUID id;
+    @Id
+    @PrimaryKey("employee_id") private String id;
     @Column("first_name") private String firstName;
 
 
     public Employee(String firstName) {
-        this.id = UUIDs.timeBased();
+
+        this.id = UUIDs.timeBased().toString();
         this.firstName = firstName;
 
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     public String getFirstName() {
         return firstName;
