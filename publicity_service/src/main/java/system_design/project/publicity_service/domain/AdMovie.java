@@ -22,6 +22,10 @@ import javax.persistence.OneToMany;
 @Entity
 @DiscriminatorValue("P")
 public class AdMovie extends AMovie {
+	//minimal amount of minutes the duration of an adMovie has to be (if possible)
+	public static final int minimalMinutes = 25;
+	public static final int maximalMinutes = minimalMinutes + 5;
+	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AMovie> playlist;
 	private LocalDate creationDate;
@@ -62,5 +66,4 @@ public class AdMovie extends AMovie {
 	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
 	}
-
 }

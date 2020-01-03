@@ -23,8 +23,6 @@ import system_design.project.publicity_service.persistence.TrailerRepository;
 @Service("publicityService")
 @EnableScheduling
 public class PublicityService {
-	//minimal amount of minutes the duration of an admovie has to be 
-	static final int minimalMinutes = 25;
 	
 	@Autowired
 	public AdMovieRepository adMovieRepo;
@@ -54,10 +52,16 @@ public class PublicityService {
 		choice.addAll(trailerRepo.findTrailerByCategory(Category.All));
 		
 		Duration duration = Duration.ZERO;
-		while(duration.toMinutes() < minimalMinutes && !choice.isEmpty()) {
+		while(duration.toMinutes() < AdMovie.minimalMinutes && !choice.isEmpty()) {
+			//choose new AMovie and removes it from the choice
 			AMovie a = getNewAMovie(choice);
-			playlist.add(a);
-			duration = duration.plus(a.getDuration());
+			
+			//check if duration is not going to exceed the maximum value
+			//toMinutes is no rounded value, but is the minutes part
+			if(duration.toSeconds() + a.getDuration().toSeconds() < AdMovie.maximalMinutes*60) {
+				playlist.add(a);
+				duration = duration.plus(a.getDuration());
+			}
 		}
 		LocalDate now = LocalDate.now();
 		AdMovie newAdMovie = new AdMovie(duration, category, "AdMovie"+category.name()+now.toString(), playlist, now);

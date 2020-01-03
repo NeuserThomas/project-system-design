@@ -127,6 +127,7 @@ public class PublicityServiceApplication {
 			AdMovie testPlaylist = aRepository.getOne((long)1);
 			testPlaylist.setPlaylist(playlist);
 			logger.info(testPlaylist.getDuration().toString());//8 minuten
+			//aRepository.save(testPlaylist); //gives error detached entity passed to persist, changing the cascadeType of playlist didn't give any result
 			
 			List<AdMovie> adMovies = aRepository.findAdMovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
 			adMovies.forEach((adMovie) -> logger.info(adMovie.toString()));

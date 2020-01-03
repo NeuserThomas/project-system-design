@@ -34,4 +34,10 @@ public class PublicityRestController {
 		}
 		return res;
 	}
+	
+	@GetMapping("/maxDuration")
+	public int getMaxDurationInSeconds() {
+		//this seems a bit strange, but it's also strange to get a final value from an object in a database instead of from the class itself
+		return AdMovie.maximalMinutes*60;
+	}
 }
