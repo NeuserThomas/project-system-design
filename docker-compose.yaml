@@ -29,8 +29,32 @@ services:
       - MYSQL_ROOT_PASSWORD=ThePassword
       - MYSQL_DATABASE=Day
 
+  cassandra:
+    image: 'cassandra'
+    ports:
+      - '7000:7000'
+      - '9042:9042'
+    volumes:
+      - 'cassandra_data:/bitnami'
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=cassandra
+
+
 
 # -------------Main services---------------
+
+  staffservice:
+    build: 
+      context: ./staff_service
+    entrypoint: ["java", "-jar", "/app/target/staff_service-0.0.1-SNAPSHOT.jar"]
+    depends_on:
+      - cassandra
+    restart: on-failure
+    ports:
+      - "2224:2224"
+
   hall_planning:
     build: 
       context: ./hall_planning_service
@@ -56,4 +80,9 @@ services:
     expose:
       - "2223"
 
+  
+
+volumes:
+  cassandra_data:
+    driver: local
 

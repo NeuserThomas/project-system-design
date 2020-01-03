@@ -1,14 +1,19 @@
 package system_design.project.staff_service;
 
+import com.datastax.driver.core.AuthProvider;
+import com.datastax.driver.core.PlainTextAuthProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.core.cql.keyspace.DropKeyspaceSpecification;
+import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,11 +44,26 @@ import java.util.List;
 @EnableCassandraRepositories(basePackages = {"system_design.project.staff_service.persistence"})
 public class CassandraConfig extends AbstractCassandraConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(CassandraConfig.class);
-    private static final String CONTACT_POINTS = "localhost";
+    //private static final String CONTACT_POINTS = "localhost";
     private static final String KEYSPACE_NAME = "staffservice_dev";
 
 
-    private static final SchemaAction SCHEMA_ACTION = SchemaAction.RECREATE;
+
+    private static final SchemaAction SCHEMA_ACTION = SchemaAction.CREATE_IF_NOT_EXISTS;
+
+
+    private final String keyspace;
+    private final String hosts;
+
+    CassandraConfig(
+            @Value("${spring.data.cassandra.keyspace-name}") String keyspace,
+            @Value("${spring.data.cassandra.contact-points}") String hosts) {
+        this.keyspace = keyspace;
+        this.hosts = hosts;
+        logger.info("CassandraConfig Constructor called ! keyspace: " + keyspace + "\t hosts: " + hosts);
+
+    }
+
 
     @Override
     protected boolean getMetricsEnabled() {
@@ -52,12 +72,12 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
     protected String getContactPoints() {
-        return CONTACT_POINTS;
+        return hosts;
     }
 
     @Override
     protected String getKeyspaceName() {
-        return KEYSPACE_NAME;
+        return keyspace;
     }
 
     @Override
@@ -69,11 +89,31 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
 
-        return super.getKeyspaceCreations();
+       List<CreateKeyspaceSpecification> keyspaceSpecifications = new ArrayList<>();
+//        keyspaceSpecifications.add(CreateKeyspaceSpecification.createKeyspace(KEYSPACE_NAME));
+
+        CreateKeyspaceSpecification specification =
+                CreateKeyspaceSpecification.createKeyspace(KEYSPACE_NAME)
+                                            .ifNotExists()
+                                            .with(KeyspaceOption.DURABLE_WRITES, true)
+                                            .withSimpleReplication();
+
+
+        keyspaceSpecifications.add(specification);
+        return keyspaceSpecifications;
+
     }
 
     @Override
     protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
-        return super.getKeyspaceDrops();
+        List<DropKeyspaceSpecification> keyspaceSpecifications = new ArrayList<>();
+        keyspaceSpecifications.add(DropKeyspaceSpecification.dropKeyspace(KEYSPACE_NAME));
+        return keyspaceSpecifications;
+    }
+
+    @Override
+    protected AuthProvider getAuthProvider() {
+
+        return new PlainTextAuthProvider("cassandra", "cassandra");
     }
 }

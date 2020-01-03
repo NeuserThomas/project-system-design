@@ -76,7 +76,25 @@ Available rest calls:
 - /planning/cinema/{cinemaId}		: Return all planned days from today for cinema
 - /planning/{cinemaId}/{day}	: Return planning for certain day (WIP)
 
+## Staff Service
+
+REST API
+
+```
+
+# all employees
+localhost:2224/employee/
+
+# all timeslots
+localhost:2224/timeslot/
+# timeslots for a specific day
+localhost:2224/timeslot/YYYY-MM-DD
+```
+
+
+
 ## **frontend**
+
 To run the frontend, go to the direcotry /frontent/frontend in the terminal, and run:
 ```bash
 $ ng serve --open
