@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 export class MovieService {
 
   private movieUrl: string;
-  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
+  URL = "nada";
 
   constructor(private http: HttpClient) {
     this.movieUrl = this.URL+'movie';

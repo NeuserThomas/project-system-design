@@ -4,26 +4,14 @@ metadata:
   name: gateway-ingress
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
-    nginx.ingress.kubernetes.io/rewrite-target: /
-
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
-  backend:
-    serviceName: default-http-backend
-    servicePort: 8080
   rules:
-  - host: localhost
-    http:
+  - http:
       paths:
-      - path: /stock*
-        backend:
-          serviceName: shop
-          servicePort: 2230
-      - path: /shopItem*
-        backend:
-          serviceName: shop
-          servicePort: 2230
-      - path: /transaction*
+      - path: /shop
         backend:
           serviceName: shop
           servicePort: 2230

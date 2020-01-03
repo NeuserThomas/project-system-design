@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ShopItem } from 'src/app/model/shop-service/shop-item';
 import { Observable } from 'rxjs/Observable';
 import { Stock } from 'src/app/model/shop-service/stock';
-import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +12,12 @@ export class StockService {
 
   private shopUrl: string;
   private stockUrl: string;
-  SHOP_URL = `http://${process.env.SHOP_SERVICE_HOST}:${process.env.SHOP_SERVICE_PORT}/`;
 
-
-
-  constructor(private http: HttpClient) {
-    this.stockUrl = this.SHOP_URL + 'stock';
-    this.shopUrl = this.SHOP_URL + 'shopItem';
+  constructor(private http: HttpClient, private router: Router) {
+    this.stockUrl = "http://" + window.location.hostname + "/shop/stock";
+    this.shopUrl = "http://" + window.location.hostname + "/shop/shopItem";
     console.log(this.stockUrl);
     console.log(this.shopUrl);
-    console.log(this.SHOP_URL);
-    console.log(process.env);
   }
 
   public findProducts(): Observable<ShopItem[]> {

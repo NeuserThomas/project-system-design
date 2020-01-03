@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 export class CinemaService {
   private cinemaUrl: string;
 
-  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
+  URL = "nada";
 
   constructor(private http: HttpClient) {
     this.cinemaUrl = this.URL + 'cinema';

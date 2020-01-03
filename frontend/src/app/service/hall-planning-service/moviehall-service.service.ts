@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Moviehall } from '../../model/hall-planning-service/moviehall';
 import { Observable } from 'rxjs/Observable';
-import { environment } from 'src/environments/environment';
 
 
 @Injectable()
 export class MoviehallService {
   private moviehallUrl: string;
-  URL = `http://${process.env.HALL_PLANNING_SERVICE_HOST}:${process.env.HALL_PLANNING_SERVICE_PORT}/`;
+  URL = "nada";
 
 
   constructor(private http: HttpClient) {

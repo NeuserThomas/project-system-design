@@ -9,4 +9,4 @@ RUN mvn -e -B package -DskipTests
 
 FROM openjdk:8-jre-alpine
 COPY --from=builder /app/target/shop_service-0.0.1-SNAPSHOT.jar /
-CMD ["java", "-jar", "/shop_service-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/shop_service-0.0.1-SNAPSHOT.jar","-Dspring.profiles.active=dev"]

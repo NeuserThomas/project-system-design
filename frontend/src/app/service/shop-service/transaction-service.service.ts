@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Transaction } from 'src/app/model/shop-service/transaction';
 import { Observable } from 'rxjs/Observable';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService {
 
-  SHOP_URL = `http://${process.env.SHOP_SERVICE_HOST}:${process.env.SHOP_SERVICE_PORT}/transaction`;
+  SHOP_URL = window.location.hostname + "/transaction";
 
   constructor(private http: HttpClient) {
+    console.log(this.SHOP_URL);
   }
 
   public tryAndSell(transaction: Transaction): Observable<Transaction> {

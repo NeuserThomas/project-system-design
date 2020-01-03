@@ -25,22 +25,12 @@ spec:
     requests:
       storage: 2Gi
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysqldb
-spec:
-  ports:
-  - port: 3306
-  selector:
-    app: mysqldb
-  clusterIP: None
----
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
   name: mysqldb
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: mysqldb
@@ -69,3 +59,14 @@ spec:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysqldb
+  clusterIP: None
