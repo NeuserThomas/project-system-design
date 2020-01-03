@@ -14,20 +14,20 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import system_design.project.publicity_service.domain.AMovie;
-import system_design.project.publicity_service.domain.Ad_Movie;
+import system_design.project.publicity_service.domain.AdMovie;
 import system_design.project.publicity_service.domain.Category;
-import system_design.project.publicity_service.persistence.Ad_MovieRepository;
+import system_design.project.publicity_service.persistence.AdMovieRepository;
 import system_design.project.publicity_service.persistence.AdvertisementRepository;
 import system_design.project.publicity_service.persistence.TrailerRepository;
 
 @Service("publicityService")
 @EnableScheduling
 public class PublicityService {
-	//minimal amount of minutes the duration of an ad_movie has to be 
+	//minimal amount of minutes the duration of an admovie has to be 
 	static final int minimalMinutes = 25;
 	
 	@Autowired
-	public Ad_MovieRepository ad_MovieRepo;
+	public AdMovieRepository adMovieRepo;
 	@Autowired
 	public AdvertisementRepository adRepo;
 	@Autowired
@@ -60,9 +60,9 @@ public class PublicityService {
 			duration = duration.plus(a.getDuration());
 		}
 		LocalDate now = LocalDate.now();
-		Ad_Movie ad_Movie = new Ad_Movie(duration, category, "Ad_Movie"+category.name()+now.toString(), playlist, now);
-		logger.info("Save " + ad_Movie.toString());
-		ad_MovieRepo.save(ad_Movie);
+		AdMovie newAdMovie = new AdMovie(duration, category, "AdMovie"+category.name()+now.toString(), playlist, now);
+		logger.info("Save " + newAdMovie.toString());
+		adMovieRepo.save(newAdMovie);
 	}
 	
 	private AMovie getNewAMovie(List<AMovie> choice) {

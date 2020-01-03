@@ -14,12 +14,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import system_design.project.publicity_service.domain.AMovie;
-import system_design.project.publicity_service.domain.Ad_Movie;
+import system_design.project.publicity_service.domain.AdMovie;
 import system_design.project.publicity_service.domain.Advertisement;
 import system_design.project.publicity_service.domain.Category;
 import system_design.project.publicity_service.domain.Trailer;
 import system_design.project.publicity_service.persistence.TrailerRepository;
-import system_design.project.publicity_service.persistence.Ad_MovieRepository;
+import system_design.project.publicity_service.persistence.AdMovieRepository;
 import system_design.project.publicity_service.persistence.AdvertisementRepository;
 
 @SpringBootApplication
@@ -32,42 +32,42 @@ public class PublicityServiceApplication {
 	}
 
 	@Bean
-	CommandLineRunner testAd_MovieRepository(Ad_MovieRepository repository) {
+	CommandLineRunner testAdMovieRepository(AdMovieRepository repository) {
 		return (args) -> {
-			logger.info("Adding 2 Ad_Movies:");
-			Ad_Movie ad_Movie1 = new Ad_Movie(Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
-					Category.Children, "Ad_MovieChildren1", null, LocalDate.now());
-			Ad_Movie ad_Movie2 = new Ad_Movie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
-					Category.Action, "Ad_MovieAction1", null, LocalDate.now());
-			Ad_Movie ad_Movie3 = new Ad_Movie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
-					Category.Plus18, "Ad_MoviePlus18_1", null, LocalDate.now());
+			logger.info("Adding 2 AdMovies:");
+			AdMovie adMovie1 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:30:00")),
+					Category.Children, "AdMovieChildren1", null, LocalDate.now());
+			AdMovie adMovie2 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+					Category.Action, "AdMovieAction1", null, LocalDate.now());
+			AdMovie adMovie3 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+					Category.Plus18, "AdMoviePlus18_1", null, LocalDate.now());
 			
-			logger.info(ad_Movie1.toString());
-			logger.info(ad_Movie2.toString());
-			logger.info(ad_Movie3.toString());
+			logger.info(adMovie1.toString());
+			logger.info(adMovie2.toString());
+			logger.info(adMovie3.toString());
 			
-			repository.save(ad_Movie1);
-			repository.save(ad_Movie2);
-			repository.save(ad_Movie3);
+			repository.save(adMovie1);
+			repository.save(adMovie2);
+			repository.save(adMovie3);
 			logger.info("saved");
 		};
 	}
 	
 	@Bean
-	CommandLineRunner getActionAd_Movie(Ad_MovieRepository repository) {
+	CommandLineRunner getActionAdMovie(AdMovieRepository repository) {
 		return (args) -> {
-			logger.info("Checking database population. Printing all Ad_Movies...");
-			repository.findAll().forEach((ad_Movie) -> logger.info(ad_Movie.toString()));
+			logger.info("Checking database population. Printing all AdMovies...");
+			repository.findAll().forEach((adMovie) -> logger.info(adMovie.toString()));
 
 			logger.info("Checking database population. Printing count...");
 			logger.info(repository.count() + " items");
 			
-			logger.info("Checking database population. Printing all Action Ad_Movies made in this week...");
-			repository.findAd_MovieByCategoryAndDate(Category.Action, LocalDate.now().minusDays(7))
-														.forEach((ad_Movie) -> logger.info(ad_Movie.toString()));
+			logger.info("Checking database population. Printing all Action AdMovies made in this week...");
+			repository.findAdMovieByCategoryAndDate(Category.Action, LocalDate.now().minusDays(7))
+														.forEach((adMovie) -> logger.info(adMovie.toString()));
 			
-			logger.info("Checking database population. Printing all Children Ad_Movies");
-			repository.findAd_MovieByCategoryIsChildren().forEach((ad_Movie) -> logger.info(ad_Movie.toString()));
+			logger.info("Checking database population. Printing all Children AdMovies");
+			repository.findAdMovieByCategoryIsChildren().forEach((adMovie) -> logger.info(adMovie.toString()));
 		};
 	}
 
@@ -115,29 +115,29 @@ public class PublicityServiceApplication {
 	}
 	
 	@Bean
-	CommandLineRunner testPlaylistUpdate(Ad_MovieRepository aRepository, TrailerRepository tRepository, AdvertisementRepository adRepository) {
+	CommandLineRunner testPlaylistUpdate(AdMovieRepository aRepository, TrailerRepository tRepository, AdvertisementRepository adRepository) {
 		return (args) -> {
-			logger.info("Adding playlist to Ad_Movie");
+			logger.info("Adding playlist to AdMovie");
 			List<AMovie> playlist = new ArrayList<AMovie>();
 			List<Advertisement> een = adRepository.findAdvertisementByName("Belgiëbankreclame");
 			List<Trailer> twee = tRepository.findTrailerByName("TrailerBoy");
 			playlist.add(een.get(0));
 			playlist.add(twee.get(0));
 			logger.info("get movie");
-			Ad_Movie a = aRepository.getOne((long)1);
-			a.setPlaylist(playlist);
-			logger.info(a.getDuration().toString());//8 minuten
+			AdMovie testPlaylist = aRepository.getOne((long)1);
+			testPlaylist.setPlaylist(playlist);
+			logger.info(testPlaylist.getDuration().toString());//8 minuten
 			
-			List<Ad_Movie> ad_Movies = aRepository.findAd_MovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
-			ad_Movies.forEach((adMovie) -> logger.info(adMovie.toString()));
+			List<AdMovie> adMovies = aRepository.findAdMovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
+			adMovies.forEach((adMovie) -> logger.info(adMovie.toString()));
 		};
 	}
 	
 	@Bean
-	CommandLineRunner testGetUpdate(Ad_MovieRepository aRepository, TrailerRepository tRepository, AdvertisementRepository adRepository) {
+	CommandLineRunner testGetUpdate(AdMovieRepository aRepository, TrailerRepository tRepository, AdvertisementRepository adRepository) {
 		return (args) -> {
-			List<Ad_Movie> ad_Movies = aRepository.findAd_MovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
-			ad_Movies.forEach((adMovie) -> logger.info(adMovie.toString()));
+			List<AdMovie> adMovies = aRepository.findAdMovieByCategoryAndDate(Category.Children, LocalDate.now().minusDays(7));//nog steeds 30 minuten
+			adMovies.forEach((adMovie) -> logger.info(adMovie.toString()));
 		};
 	}
 }

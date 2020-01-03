@@ -15,23 +15,23 @@ import javax.persistence.OneToMany;
  * 
  * @author Jasper Derbaix
  * 
- * An Ad_Movie is the combination of trailers, advertisements of the cinema and other companies and so on,
+ * An AdMovie is the combination of trailers, advertisements of the cinema and other companies and so on,
  * that is played before the movie is played itself.
  *
  */
 @Entity
 @DiscriminatorValue("P")
-public class Ad_Movie extends AMovie {
+public class AdMovie extends AMovie {
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AMovie> playlist;
 	private LocalDate creationDate;
 	
-	public Ad_Movie() {
+	public AdMovie() {
 		super(null, null, null);
 		this.playlist = new ArrayList<AMovie>();
 	}
 
-	public Ad_Movie(Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
+	public AdMovie(Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
 		super(duration, category, name);
 		// TODO Auto-generated constructor stub
 		this.playlist = playlist;
