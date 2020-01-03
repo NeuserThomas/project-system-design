@@ -31,3 +31,4 @@ Because our domain repository extends CrudRepository, it provides you with basic
 - [Spring IOC ](https://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/beans.html)
 - Defining entities: https://docs.spring.io/spring-data/cassandra/docs/current/reference/html/#cassandra-repo-usage
 - [Spring Data Cassandra (Github) examples](https://github.com/spring-projects/spring-data-examples/tree/master/cassandra)
+- https://hub.docker.com/r/bitnami/cassandra/
