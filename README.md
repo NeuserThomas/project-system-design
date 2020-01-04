@@ -192,7 +192,7 @@ spec:
 ```
 Daarom is het belangrijk dat je applicatie mogelijks via een algemene url /shop omleidbaar is. 
 Indien je er meerdere hebt (bv per restcontroller, zonder /shop ervoor), zou je hier per url moeten omleiden.
-#### Ingress controller: Hier zit ik momenteel vast
+#### Ingress controller:
 Uitleg over ingress controller:
 https://www.youtube.com/watch?v=VicH6KojwCI&fbclid=IwAR3MchJe-CeINbiEIdcq8acLMNJEXv2AtmCR0_RcDYH-GlWQ742Kf3jaF_A
 In microk8s kan je via :
@@ -200,6 +200,7 @@ In microk8s kan je via :
 microk8s.enable ingress
 ```
 een ingebouwde ingress controller gebruiken. Ik ben zelf nog aan het uitzoeken hoe ik deze goed deploy. Enige hulp is altijd welkom.
-
+#### Eigen ingress controller:
+Er zijn nu 2 yamls toegevoegd, die zelf een deployen. Zie kubernetes/definitive_versions/mandator.yaml en de kubernetes/definitive_versions/service-nodeport.yaml. Indien je deze deployt, heb je de microk8s ingress niet nodig.
 
 Dit was mijn TED talk, bedankt voor uw aandacht.
