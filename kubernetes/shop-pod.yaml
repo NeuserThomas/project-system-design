@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: shop
+    app: shop
+  name: shop
+spec:
+  containers:
+  - image: shop-service
+    imagePullPolicy: Never
+    name: shop-service
+    ports:
+    - containerPort: 2230
+    resources: {}
+  restartPolicy: OnFailure
+status: {}
