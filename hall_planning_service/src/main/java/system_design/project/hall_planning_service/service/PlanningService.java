@@ -18,9 +18,13 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import system_design.project.hall_planning_service.adapters.messaging.MessageGateway;
 import system_design.project.hall_planning_service.domain.Cinema;
@@ -50,6 +54,9 @@ public class PlanningService {
 	public MovieRepository movieRepo;
 	@Autowired
 	public TimeSlotRepository timeSlotRepo;
+	
+	@Autowired
+	private Environment env;
 	
 	// @Autowired
 	// private KafkaTemplate<String, String> simpleProducer;
@@ -105,6 +112,8 @@ public class PlanningService {
 			publish(date.toString());
 		}
 	}
+
+	
 	
 	/**
 	 * Version 0.1 Rudementary planning algorithm. Next version should be PERT.
@@ -115,6 +124,15 @@ public class PlanningService {
 	 * @return
 	 */
 	private void planCinemaForDay(Cinema c,List<Movie> movies,List<Double> wStatus, LocalDate date) {
+		//TODO, only one master.
+
+		//todo change url
+		String publicityUrl = env.getProperty("publicity.url");
+		RestTemplate restTemplate = new RestTemplate();
+		String result = restTemplate.getForObject(publicityUrl, String.class);
+		
+		logger.info("Publicity answer: "+result);
+		
 		Day day = new Day();
 		day.setCinema(c);
 		day.setDate(date);

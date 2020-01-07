@@ -7,11 +7,10 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class MoviehallService {
   private moviehallUrl: string;
-  URL = "nada";
 
 
   constructor(private http: HttpClient) {
-    this.moviehallUrl = this.URL + 'hall';
+    this.moviehallUrl = "http://" + window.location.hostname + "/planning/hall";
   }
 
   public findAll(): Observable<Moviehall[]> {

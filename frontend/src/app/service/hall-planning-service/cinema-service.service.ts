@@ -9,10 +9,8 @@ import { environment } from 'src/environments/environment';
 export class CinemaService {
   private cinemaUrl: string;
 
-  URL = "nada";
-
   constructor(private http: HttpClient) {
-    this.cinemaUrl = this.URL + 'cinema';
+    this.cinemaUrl = "http://" + window.location.hostname + "/planning/cinema";
   }
 
   public findAll(): Observable<Cinema[]> {

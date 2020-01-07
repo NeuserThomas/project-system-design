@@ -14,7 +14,12 @@ spec:
         backend:
           serviceName: shop
           servicePort: 2230
+      - path: /planning
+        backend:
+          serviceName: hall-planning
+          servicePort: 2223
       - path: /
         backend:
           serviceName: frontend
           servicePort: 80
+          

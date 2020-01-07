@@ -3,12 +3,12 @@
     <tbody>
       <th>Title</th>
       <tr>{{movie.title}}</tr>
-      <!--<div *ngFor="let item of movie | keyvalue">
-                <div *ngIf="!shouldBeIgnored(item.key)">
-                    <th>{{item.key}}</th>
-                    <tr>{{item.value}}</tr>
-                </div>
-            </div>-->
+      <div *ngFor="let item of movie | keyvalue">
+        <div *ngIf="!shouldBeIgnored(item.key)">
+          <th>{{item.key}}</th>
+          <tr>{{item.value}}</tr>
+        </div>
+      </div>
     </tbody>
   </table>
 

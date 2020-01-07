@@ -10,11 +10,9 @@ import { environment } from 'src/environments/environment';
 export class DayService {
   private dayUrl: string;
 
-  URL = "nada";
-
 
   constructor(private http: HttpClient) {
-    this.dayUrl = this.URL + 'planning';
+    this.dayUrl = "http://" + window.location.hostname + "/planning/planning";
   }
 
   public findAll(): Observable<Day[]> {

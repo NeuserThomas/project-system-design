@@ -8,10 +8,9 @@ import { environment } from 'src/environments/environment';
 export class MovieService {
 
   private movieUrl: string;
-  URL = "nada";
 
   constructor(private http: HttpClient) {
-    this.movieUrl = this.URL+'movie';
+    this.movieUrl = "http://" + window.location.hostname + "/planning/movie";
   }
 
   public findAll(): Observable<Movie[]> {
@@ -20,14 +19,14 @@ export class MovieService {
 
   public findById(id): Observable<Movie> {
     console.log(id);
-    return this.http.get<Movie>(this.movieUrl+"/"+id);
+    return this.http.get<Movie>(this.movieUrl + "/" + id);
   }
 
   public save(movie: Movie) {
     return this.http.post<Movie>(this.movieUrl, movie);
   }
 
-  public search(title:String): Observable<Movie>{
-    return this.http.get<Movie>(this.movieUrl+"/getMovieByName/"+title);
+  public search(title: String): Observable<Movie> {
+    return this.http.get<Movie>(this.movieUrl + "/getMovieByName/" + title);
   }
 }
