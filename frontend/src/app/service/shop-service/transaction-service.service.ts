@@ -14,7 +14,7 @@ export class TransactionService {
     console.log(this.SHOP_URL);
   }
 
-  public tryAndSell(transaction: Transaction): Observable<Transaction> {
-    return this.http.post<Transaction>(this.SHOP_URL, transaction);
+  public tryAndSell(transaction: Transaction): Observable<Object> {
+    return this.http.post<Object>(this.SHOP_URL, transaction);
   }
 }
