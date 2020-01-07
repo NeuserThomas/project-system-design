@@ -65,13 +65,10 @@ public class MovieAPIService implements IMovieInfoAPI {
 				result=ss.toString();
 			}
 		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (ProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(!result.contains("\"Response\":\"False\"")){

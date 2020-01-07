@@ -1,16 +1,11 @@
 package system_design.project.hall_planning_service.service;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,16 +18,19 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import system_design.project.hall_planning_service.adapters.messaging.MessageGateway;
 import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.HallDay;
 import system_design.project.hall_planning_service.domain.Movie;
-import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.PlannedMovies;
 import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
@@ -56,6 +54,9 @@ public class PlanningService {
 	public MovieRepository movieRepo;
 	@Autowired
 	public TimeSlotRepository timeSlotRepo;
+	
+	@Autowired
+	private Environment env;
 	
 	// @Autowired
 	// private KafkaTemplate<String, String> simpleProducer;
@@ -108,9 +109,11 @@ public class PlanningService {
 			}
 		}
 		if (updated) {
-			publish("Updated schedule!");
+			publish(date.toString());
 		}
 	}
+
+	
 	
 	/**
 	 * Version 0.1 Rudementary planning algorithm. Next version should be PERT.
@@ -121,6 +124,15 @@ public class PlanningService {
 	 * @return
 	 */
 	private void planCinemaForDay(Cinema c,List<Movie> movies,List<Double> wStatus, LocalDate date) {
+		//TODO, only one master.
+
+		//todo change url
+		String publicityUrl = env.getProperty("publicity.url");
+		RestTemplate restTemplate = new RestTemplate();
+		String result = restTemplate.getForObject(publicityUrl, String.class);
+		
+		logger.info("Publicity answer: "+result);
+		
 		Day day = new Day();
 		day.setCinema(c);
 		day.setDate(date);
@@ -263,4 +275,8 @@ public class PlanningService {
 		movies=movieRepo.findMoviesWithId(ids);
 		return movies;
 	}
+	/*
+	public List<TimeSlot> findPlannedMoviesForCinema(long cinemaId, LocalDate date, String movieId) {
+		return timeSlotRepo.findByCinemaIdAndMovie(cinemaId, movieId,date);
+	}*/
 }

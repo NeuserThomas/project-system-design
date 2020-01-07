@@ -95,6 +95,16 @@ public class PlanningRestController {
 			return new ResponseEntity<List<Movie>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	/*
+	@GetMapping("/plannedMovies/{cinemaId}/{date}/{movieId}")
+	public @ResponseBody ResponseEntity<List<TimeSlot>> getTimeslotForMovies(@PathVariable long cinemaId,@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,@PathVariable String movieId) {
+		List<TimeSlot> movies = planService.findPlannedMoviesForCinema(cinemaId, date, movieId);
+		if(!movies.isEmpty()) {
+			return new ResponseEntity<List<TimeSlot>>(movies,HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<TimeSlot>>(HttpStatus.NOT_FOUND);
+		}
+	}*/
 	
 	@GetMapping("/days/clear")
 	/*
