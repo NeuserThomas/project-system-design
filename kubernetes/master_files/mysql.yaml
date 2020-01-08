@@ -43,8 +43,7 @@ spec:
         chaos: immune
     spec:
       containers:
-      - image: mysqldb #locally at the moment
-        imagePullPolicy: Never
+      - image: rgoussey/mysqldb #locally at the moment
         name: mysqldb
         env:  #is done in dockerfile
           # Use secret in real usage
