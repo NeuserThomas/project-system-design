@@ -7,6 +7,6 @@ kubectl apply -k github.com/Yolean/kubernetes-kafka/variants/dev-small/?ref=v6.0
 
 Then you can get a resource from kubernetes:
 ```
-kubectl get role --namespace=kafka -o yaml
+kubectl get role --namespace=kafka -o yaml --export
 ```
 And then direct this to a file, and remove timestamp etc.
