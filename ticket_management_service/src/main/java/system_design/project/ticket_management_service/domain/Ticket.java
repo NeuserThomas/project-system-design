@@ -49,7 +49,23 @@ public class Ticket {
         return "Ticket " +  id + ": Screening: " + screeningId + ", price: " + price;
     }
 
-    //added getters/ setters for price and movie name, can eventually be usable in the future
+    public long getScreeningId() {
+		return screeningId;
+	}
+
+	public void setScreeningId(long screeningId) {
+		this.screeningId = screeningId;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	//added getters/ setters for price and movie name, can eventually be usable in the future
     public Double getPrice() {
         return price;
     }
@@ -58,13 +74,6 @@ public class Ticket {
         this.price = price;
     }
 
-    public long getScreening() {
-        return screeningId;
-    }
-
-    public void setScreening(long screeningId) {
-        this.screeningId = screeningId;
-    }
     
     public boolean getParkingValidated() {
     	return this.validatedParking;

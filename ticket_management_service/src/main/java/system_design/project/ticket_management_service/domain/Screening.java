@@ -44,6 +44,10 @@ public class Screening {
 	public void sellTicket() {
 		this.soldTickets++;
 	}
+	
+	public void cancelTicket() {
+		this.soldTickets--;
+	}
 
 	public String toString() {
 		return "" + this.id + ": " + this.movieName;

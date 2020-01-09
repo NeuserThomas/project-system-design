@@ -1,6 +1,7 @@
 package system_design.project.ticket_management_service.adapters;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.ForkJoinPool;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
+import system_design.project.ticket_management_service.adapters.payment.PaymentAdapter;
 import system_design.project.ticket_management_service.domain.Screening;
 import system_design.project.ticket_management_service.domain.Ticket;
 import system_design.project.ticket_management_service.persistence.ScreeningRepository;
 import system_design.project.ticket_management_service.persistence.TicketRepository;
+import system_design.project.ticket_management_service.services.PaymentService;
 
 @RestController
 @RequestMapping("ticket")
@@ -27,6 +31,10 @@ public class TicketRestController {
     private TicketRepository ticketRepo;
     private ScreeningRepository screeningRepo;
     private Logger logger = LoggerFactory.getLogger(Ticket.class);
+    private PaymentAdapter paymentAdapter = new PaymentAdapter();
+    
+    @Autowired
+    private PaymentService paymentService;
 
     @Autowired
     public TicketRestController(TicketRepository ticketRepo, ScreeningRepository screeningRepo){
@@ -41,24 +49,37 @@ public class TicketRestController {
     
     
     @GetMapping(value="/buyTicket")
-    public ResponseEntity sellTicket(@RequestParam(value = "screeningId") String screeningId){
+    public DeferredResult<ResponseEntity> sellTicket(@RequestParam(value = "screeningId") String screeningId) throws InterruptedException{
+    	DeferredResult<ResponseEntity> output = new DeferredResult<>();
     	try {
+    		
     		Screening screening = screeningRepo.findById(Long.valueOf(screeningId)).get();
     		
     		if(screening.getSoldTickets() < screening.getAvailableSeats()) {
-    			screening.sellTicket();
     			Ticket t = new Ticket(Long.valueOf(screeningId));
-    			ticketRepo.save(t);
-    			screeningRepo.save(screening);
-    			return new ResponseEntity<Ticket>(t, HttpStatus.OK);
+    			
+    			ForkJoinPool.commonPool().submit(() -> {
+        			try {
+        				if (paymentService.TryAndSell(t).get()) {
+        					screening.sellTicket();
+        					ticketRepo.save(t);
+        	    			screeningRepo.save(screening);
+        					output.setResult(new ResponseEntity<Ticket>(HttpStatus.OK));
+        				}
+        			} catch (Exception e) {
+        				e.printStackTrace();
+        			}
+        			output.setResult(new ResponseEntity<String>(HttpStatus.CONFLICT));
+        		});
     		}
     		else {
-    			return new ResponseEntity<String>("No more tickets available", HttpStatus.BAD_REQUEST);
+    			output.setResult(new ResponseEntity<String>("No more tickets available", HttpStatus.BAD_REQUEST));
     		}
     	}
     	catch(NoSuchElementException ne) {
-    		return new ResponseEntity<String>("Screening with that ID doesnt exist!", HttpStatus.BAD_REQUEST);
+    		output.setResult(new ResponseEntity<String>("Screening with that ID doesnt exist!", HttpStatus.BAD_REQUEST));
     	}
+    	return output;
     	
     }
 
