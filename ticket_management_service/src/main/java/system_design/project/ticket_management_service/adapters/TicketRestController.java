@@ -2,6 +2,8 @@ package system_design.project.ticket_management_service.adapters;
 
 import java.util.NoSuchElementException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import system_design.project.ticket_management_service.domain.Movie;
+import system_design.project.ticket_management_service.domain.Screening;
 import system_design.project.ticket_management_service.domain.Ticket;
-import system_design.project.ticket_management_service.persistence.MovieRepository;
+import system_design.project.ticket_management_service.persistence.ScreeningRepository;
 import system_design.project.ticket_management_service.persistence.TicketRepository;
 
 @RestController
@@ -23,12 +25,13 @@ import system_design.project.ticket_management_service.persistence.TicketReposit
 public class TicketRestController {
 
     private TicketRepository ticketRepo;
-    private MovieRepository movieRepo;
+    private ScreeningRepository screeningRepo;
+    private Logger logger = LoggerFactory.getLogger(Ticket.class);
 
     @Autowired
-    public TicketRestController(TicketRepository ticketRepo, MovieRepository movieRepo){
+    public TicketRestController(TicketRepository ticketRepo, ScreeningRepository screeningRepo){
         this.ticketRepo = ticketRepo;
-        this.movieRepo = movieRepo;
+        this.screeningRepo = screeningRepo;
     }
 
     @GetMapping
@@ -36,15 +39,17 @@ public class TicketRestController {
         return ticketRepo.findAll();
     }
     
+    
     @GetMapping(value="/buyTicket")
-    public ResponseEntity sellTicket(@RequestParam(value = "movieId") String movieId){
+    public ResponseEntity sellTicket(@RequestParam(value = "screeningId") String screeningId){
     	try {
-    		Movie m = movieRepo.findById(Long.valueOf(movieId)).get();
+    		Screening screening = screeningRepo.findById(Long.valueOf(screeningId)).get();
     		
-    		if(m.getSoldTickets() < m.getNumberOfSeats()) {
-    			m.sellTicket();
-    			Ticket t = new Ticket(Long.valueOf(movieId));
+    		if(screening.getSoldTickets() < screening.getAvailableSeats()) {
+    			screening.sellTicket();
+    			Ticket t = new Ticket(Long.valueOf(screeningId));
     			ticketRepo.save(t);
+    			screeningRepo.save(screening);
     			return new ResponseEntity<Ticket>(t, HttpStatus.OK);
     		}
     		else {
@@ -52,7 +57,7 @@ public class TicketRestController {
     		}
     	}
     	catch(NoSuchElementException ne) {
-    		return new ResponseEntity<String>("Movie with that ID doesnt exist!", HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<String>("Screening with that ID doesnt exist!", HttpStatus.BAD_REQUEST);
     	}
     	
     }
@@ -64,8 +69,8 @@ public class TicketRestController {
     }
     
     @GetMapping("/movies")
-    public Iterable<Movie> getMovies(){
-    	return movieRepo.findAll();
+    public Iterable<Screening> getMovies(){
+    	return screeningRepo.findAll();
     }
     
     @RequestMapping(value="/validateParkingTicket/{ticketId}", method=RequestMethod.PUT)
