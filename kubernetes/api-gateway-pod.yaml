@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  creationTimestamp: null
   labels:
-    io.kompose.service: api-gateway
+    app: api-gateway
   name: api-gateway
 spec:
   containers:
   - image: api-gateway
+    imagePullPolicy: Never
     name: api-gateway
     ports:
     - containerPort: 8080

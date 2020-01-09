@@ -1,12 +1,12 @@
 FROM node:alpine AS builder
 
-WORKDIR /app
-
+WORKDIR /app/
 COPY . .
-
-RUN npm install && \
-    npm run build
+RUN npm install
+RUN npm run build -- --prod
 
 FROM nginx:alpine
 
-COPY --from=builder /app/dist/* /usr/share/nginx/html/
+COPY --from=builder /app/dist/frontend/ /usr/share/nginx/html/
+RUN chmod 755 /usr/share/nginx/html/*
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf

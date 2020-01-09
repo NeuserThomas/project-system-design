@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +23,14 @@ import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.Movie;
 import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.DayRepository;
+import system_design.project.hall_planning_service.persistence.MovieRepository;
 import system_design.project.hall_planning_service.service.PlanningService;
 
+
+/**
+ * @author robin
+ *
+ */
 @RestController
 @RequestMapping("planning")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -31,6 +38,7 @@ public class PlanningRestController {
 	
 	@Autowired
 	private DayRepository planRepo;
+	
 	@Autowired
 	private PlanningService planService;
 	
@@ -41,7 +49,7 @@ public class PlanningRestController {
 		return new ResponseEntity<List<Day>>(planRepo.findAll(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/{date}")
+	@GetMapping("/getByDate/{date}")
 	public @ResponseBody ResponseEntity<List<Day>> getCinemasAfterDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		List<Day> days = planRepo.findDaysAfterDate(date);
 		if(!days.isEmpty()) {
@@ -58,18 +66,8 @@ public class PlanningRestController {
 		return new ResponseEntity<Day>(HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping(path="/dummydata")
-	public ResponseEntity<Day> dummyDay() {
-		LocalDate date = LocalDate.now();
-		planService.planDay(date);
-		planRepo.findDaysAfterDate(date.minusDays(1));
-		logger.info("Call: dummyDay");
-		return new ResponseEntity<Day>(HttpStatus.OK);
-	}
-	
-	@GetMapping(path="/planDays")
+	@GetMapping("/planDays")
 	public ResponseEntity<Day> planDays() {
-		LocalDate date = LocalDate.now().plusDays(7);
 		planService.planDays(LocalDate.now(), LocalDate.now().plusDays(7));
 		logger.info("Call: planDays");
 		return new ResponseEntity<Day>(HttpStatus.OK);

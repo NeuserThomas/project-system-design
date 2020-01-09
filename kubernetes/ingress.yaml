@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 8080
+  rules:
+  - host: test.domain
+    http:
+      paths:
+      - path: /stock
+        backend:
+          serviceName: shop
+          servicePort: 2230
+      - path: /shopItem
+        backend:
+          serviceName: shop
+          servicePort: 2230
+      - path: /transaction
+        backend:
+          serviceName: shop
+          servicePort: 2230
+      - path: /
+        backend:
+          serviceName: frontend
+          servicePort: 80

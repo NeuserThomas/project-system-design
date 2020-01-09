@@ -10,16 +10,17 @@ import { environment } from 'src/environments/environment';
 export class DayService {
   private dayUrl: string;
 
+
   constructor(private http: HttpClient) {
-    this.dayUrl = environment.hallPlanningServiceURL+'/planning';
+    this.dayUrl = "http://" + window.location.hostname + "/planning/planning";
   }
 
   public findAll(): Observable<Day[]> {
     return this.http.get<Day[]>(this.dayUrl);
   }
 
-  public findDaysForCinema(cinema:Cinema){
-    return this.http.get<Day[]>(this.dayUrl+"/cinema/"+cinema.id);
+  public findDaysForCinema(cinema: Cinema) {
+    return this.http.get<Day[]>(this.dayUrl + "/cinema/" + cinema.id);
   }
 
   public save(day: Day) {

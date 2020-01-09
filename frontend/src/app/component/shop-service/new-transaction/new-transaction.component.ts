@@ -50,12 +50,18 @@ export class NewTransactionComponent implements OnInit {
     if(this.transaction==null){
       this.showAlertMethod(false,"Please start a transaction!");
     } else {
-      if(this.transaction.soldItems!=null && this.transaction.soldItems){
+      if(this.transaction.soldItems==null || !this.transaction.soldItems){
+        if(this.transaction.soldItems==null){
+          console.log(1);
+        }
+        if(! this.transaction.soldItems){
+          console.log(2);
+        }
+        console.log("transaction");
         this.showAlertMethod(false,"Please add items");
       }
       this.transaction.stockId=this.stockId;
       this.loading=true;
-      console.log(this.transaction);
       this.transactionService.tryAndSell(this.transaction).subscribe(
         data=>{
           this.showAlertMethod(true,"Saved!");
