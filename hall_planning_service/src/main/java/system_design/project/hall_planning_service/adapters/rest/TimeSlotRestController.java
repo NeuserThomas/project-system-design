@@ -1,6 +1,8 @@
 package system_design.project.hall_planning_service.adapters.rest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -60,8 +62,6 @@ public class TimeSlotRestController {
 	@GetMapping("/getByCinemaId/{cinemaId}/{date}")
 	public @ResponseBody ResponseEntity<List<TimeSlot>> getByCinemaId(@PathVariable long cinemaId,@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		logger.info("Getting timeslots for date: "+ date);
-		logger.info("Getting timeslots for date:"+ date.atStartOfDay(ZoneId.systemDefault()));
-		logger.info("Getting timeslots for date:"+ date.atStartOfDay(ZoneId.of("Europe/Brussels")));
 
 		List<TimeSlot> list = timeRepo.findForCinemaAndDate(cinemaId,date);
 		//TODO cache this
