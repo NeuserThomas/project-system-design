@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: shop
+  name: shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shop
+  template:
+    metadata:
+      labels:
+        app: shop
+    spec:
+      containers:
+      - image: rgoussey/shop
+        name: shop
+        ports:
+        - containerPort: 2230
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: shop
+  name: shop
+spec:
+  type: ClusterIP
+  ports:
+  - name: "2230"
+    port: 2230 # inside the cluster
+    targetPort: 2230 # pod port, same as containerPort
+  selector:
+    app: shop

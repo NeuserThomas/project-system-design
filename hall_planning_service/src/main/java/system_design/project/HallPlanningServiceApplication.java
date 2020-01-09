@@ -3,6 +3,9 @@ package system_design.project;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -36,6 +39,12 @@ public class HallPlanningServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HallPlanningServiceApplication.class, args);
 	}
+	
+	@PostConstruct
+    public void init(){
+      // Setting Spring Boot SetTimeZone
+      TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
 	
 	@Bean
 	CommandLineRunner testRepository(CinemaRepository cRep,PlannedMoviesRepository pRepo, MovieRepository mRepo, MovieAPIService mService) {
