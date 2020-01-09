@@ -127,11 +127,11 @@ public class PlanningService {
 		//TODO, only one master.
 
 		//todo change url
-		String publicityUrl = env.getProperty("publicity.url");
-		RestTemplate restTemplate = new RestTemplate();
-		String result = restTemplate.getForObject(publicityUrl, String.class);
+		//String publicityUrl = env.getProperty("publicity.url");
+		//RestTemplate restTemplate = new RestTemplate();
+		//String result = restTemplate.getForObject(publicityUrl, String.class);
 		
-		logger.info("Publicity answer: "+result);
+		//logger.info("Publicity answer: "+result);
 		
 		Day day = new Day();
 		day.setCinema(c);
