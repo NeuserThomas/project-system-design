@@ -13,6 +13,7 @@ public class Screening {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	private String movieId;
 	private String movieName;
 	private long hallNumber;
 	private LocalDateTime startTime;
@@ -33,7 +34,8 @@ public class Screening {
 	
 	public Screening(ScreeningProxy proxy) {
 		this.id = proxy.getTid();
-		this.movieName = proxy.getMovieId();
+		this.movieId = proxy.getMovieId();
+		this.movieName = proxy.getMovieTitle();
 		this.hallNumber = proxy.getHall().getHallNumber();
 		this.startTime = proxy.getStartTime();
 		this.stopTime = proxy.getStopTime();
@@ -71,6 +73,23 @@ public class Screening {
 
 	public void setMovieName(String movieName) {
 		this.movieName = movieName;
+	}
+	
+
+	public String getMovieId() {
+		return movieId;
+	}
+
+	public void setMovieId(String movieId) {
+		this.movieId = movieId;
+	}
+
+	public LocalDateTime getStopTime() {
+		return stopTime;
+	}
+
+	public void setStopTime(LocalDateTime stopTime) {
+		this.stopTime = stopTime;
 	}
 
 	public long getHallNumber() {

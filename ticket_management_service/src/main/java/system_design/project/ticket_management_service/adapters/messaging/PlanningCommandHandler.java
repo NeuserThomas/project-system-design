@@ -8,6 +8,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import system_design.project.ticket_management_service.domain.CinemaProxy;
 import system_design.project.ticket_management_service.domain.Screening;
 import system_design.project.ticket_management_service.domain.ScreeningProxy;
 import system_design.project.ticket_management_service.persistence.ScreeningRepository;
@@ -26,7 +27,12 @@ public class PlanningCommandHandler {
 	public void processPlanningUpdated(String message) {
 		
 		RestTemplate rt = new RestTemplate();
-		ScreeningProxy[] screeningProxies = rt.getForObject("http://localhost:2223/timeslot/getByDate/"+message, ScreeningProxy[].class);
+		CinemaProxy[] cinemaProxies = rt.getForObject("http://localhost:2223/planning/cinema", CinemaProxy[].class);
+		
+		long cinemaId = cinemaProxies[0].getId();
+		
+		
+		ScreeningProxy[] screeningProxies = rt.getForObject("http://localhost:2223/planning/timeslot/getByCinemaId/"+ String.valueOf(cinemaId) +"/" +message, ScreeningProxy[].class);
 		
 		for(int i=0; i<screeningProxies.length; i++) {
 			Screening screening = new Screening(screeningProxies[i]);

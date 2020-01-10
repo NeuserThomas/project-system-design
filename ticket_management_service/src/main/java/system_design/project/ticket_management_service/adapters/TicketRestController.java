@@ -1,5 +1,6 @@
 package system_design.project.ticket_management_service.adapters;
 
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ForkJoinPool;
 
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ import system_design.project.ticket_management_service.persistence.ScreeningRepo
 import system_design.project.ticket_management_service.persistence.TicketRepository;
 import system_design.project.ticket_management_service.services.PaymentService;
 
+@SuppressWarnings({ "rawtypes" })
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("ticket")
 public class TicketRestController {
@@ -47,6 +51,13 @@ public class TicketRestController {
         return ticketRepo.findAll();
     }
     
+    @GetMapping(value="/screenings/{date}")
+    public Iterable<Screening> getScreeningsByDate(@PathVariable("date") String date){
+    	LocalDate ld = LocalDate.parse(date);
+
+    	return screeningRepo.findbyDate(ld);
+    }
+    
     
     @GetMapping(value="/buyTicket")
     public DeferredResult<ResponseEntity> sellTicket(@RequestParam(value = "screeningId") String screeningId) throws InterruptedException{
@@ -64,7 +75,7 @@ public class TicketRestController {
         					screening.sellTicket();
         					ticketRepo.save(t);
         	    			screeningRepo.save(screening);
-        					output.setResult(new ResponseEntity<Ticket>(HttpStatus.OK));
+        					output.setResult(new ResponseEntity<Ticket>(t,HttpStatus.OK));
         				}
         			} catch (Exception e) {
         				e.printStackTrace();

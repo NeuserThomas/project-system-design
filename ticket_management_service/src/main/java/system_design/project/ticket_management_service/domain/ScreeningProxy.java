@@ -11,6 +11,7 @@ public class ScreeningProxy {
 	private LocalDateTime startTime;
 	private LocalDateTime stopTime;
 	private String movieId;
+	private String movieTitle;
 	private Hall hall;
 	private int tid;
 	
@@ -22,7 +23,13 @@ public class ScreeningProxy {
 		this.hall = hall;
 	}
 	
-	
+	public String getMovieTitle() {
+		return movieTitle;
+	}
+
+	public void setMovieTitle(String movieTitle) {
+		this.movieTitle = movieTitle;
+	}	
 	
 	public LocalDateTime getStartTime() {
 		return startTime;
