@@ -15,8 +15,7 @@ public class Ticket {
     private long id;
     private Double price;
     //movie is a string atm, maybe change it to an Entity?
-    private long movieId;
-    private int seat;
+    private long screeningId;
     
     @Column(columnDefinition = "boolean default false")
     private boolean validatedParking;
@@ -24,14 +23,14 @@ public class Ticket {
     //default constructor used for JPA (is necessary)
     public Ticket(){
         this.price = 7.5;
-        this.movieId = 0;
+        this.screeningId = 0;
         this.validatedParking = false;
     }
 
     //ticket is made, not yet sold
-    public Ticket(long movieId){
+    public Ticket(long screeningId){
         this.price = 7.5;
-        this.movieId = movieId;
+        this.screeningId = screeningId;
         this.validatedParking = false;
     }
 
@@ -47,10 +46,26 @@ public class Ticket {
 
     @Override
     public String toString(){
-        return "Ticket " +  id + ": Movie: " + movieId + ", price: " + price;
+        return "Ticket " +  id + ": Screening: " + screeningId + ", price: " + price;
     }
 
-    //added getters/ setters for price and movie name, can eventually be usable in the future
+    public long getScreeningId() {
+		return screeningId;
+	}
+
+	public void setScreeningId(long screeningId) {
+		this.screeningId = screeningId;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	//added getters/ setters for price and movie name, can eventually be usable in the future
     public Double getPrice() {
         return price;
     }
@@ -59,13 +74,6 @@ public class Ticket {
         this.price = price;
     }
 
-    public long getMovie() {
-        return movieId;
-    }
-
-    public void setMovie(long movieId) {
-        this.movieId = movieId;
-    }
     
     public boolean getParkingValidated() {
     	return this.validatedParking;
@@ -74,9 +82,4 @@ public class Ticket {
     public void setParkingValidated(boolean validated) {
         this.validatedParking = validated;
     }
-    
-    public int getSeat() {
-    	return this.seat;
-    }
-
 }

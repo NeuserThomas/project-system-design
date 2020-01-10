@@ -25,6 +25,4 @@ export class ParkingService {
     return this.http.get(this.parkingUrl+'/numberOfFreeSpots');
   }
 
-  public 
-
 }

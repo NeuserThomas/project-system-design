@@ -36,7 +36,6 @@ import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.persistence.DayRepository;
 import system_design.project.hall_planning_service.persistence.MovieRepository;
-import system_design.project.hall_planning_service.persistence.TimeSlotRepository;
 
 /**
  * @author robin
@@ -52,8 +51,8 @@ public class PlanningService {
 	public CinemaRepository cinemaRepo;
 	@Autowired
 	public MovieRepository movieRepo;
-	@Autowired
-	public TimeSlotRepository timeSlotRepo;
+	//@Autowired
+	//public TimeSlotRepository timeSlotRepo;
 	
 	@Autowired
 	private Environment env;
