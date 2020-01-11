@@ -12,10 +12,12 @@ export class TicketServiceComponent implements OnInit {
 
   screenings: Screening[];
   isHidden: boolean;
-  ticket : Ticket;
+  ticket: Ticket;
 
   chosenName: String;
   chosenHallNumber: number;
+  chosenDate: String;
+  dateString: String;
   chosenStartTime: String;
   chosenScreening: number;
   isBuying: boolean;
@@ -23,6 +25,7 @@ export class TicketServiceComponent implements OnInit {
   constructor(private ticketService: TicketService) {
     this.isHidden = true;
     this.isBuying = false;
+    this.chosenDate = new Date().toISOString().split('T')[0];
   }
 
 
@@ -58,13 +61,13 @@ export class TicketServiceComponent implements OnInit {
     this.chosenScreening = screening.id;
   }
 
-  public buyAndPayTicket(){
+  public buyAndPayTicket() {
     this.isBuying = true;
     this.ticketService.buyTicket(this.chosenScreening).subscribe(data => {
       this.ticket = data;
       this.getScreenings();
       this.isBuying = false;
-      alert("Ticket bought! \nTicket: " + this.ticket.id + " , price: " + this.ticket.price);
+      alert("Ticket bought! \nTicket: " + this.ticket.id + " , price: €" + this.ticket.price);
     }
     );
   }
@@ -72,9 +75,7 @@ export class TicketServiceComponent implements OnInit {
 
   public getScreenings() {
     this.isHidden = false;
-    let date = new Date("2020-01-11");
-    let d = date.toISOString().split('T')[0];
-    this.ticketService.findAllScreeningsByDate(d).subscribe(data => {
+    this.ticketService.findAllScreeningsByDate(this.chosenDate).subscribe(data => {
       this.screenings = data;
       this.screenings.forEach(screening => {
         screening.startHour = screening.startTime.toString().split('T')[1];
