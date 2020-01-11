@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -34,6 +35,9 @@ public class ParkingRestController {
 
 	private ParkingRepository parkingRepo;
 	private ParkingTicketRepository parkingTicketRepo;
+
+	@Autowired
+	private Environment env;
 
 	final Logger logger = LoggerFactory.getLogger(ParkingRestController.class);
 
@@ -89,7 +93,8 @@ public class ParkingRestController {
 			ParkingTicket pt = parkingTicketRepo.findById(parkingTicketId).get();
 			RestTemplate rt = new RestTemplate();
 			RequestEntity<ParkingTicket> re = new RequestEntity<ParkingTicket>(HttpMethod.PUT,
-					URI.create("http://localhost:2300/ticket/validateParkingTicket/" + ticketId));
+					URI.create("http://" + env.getProperty("host.name") + ":" + env.getProperty("host.port")
+							+ "/ticket/validateParkingTicket/" + ticketId));
 
 			if (pt.isValidated() == false) {
 
@@ -105,7 +110,8 @@ public class ParkingRestController {
 						return resp;
 					}
 				} catch (HttpServerErrorException e) {
-					return new ResponseEntity<String>("Ticket has already been used to validate or doesn't exist", HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<String>("Ticket has already been used to validate or doesn't exist",
+							HttpStatus.BAD_REQUEST);
 				}
 			} else {
 				return new ResponseEntity<String>("Parkingticket already validated", HttpStatus.BAD_REQUEST);
