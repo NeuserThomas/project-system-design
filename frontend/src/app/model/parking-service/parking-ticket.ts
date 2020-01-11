@@ -1,5 +1,5 @@
 export class ParkingTicket {
-    parkingTicketId: number;
+    id: number;
     validated: boolean;
     enterTime: Date;
     validationTime: Date;
