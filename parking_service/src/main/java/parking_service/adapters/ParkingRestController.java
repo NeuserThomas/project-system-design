@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import parking_service.domain.Parking;
@@ -48,7 +49,7 @@ public class ParkingRestController {
 	}
 
 	@GetMapping(value = "/numberOfFreeSpots")
-	public int getFreeSpots() {
+	public int getNumberOfFreeSpots() {
 		return parkingRepo.findAll().iterator().next().getNumberOfFreeSpots();
 	}
 
@@ -91,17 +92,20 @@ public class ParkingRestController {
 					URI.create("http://localhost:2300/ticket/validateParkingTicket/" + ticketId));
 
 			if (pt.isValidated() == false) {
-				ResponseEntity<ParkingTicket> resp = rt.exchange(re, ParkingTicket.class);
-				logger.info(re.toString());
-				logger.info(resp.getStatusCode().toString());
 
-				if (resp.getStatusCode() == HttpStatus.OK) {
-					pt.setValidated(true);
-					pt.setValidationTime(LocalDateTime.now());
-					parkingTicketRepo.save(pt);
-					return resp;
-				} else {
-					return resp;
+				try {
+					ResponseEntity<ParkingTicket> resp = rt.exchange(re, ParkingTicket.class);
+
+					if (resp.getStatusCode() == HttpStatus.OK) {
+						pt.setValidated(true);
+						pt.setValidationTime(LocalDateTime.now());
+						parkingTicketRepo.save(pt);
+						return new ResponseEntity<ParkingTicket>(pt, HttpStatus.OK);
+					} else {
+						return resp;
+					}
+				} catch (HttpServerErrorException e) {
+					return new ResponseEntity<String>("Ticket has already been used to validate or doesn't exist", HttpStatus.BAD_REQUEST);
 				}
 			} else {
 				return new ResponseEntity<String>("Parkingticket already validated", HttpStatus.BAD_REQUEST);
@@ -115,7 +119,7 @@ public class ParkingRestController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/getTicket", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity postParkingTicket() {
+	public ResponseEntity getNewParkingTicket() {
 
 		Parking p = parkingRepo.findAll().iterator().next();
 
