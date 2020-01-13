@@ -33,6 +33,13 @@ public class PublicityService {
 	
 	private static Logger logger = LoggerFactory.getLogger(PublicityService.class);
 	
+	LocalDate yetToPlan = LocalDate.MIN;//changes by event from hallPlanning
+	
+	//is set to yetToPlan when the variable maximumDuration of AdMovie is changed
+	//adMovies that are created with the new maximumDuration, can only be played and planned after this day
+	//the days before were already planned before the change of maximumDuration
+	LocalDate minimumCommissioningDate = LocalDate.MIN;
+	
 	/**
 	 * Will run every week on sunday, at midnight.
 	 */
@@ -63,8 +70,14 @@ public class PublicityService {
 				duration = duration.plus(a.getDuration());
 			}
 		}
-		LocalDate now = LocalDate.now();
-		AdMovie newAdMovie = new AdMovie(duration, category, "AdMovie"+category.name()+now.toString(), playlist, now);
+		
+		//
+		//if there was no recent change (minComDate before now), the adMovie can be played from the moment it exists,
+		//if there was a recent change, the adMovie can only be played from the day
+		//that was not yet planned (by hallPlanning) at the time of the change.
+		// if a is more recent than b, a.compareTo(b) is greater than 1 
+		LocalDate commissioningDate = LocalDate.now().compareTo(minimumCommissioningDate) > 1 ? LocalDate.now() : minimumCommissioningDate;
+		AdMovie newAdMovie = new AdMovie(duration, category, "AdMovie"+category.name()+LocalDate.now().toString(), playlist, commissioningDate);
 		logger.info("Save " + newAdMovie.toString());
 		adMovieRepo.save(newAdMovie);
 	}

@@ -1,6 +1,7 @@
 package system_design.project.publicity_service.domain;
 
 import java.time.LocalDate;
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,20 @@ public class AdMovie extends AMovie {
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AMovie> playlist;
-	private LocalDate creationDate;
+	
+	//day from which the film may be used
+	private LocalDate commissioningDate;
 	
 	public AdMovie() {
 		super(null, null, null);
 		this.playlist = new ArrayList<AMovie>();
 	}
 
-	public AdMovie(Duration duration, Category category, String name, List<AMovie> playlist, LocalDate creationDate) {
+	public AdMovie(Duration duration, Category category, String name, List<AMovie> playlist, LocalDate commissioningDate) {
 		super(duration, category, name);
 		// TODO Auto-generated constructor stub
 		this.playlist = playlist;
-		this.creationDate = creationDate;
+		this.commissioningDate = commissioningDate;
 	}
 
 	public List<AMovie> getPlaylist() {
@@ -59,11 +62,17 @@ public class AdMovie extends AMovie {
 		this.setDuration(newDuration);
 	}
 
-	public LocalDate getCreationDate() {
-		return creationDate;
+	public LocalDate getCommissioningDate() {
+		return commissioningDate;
 	}
 
-	public void setCreationDate(LocalDate creationDate) {
-		this.creationDate = creationDate;
+	public void setCommissioningDate(LocalDate commissioningDate) {
+		this.commissioningDate = commissioningDate;
+	}
+	
+	@Override
+	public String toString() {
+		return MessageFormat.format("{0}\t CommissioningDate: {1}" ,
+				super.toString(), this.commissioningDate);
 	}
 }

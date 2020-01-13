@@ -39,16 +39,20 @@ public class PublicityServiceApplication {
 					Category.Children, "AdMovieChildren1", null, LocalDate.now());
 			AdMovie adMovie2 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
 					Category.Action, "AdMovieAction1", null, LocalDate.now());
-			AdMovie adMovie3 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
+			AdMovie adMovie3 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:22:30")),
+					Category.Action, "AdMovieAction2", null, LocalDate.now().plusDays(1));
+			AdMovie adMovie4 = new AdMovie(Duration.between(LocalTime.MIN, LocalTime.parse("00:20:00")),
 					Category.Plus18, "AdMoviePlus18_1", null, LocalDate.now());
 			
 			logger.info(adMovie1.toString());
 			logger.info(adMovie2.toString());
 			logger.info(adMovie3.toString());
+			logger.info(adMovie4.toString());
 			
 			repository.save(adMovie1);
 			repository.save(adMovie2);
 			repository.save(adMovie3);
+			repository.save(adMovie4);
 			logger.info("saved");
 		};
 	}
@@ -63,8 +67,12 @@ public class PublicityServiceApplication {
 			logger.info(repository.count() + " items");
 			
 			logger.info("Checking database population. Printing all Action AdMovies made in this week...");
-			repository.findAdMovieByCategoryAndDate(Category.Action, LocalDate.now().minusDays(7))
-														.forEach((adMovie) -> logger.info(adMovie.toString()));
+			repository.findAdMovieByCategoryAndDate(Category.Action, LocalDate.now())
+									.forEach((adMovie) -> {
+										if(adMovie.getCommissioningDate().compareTo(LocalDate.now().minusDays(7)) > 1) {
+											logger.info(adMovie.toString());
+										}
+									});
 			
 			logger.info("Checking database population. Printing all Children AdMovies");
 			repository.findAdMovieByCategoryIsChildren().forEach((adMovie) -> logger.info(adMovie.toString()));

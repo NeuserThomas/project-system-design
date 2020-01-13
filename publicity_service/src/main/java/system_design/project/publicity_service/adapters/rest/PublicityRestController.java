@@ -1,5 +1,6 @@
 package system_design.project.publicity_service.adapters.rest;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,12 @@ public class PublicityRestController {
 	}
 	
 	@GetMapping("/{category}")
-	public AdMovie getAdMovieByCategory(@PathVariable("category") String category) {
-		List<AdMovie> adMovies = this.adMovieRepository.findAdMovieByCategory(Category.valueOf(category));
+	public AdMovie getAdMovieByCategoryForToday(@PathVariable("category") String category) {
+		//there is no need for the user to send the LocalDate (now) in Rest, because the controller knows that Localtime too.
+		List<AdMovie> adMovies = this.adMovieRepository.findAdMovieByCategoryAndDate(Category.valueOf(category),LocalDate.now());
 		AdMovie res = adMovies.get(0);
-		for(AdMovie adMovie : adMovies) {
-			if(adMovie.getCreationDate().compareTo(res.getCreationDate()) > 1) {
+		for(AdMovie adMovie : adMovies) {//get most recent of selected adMovies
+			if(adMovie.getCommissioningDate().compareTo(res.getCommissioningDate()) > 1) {
 				//adMovie is more recent than res
 				res = adMovie;
 			}

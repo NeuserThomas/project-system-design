@@ -15,11 +15,11 @@ public interface AdMovieRepository extends JpaRepository<AdMovie, Long> {
 	/**
 	 * 
 	 * @param category category of the AdMovie
-	 * @param creationDate the AdMovie has to be created after creationDate
-	 * @return
+	 * @param maxCommissioningDate the AdMovie it's commissioningDate has to be older (lower, before) maxCommissioningDate
+	 * @return list of adMovies with category and with commissionDate not more recent than maxCommissioningDate
 	 */
-	@Query("Select a from AdMovie a where a.category = ?1 and a.creationDate > ?2")
-	List<AdMovie> findAdMovieByCategoryAndDate(Category category, LocalDate creationDate);
+	@Query("Select a from AdMovie a where a.category = ?1 and a.commissioningDate <= ?2")
+	List<AdMovie> findAdMovieByCategoryAndDate(Category category, LocalDate maxCommissioningDate);
 
 	List<AdMovie> findAdMovieByCategory(Category category);
 	
