@@ -16,6 +16,8 @@ public class Ticket {
     private Double price;
     //movie is a string atm, maybe change it to an Entity?
     private long screeningId;
+    private int paid;
+    
     
     @Column(columnDefinition = "boolean default false")
     private boolean validatedParking;
@@ -25,6 +27,7 @@ public class Ticket {
         this.price = 10.0;
         this.screeningId = 0;
         this.validatedParking = false;
+        this.paid = 0;
     }
 
     //ticket is made, not yet sold
@@ -63,6 +66,14 @@ public class Ticket {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public int getPaid() {
+		return paid;
+	}
+
+	public void setPaid(int paid) {
+		this.paid = paid;
 	}
 
 	//added getters/ setters for price and movie name, can eventually be usable in the future

@@ -16,7 +16,6 @@ import system_design.project.ticket_management_service.domain.Ticket;
 import system_design.project.ticket_management_service.persistence.ScreeningRepository;
 import system_design.project.ticket_management_service.persistence.TicketRepository;
 
-
 @SpringBootApplication
 @EnableBinding(Channels.class)
 public class TicketManagementServiceApplication {
@@ -25,22 +24,26 @@ public class TicketManagementServiceApplication {
 	@Autowired
 	private ScreeningRepository screeningRepository;
 
+	@Autowired
+	private TicketRepository ticketRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(TicketManagementServiceApplication.class, args);
 	}
-	
+
 	@PostConstruct
-    public void init(){
-      // Setting Spring Boot SetTimeZone
-      TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }
+	public void init() {
+		// Setting Spring Boot SetTimeZone
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
 
 	@Bean
-	public CommandLineRunner getAllTickets(TicketRepository ticketRepo, ScreeningRepository movieRepo){
+	public CommandLineRunner removeUnpaidTickets(TicketRepository ticketRepo) {
 		return args -> {
-			ticketRepo.findAll().forEach(ticket -> {logger.info(ticket.toString());});
-			logger.info("---------------------------------------------------------------------------------------");
-			movieRepo.findAll().forEach(movie -> {logger.info(movie.toString());});
+			ticketRepo.findAllUnpaidTickets().forEach(ticket -> {
+				logger.info(ticket.toString());
+				ticketRepo.delete(ticket);
+			});
 		};
 	}
 }
