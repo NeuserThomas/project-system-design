@@ -32,96 +32,99 @@ import system_design.project.ticket_management_service.services.PaymentService;
 @RequestMapping("ticket")
 public class TicketRestController {
 
-    private TicketRepository ticketRepo;
-    private ScreeningRepository screeningRepo;
-    private Logger logger = LoggerFactory.getLogger(Ticket.class);
-    private PaymentAdapter paymentAdapter = new PaymentAdapter();
-    
-    @Autowired
-    private PaymentService paymentService;
+	private TicketRepository ticketRepo;
+	private ScreeningRepository screeningRepo;
+	private Logger logger = LoggerFactory.getLogger(Ticket.class);
+	private PaymentAdapter paymentAdapter = new PaymentAdapter();
 
-    @Autowired
-    public TicketRestController(TicketRepository ticketRepo, ScreeningRepository screeningRepo){
-        this.ticketRepo = ticketRepo;
-        this.screeningRepo = screeningRepo;
-    }
+	@Autowired
+	private PaymentService paymentService;
 
-    @GetMapping
-    public Iterable<Ticket> getAllTickets(){
-        return ticketRepo.findAll();
-    }
-    
-    @GetMapping(value="/screenings/{date}")
-    public Iterable<Screening> getScreeningsByDate(@PathVariable("date") String date){
-    	LocalDate ld = LocalDate.parse(date);
+	@Autowired
+	public TicketRestController(TicketRepository ticketRepo, ScreeningRepository screeningRepo) {
+		this.ticketRepo = ticketRepo;
+		this.screeningRepo = screeningRepo;
+	}
 
-    	return screeningRepo.findbyDate(ld);
-    }
-    
-    
-    @GetMapping(value="/buyTicket")
-    public DeferredResult<ResponseEntity> sellTicket(@RequestParam(value = "screeningId") String screeningId) throws InterruptedException{
-    	DeferredResult<ResponseEntity> output = new DeferredResult<>();
-    	try {
-    		
-    		Screening screening = screeningRepo.findById(Long.valueOf(screeningId)).get();
-    		
-    		if(screening.getSoldTickets() < screening.getAvailableSeats()) {
-    			Ticket t = new Ticket(Long.valueOf(screeningId));
-    			
-    			ForkJoinPool.commonPool().submit(() -> {
-        			try {
-        				if (paymentService.TryAndSell(t).get()) {
-        					screening.sellTicket();
-        					ticketRepo.save(t);
-        	    			screeningRepo.save(screening);
-        					output.setResult(new ResponseEntity<Ticket>(t,HttpStatus.OK));
-        				}
-        			} catch (Exception e) {
-        				e.printStackTrace();
-        			}
-        			output.setResult(new ResponseEntity<String>(HttpStatus.CONFLICT));
-        		});
-    		}
-    		else {
-    			output.setResult(new ResponseEntity<String>("No more tickets available", HttpStatus.BAD_REQUEST));
-    		}
-    	}
-    	catch(NoSuchElementException ne) {
-    		output.setResult(new ResponseEntity<String>("Screening with that ID doesnt exist!", HttpStatus.BAD_REQUEST));
-    	}
-    	return output;
-    	
-    }
+	@GetMapping
+	public Iterable<Ticket> getAllTickets() {
+		return ticketRepo.findAll();
+	}
 
-    //this call can be used for validateTicket: check if ticket is in db en is sold, check endTime etc
-    @GetMapping("/{id}")
-    public Ticket getTicket(@PathVariable("id") Long id){
-        return ticketRepo.findById(id).orElse(null);
-    }
-    
-    @GetMapping("/movies")
-    public Iterable<Screening> getMovies(){
-    	return screeningRepo.findAll();
-    }
-    
-    @RequestMapping(value="/validateParkingTicket/{ticketId}", method=RequestMethod.PUT)
-    @ResponseBody
-    public ResponseEntity<Ticket> validateTicket(@PathVariable("ticketId") long ticketId){
-    	Ticket t = ticketRepo.findById(ticketId).get();
-    	
-    	if(t != null) {
-    		if(t.getParkingValidated() == false) {
-    			t.setParkingValidated(true);
-    			ticketRepo.save(t);
-    			return new ResponseEntity<Ticket>(t, HttpStatus.OK);
-    		}
-    		else {
-    			return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
-    		}
-    	}
-    	else {
-    		return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
-    	}
-    }
+	@GetMapping(value = "/screenings/{date}")
+	public Iterable<Screening> getScreeningsByDate(@PathVariable("date") String date) {
+		LocalDate ld = LocalDate.parse(date);
+
+		return screeningRepo.findbyDate(ld);
+	}
+
+	@GetMapping(value = "/buyTicket")
+	public DeferredResult<ResponseEntity> sellTicket(@RequestParam(value = "screeningId") String screeningId)
+			throws InterruptedException {
+		DeferredResult<ResponseEntity> output = new DeferredResult<>();
+		try {
+
+			Screening screening = screeningRepo.findById(Long.valueOf(screeningId)).get();
+
+			if (screening.getSoldTickets() < screening.getAvailableSeats()) {
+				Ticket t = new Ticket(Long.valueOf(screeningId));
+				ticketRepo.save(t);
+
+				ForkJoinPool.commonPool().submit(() -> {
+					try {
+						if (paymentService.TryAndSell(t).get()) {
+							if (ticketRepo.findById(t.getId()).get().getPaid() == 1) {
+								screening.sellTicket();
+								screeningRepo.save(screening);
+								output.setResult(new ResponseEntity<Ticket>(t, HttpStatus.OK));
+							}
+							else {
+								logger.info("Something must have gone wrong with the payment");
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					output.setResult(new ResponseEntity<String>("Something went wrong when trying to process the payment, please try again", HttpStatus.CONFLICT));
+				});
+			} else {
+				output.setResult(new ResponseEntity<String>("No more tickets available", HttpStatus.BAD_REQUEST));
+			}
+		} catch (NoSuchElementException ne) {
+			output.setResult(
+					new ResponseEntity<String>("Screening with that ID doesnt exist!", HttpStatus.BAD_REQUEST));
+		}
+		return output;
+
+	}
+
+	// this call can be used for validateTicket: check if ticket is in db en is
+	// sold, check endTime etc
+	@GetMapping("/{id}")
+	public Ticket getTicket(@PathVariable("id") Long id) {
+		return ticketRepo.findById(id).orElse(null);
+	}
+
+	@GetMapping("/screenings")
+	public Iterable<Screening> getScreenings() {
+		return screeningRepo.findAll();
+	}
+
+	@RequestMapping(value = "/validateParkingTicket/{ticketId}", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<Ticket> validateTicket(@PathVariable("ticketId") long ticketId) {
+		Ticket t = ticketRepo.findById(ticketId).get();
+
+		if (t != null) {
+			if (t.getParkingValidated() == false) {
+				t.setParkingValidated(true);
+				ticketRepo.save(t);
+				return new ResponseEntity<Ticket>(t, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			return new ResponseEntity<Ticket>(t, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

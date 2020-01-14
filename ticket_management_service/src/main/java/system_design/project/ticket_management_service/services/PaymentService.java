@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import system_design.project.ticket_management_service.adapters.payment.IPaymentAdapter;
 import system_design.project.ticket_management_service.domain.Ticket;
+import system_design.project.ticket_management_service.persistence.TicketRepository;
 
 @Service("PaymentService")
 @EnableAsync
@@ -21,6 +22,9 @@ public class PaymentService {
 	@Autowired
 	private IPaymentAdapter paymentAdapter;
 	
+	@Autowired
+	private TicketRepository tp;
+	
 	@Async
 	public CompletableFuture<Boolean> TryAndSell(Ticket ticket) {
 		logger.info("Checking transaction");
@@ -30,6 +34,8 @@ public class PaymentService {
 			if(canPay) {
 					logger.info("Ticket for Screening: " + ticket.getScreeningId() + " can be sold");
 					Boolean payDone = paymentAdapter.pay().get();
+					ticket.setPaid(1);
+					tp.save(ticket);
 					logger.info("Ticket for screening " + ticket.getScreeningId() + " is sold");
 					return CompletableFuture.completedFuture(true);
 				}
