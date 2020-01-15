@@ -1,6 +1,6 @@
 from maven:3.6-jdk-8-alpine AS builder
 #from openjdk:8
-MAINTAINER Robin Goussey
+MAINTAINER Robin Goussey rgoussey@gmail.com
 WORKDIR /app
 copy pom.xml .
 RUN mvn -e -B dependency:resolve
