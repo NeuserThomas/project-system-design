@@ -86,7 +86,12 @@ public class TransactionService {
 				long id = sell(transaction);
 				if(id>-1L) {
 					logger.info("Selling: "+id);
-					Boolean payDone = paymentAdapter.pay().get();
+					/**
+					 * Right now I just work with a boolean, and remove the failed ones. In real life it would be bound to a payment object, with more information.
+					 */
+					transaction.setPaid(paymentAdapter.pay().get());
+					//Should I add payment objects?
+					transactionRepo.save(transaction);
 					logger.info("Sold: "+id);
 					return CompletableFuture.completedFuture(true);
 				}
