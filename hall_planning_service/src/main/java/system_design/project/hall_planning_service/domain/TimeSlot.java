@@ -2,25 +2,26 @@ package system_design.project.hall_planning_service.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-@Entity
+
 /**
  * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
  * have more flexibility. (Paper already submitted, extra feature)
  * @author robin
  *
  */
+@Entity
 public class TimeSlot implements Serializable {
 	
 	/**
@@ -29,14 +30,14 @@ public class TimeSlot implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue
-	private long Tid;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long tId;
+
+	//@Column(name = "startTime", columnDefinition = "TIMESTAMP") 
+	private LocalDateTime startTime=LocalDateTime.now();
 	
-	@Column(name = "startTime", columnDefinition = "TIMESTAMP")
-	private LocalDateTime startTime;
-	
-	@Column(name = "stopTime", columnDefinition = "TIMESTAMP")
-	private LocalDateTime stopTime;
+	//@Column(name = "stopTime", columnDefinition = "TIMESTAMP") //Creates error?
+	private LocalDateTime stopTime=LocalDateTime.now();
 	//remove when working with more than event.
 	@Column(nullable=false)
 	/*
@@ -61,6 +62,13 @@ public class TimeSlot implements Serializable {
 		this.startTime = startTime;
 	}
 	
+	public long gettId() {
+		return tId;
+	}
+	public void settId(long tId) {
+		this.tId = tId;
+	}
+	
 	public LocalDateTime getStopTime() {
 		return stopTime;
 	}
@@ -75,12 +83,7 @@ public class TimeSlot implements Serializable {
 		this.movieId = objectId;
 	}
 	
-	public long getTid() {
-		return Tid;
-	}
-	public void setTid(long tid) {
-		Tid = tid;
-	}
+
 	public MovieHall getHall() {
 		return hall;
 	}

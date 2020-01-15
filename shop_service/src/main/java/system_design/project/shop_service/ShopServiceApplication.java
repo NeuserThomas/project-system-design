@@ -1,5 +1,7 @@
 package system_design.project.shop_service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -8,8 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import system_design.project.shop_service.domain.ShopItem;
 import system_design.project.shop_service.domain.Stock;
+import system_design.project.shop_service.domain.Transaction;
 import system_design.project.shop_service.persistence.ShopItemRepository;
 import system_design.project.shop_service.persistence.StockRepository;
+import system_design.project.shop_service.persistence.TransactionRepository;
+import system_design.project.shop_service.service.TransactionService;
 
 @SpringBootApplication
 public class ShopServiceApplication {
@@ -19,9 +24,28 @@ public class ShopServiceApplication {
 	}
 	
 	@Bean
+	/**
+	 * Method that removes unpaid transactions (When the application crashed)
+	 * @param transRepo
+	 * @param transService
+	 * @return
+	 */
+	CommandLineRunner checkRepo(TransactionRepository transRepo, TransactionService transService) {
+		return (args)->{
+			final Logger logger = LoggerFactory.getLogger(ShopServiceApplication.class);
+			logger.info("Checking for unpaid transactions!");
+			List<Transaction> trs = transRepo.findByUnPaidTransactions();
+			for(Transaction t : trs) {
+				logger.warn("Removing old transaction:"+t.getId());
+				transService.unSell(t);
+				transRepo.delete(t);
+			}
+		};
+	}
+	
+	@Bean
 	CommandLineRunner testRepository(ShopItemRepository shopRepo, StockRepository stockRepo) {
 		return (args)->{
-			final Logger logger = LoggerFactory.getLogger(ShopItemRepository.class);
 			if(shopRepo.count()==0) {
 				ShopItem a = new ShopItem();
 				a.setName("Water");

@@ -29,7 +29,8 @@ public class Transaction {
 	@Column(nullable=false)
 	private long stockId;
 
-	
+	//In real life, use a payment.
+	private boolean paid=false;
 
 	public Transaction() {
 		soldItems=new HashMap<Long,Long>();
@@ -65,5 +66,13 @@ public class Transaction {
 
 	public void setStockId(long stockId) {
 		this.stockId = stockId;
+	}
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 }
