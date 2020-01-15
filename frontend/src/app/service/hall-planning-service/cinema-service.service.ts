@@ -10,7 +10,7 @@ export class CinemaService {
   private cinemaUrl: string;
 
   constructor(private http: HttpClient) {
-    this.cinemaUrl = environment.hallPlanningServiceURL+'/cinema';
+    this.cinemaUrl = "http://" + window.location.hostname + "/planning/cinema";
   }
 
   public findAll(): Observable<Cinema[]> {
@@ -18,11 +18,11 @@ export class CinemaService {
   }
 
   public findAllNames(): Observable<String[]> {
-    return this.http.get<String[]>(this.cinemaUrl+"/getAllByName");
+    return this.http.get<String[]>(this.cinemaUrl + "/getAllByName");
   }
 
-  public findOneByName(name:String): Observable<Cinema> {
-    return this.http.get<Cinema>(this.cinemaUrl+"/getOneByName/"+name);
+  public findOneByName(name: String): Observable<Cinema> {
+    return this.http.get<Cinema>(this.cinemaUrl + "/getOneByName/" + name);
   }
 
   public save(cinema: Cinema) {

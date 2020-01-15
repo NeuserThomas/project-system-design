@@ -16,3 +16,10 @@ shop_service/bin/
 .metadata/
 
 parking_service/.settings/
+
+*.tar
+node_modules
+
+node_modules/
+
+*.tar

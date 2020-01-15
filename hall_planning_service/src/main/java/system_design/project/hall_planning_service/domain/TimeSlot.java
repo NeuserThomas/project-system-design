@@ -9,9 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @Entity
 /**
  * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
@@ -30,10 +32,10 @@ public class TimeSlot implements Serializable {
 	@GeneratedValue
 	private long Tid;
 	
-	//@Column(name = "startTime", columnDefinition = "TIMESTAMP")
+	@Column(name = "startTime", columnDefinition = "TIMESTAMP")
 	private LocalDateTime startTime;
 	
-	//@Column(name = "stopTime", columnDefinition = "TIMESTAMP")
+	@Column(name = "stopTime", columnDefinition = "TIMESTAMP")
 	private LocalDateTime stopTime;
 	//remove when working with more than event.
 	@Column(nullable=false)
@@ -41,7 +43,11 @@ public class TimeSlot implements Serializable {
 	 * Maps to the string representation of movieId
 	 */
 	private String movieId;
-		
+	
+	@Transient
+	@JsonSerialize
+	private String movieTitle;
+	
 	@ManyToOne
 	@JsonIgnoreProperties(value = { "cinema","seats" })
 	@JoinColumn(name="hallId",nullable=false)
@@ -80,5 +86,12 @@ public class TimeSlot implements Serializable {
 	}
 	public void setHall(MovieHall hall) {
 		this.hall = hall;
+	}
+	
+	public String getMovieTitle() {
+		return movieTitle;
+	}
+	public void setMovieTitle(String movieTitle) {
+		this.movieTitle = movieTitle;
 	}
 }

@@ -1,9 +1,59 @@
 <div class="container">
+    <div class="alert alert-success" role="alert">
+        Normal flow to be followed. 
+        <b>1.</b> You arrive at the parking and can see how much parking spots are left.
+        <b>2.</b> If there are still parking spots left, you get a new parking ticket.
+        <b>3.</b> Remember the ID of the generated parking ticket as you will need this later on. (Normally this is included in the barcode)
+        <b>4.</b> You go to the ticketservice and buy a ticket for a movie. Remember the id of the cinema ticket that will be generated as you will need this when validating your parking ticket. (Normally included in the barcode)
+        <b>5.</b> After the movie, you go to the parking machine to validate your parkingticket with your cinema ticket.
+        <b>6.</b> After succesfully validating your parking ticket, you can now exit the parking.
+    </div>
+    <div class="alert alert-warning" role="alert">
+        When you click a button and nothing happens, please check the network panel. Probably an network call returned
+        an error that will then be specified in the response body. Hover over the buttons to get some more info.
+    </div>
     <div class="buttons_container">
-        <Button class="btn btn-primary" (click)="getNumberOfFreeSpots()">Get number of free spots</Button>
-        <Button class="btn btn-primary" (click)="getAllParkingTickets()">Get tickets</Button>
-        <Button class="btn btn-primary" (click)="getNewParkingTicket()">Get new parking ticket</Button>
-        <Button class="btn btn-primary">Validate ticket</Button>
-        <Button class="btn btn-primary">Exit parking</Button>
+        <Button class="btn btn-primary" (click)="getNumberOfFreeSpots()" data-toggle="tooltip" data-placement="top"
+            title="Click this button to see how much parking spots are left on the parking">Get number of free
+            spots</Button>
+        <div class="alert alert-primary" role="alert" *ngIf="showNumber">
+            {{ numberOfFreeSpots }}
+        </div>
+        <Button class="btn btn-primary" (click)="getNewParkingTicket()" data-toggle="tooltip" data-placement="top"
+            title="Click this button to get a new parking ticket">Get new parking
+            ticket</Button>
+        <div class="alert alert-primary" role="alert" *ngIf="showTicketInfo">
+            ParkingTicket {{ newTicketInfo }}
+        </div>
+        <Button class="btn btn-primary" (click)="validateParkingTicketInit()" data-toggle="tooltip" data-placement="top"
+            title="Click on this button to validate your parkingticket, you'll need an parkingTicket id and cinema ticket id">Validate
+            ticket</Button>
+        <div class="input-group mb-3" *ngIf="showValidateFields">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Parkingticket ID</span>
+            </div>
+            <input type="number" class="form-control" aria-label="pticket" [(ngModel)]="pTicketId" id="pTicketField">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Cinematicket ID</span>
+            </div>
+            <input type="number" class="form-control" aria-label="pticket" [(ngModel)]="cTicketId" id="cTicketField">
+            <button type="button" class="btn btn-secondary" (click)="validateParkingTicket()">Validate</button>
+        </div>
+        <div class="alert alert-primary" role="alert" *ngIf="showValidatedTicketInfo">
+            ParkingTicket {{ validatedTicketInfo }}
+        </div>
+        <Button class="btn btn-primary" (click)="exitParkingInit()" data-toggle="tooltip" data-placement="top"
+            title="Click this button to exit the parking, you'll need a parking ticket id">Exit parking</Button>
+        <div class="input-group mb-3" *ngIf="showExitParkingFields">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Parkingticket ID</span>
+            </div>
+            <input type="number" class="form-control" aria-label="pticket" [(ngModel)]="exitParkingId"
+                id="pTicketField">
+            <button type="button" class="btn btn-secondary" (click)="exitParking()">Exit</button>
+        </div>
+        <div class="alert alert-primary" role="alert" *ngIf="showExitParkingInfo">
+            {{ exitParkingInfo }}
+        </div>
     </div>
 </div>

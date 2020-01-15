@@ -40,13 +40,11 @@
             </tr>
         </tbody>
     </table>
-
 </div>
-<div class="dropdown-item" *ngIf=loading>
-    <i class="fa fa-spin fa-spinner fa-5x"></i>
-  </div>
 <br>
-
+<div class="spinner-border" *ngIf="loading==true" role="status">
+    <span class="sr-only">Loading...</span>
+</div>
 <div *ngIf="showAlert && good" (click)="closeAlert()" class="alert alert-success" dismiss-on-timeout="4000" role="alert">
     {{message}}
 </div>

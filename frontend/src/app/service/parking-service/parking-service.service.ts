@@ -10,7 +10,7 @@ export class ParkingService {
   private parkingUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.parkingUrl = "http://localhost:2301/parking";
+    this.parkingUrl = "http://localhost:2302/parking";
   }
 
   public findAll(): Observable<ParkingTicket[]> {
@@ -25,6 +25,11 @@ export class ParkingService {
     return this.http.get(this.parkingUrl+'/numberOfFreeSpots');
   }
 
-  public 
+  public validateParkingTicket(pTicketId: number, cTicketId: number): Observable<ParkingTicket> {
+    return this.http.put<ParkingTicket>(this.parkingUrl+'/validateTicket/' + pTicketId +'?ticketId=' + cTicketId, null);
+  }
 
+  public exitParking(ticketId: number){
+    return this.http.delete(this.parkingUrl+'/exitParking/' + ticketId);
+  }
 }
