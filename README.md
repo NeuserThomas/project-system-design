@@ -24,6 +24,14 @@ Added a TicketRepository (currrently working with H2 database) for storing the t
 Added a RestController (that can later be used for validateTicket)
 
 
+
+
+
+
+-----------------------------
+
+
+
 ## **Parking Service**
 
 This service is used for parking management. When initialized, one parking is available with 200 free spots.
@@ -40,7 +48,23 @@ One REST controller is added: ParkingRestController. The endpoints are:
 - /parking/parking/getTicket -> getParkingTicket() : when entering the parking, a new parkingticket is returned.
 
 
+### ***Domain***
 
+Classes are: 
+
+- Parking 
+- ParkingTicket
+
+
+### ***Persistence***
+
+Two repositories are used (both interacting with MYSQL databases):
+
+- ParkingRepository
+- ParkingTicketRepository
+
+
+------------------------------
 
 
 
