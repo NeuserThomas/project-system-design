@@ -33,12 +33,12 @@ public class PublicityService {
 	
 	private static Logger logger = LoggerFactory.getLogger(PublicityService.class);
 	
-	LocalDate yetToPlan = LocalDate.MIN;//changes by event from hallPlanning
+	private LocalDate yetToPlan = LocalDate.MIN;//changes by event from hallPlanning
 	
 	//is set to yetToPlan when the variable maximumDuration of AdMovie is changed
 	//adMovies that are created with the new maximumDuration, can only be played and planned after this day
 	//the days before were already planned before the change of maximumDuration
-	LocalDate minimumCommissioningDate = LocalDate.MIN;
+	private LocalDate minimumCommissioningDate = LocalDate.MIN;
 	
 	/**
 	 * Will run every week on sunday, at midnight.
@@ -59,13 +59,13 @@ public class PublicityService {
 		choice.addAll(trailerRepo.findTrailerByCategory(Category.All));
 		
 		Duration duration = Duration.ZERO;
-		while(duration.toMinutes() < AdMovie.minimalMinutes && !choice.isEmpty()) {
+		while(duration.toMinutes() < AdMovie.getMinimalDuration() && !choice.isEmpty()) {
 			//choose new AMovie and removes it from the choice
 			AMovie a = getNewAMovie(choice);
 			
 			//check if duration is not going to exceed the maximum value
 			//toMinutes is no rounded value, but is the minutes part
-			if(duration.toSeconds() + a.getDuration().toSeconds() < AdMovie.maximalMinutes*60) {
+			if(duration.toSeconds() + a.getDuration().toSeconds() < AdMovie.getMaximalDuration()*60) {
 				playlist.add(a);
 				duration = duration.plus(a.getDuration());
 			}
@@ -85,5 +85,16 @@ public class PublicityService {
 	private AMovie getNewAMovie(List<AMovie> choice) {
 		Random r = new Random();
 		return choice.remove(r.nextInt(choice.size()));
+	}
+	
+	public void setYetToPlan(LocalDate yetToPlan) {
+		//HallPlanning planned a day
+		this.yetToPlan = yetToPlan;
+	}
+
+	public void setMinimumCommissioningDate() {
+		//maximumDuration (AdMovie) changed
+		this.generateAllCategories();
+		minimumCommissioningDate = yetToPlan;
 	}
 }

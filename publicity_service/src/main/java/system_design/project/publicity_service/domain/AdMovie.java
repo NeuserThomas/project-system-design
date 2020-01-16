@@ -24,15 +24,16 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("P")
 public class AdMovie extends AMovie {
 	//minimal amount of minutes the duration of an adMovie has to be (if possible)
-	public static final int minimalMinutes = 25;
-	public static final int maximalMinutes = minimalMinutes + 5;
-	
+	private static int maximalDuration = 30;
+	private static int delay = 5;
+
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AMovie> playlist;
 	
 	//day from which the film may be used
 	private LocalDate commissioningDate;
 	
+	//constructors
 	public AdMovie() {
 		super(null, null, null);
 		this.playlist = new ArrayList<AMovie>();
@@ -45,6 +46,7 @@ public class AdMovie extends AMovie {
 		this.commissioningDate = commissioningDate;
 	}
 
+	//getters and setters
 	public List<AMovie> getPlaylist() {
 		return playlist;
 	}
@@ -74,5 +76,25 @@ public class AdMovie extends AMovie {
 	public String toString() {
 		return MessageFormat.format("{0}\t CommissioningDate: {1}" ,
 				super.toString(), this.commissioningDate);
+	}
+	
+	
+	public static int getMinimalDuration() {
+		return maximalDuration - delay;
+	}
+
+	public static int getMaximalDuration() {
+		return maximalDuration;
+	}
+
+	public static void setMaximalDuration(int maximalDuration) {
+		AdMovie.maximalDuration = maximalDuration;
+		//delay should be at least 3 minutes
+		AdMovie.delay = maximalDuration < 18 ? 3 : maximalDuration/6;
+	}
+
+	public static void setDelay(int delay) {
+		//delay should be at least 3 minutes
+		AdMovie.delay = delay < 3 ? 3 : delay;
 	}
 }
