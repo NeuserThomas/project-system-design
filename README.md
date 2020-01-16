@@ -4,28 +4,47 @@
 This repository contains all the folders/ files related to the Bioscoop system project for the course System Design 2019-2020.
 
 
-## **TicketManagement service**
-
-### ***Domain***
-
-Added next classes:
-
-- Ticket
-- Movie
-- MovieSchedule (MovieSchedule is an array of Movies, used when getting the MovieSchedule from the MoviePlanner service)
-- TicketStatus (enum containing the states that a Ticket can have)
-
-### ***Persistence***
-
-Added a TicketRepository (currrently working with H2 database) for storing the tickets
+## **Ticket service**
 
 ### ***Adapters***
 
-Added a RestController (that can later be used for validateTicket)
+Added one REST controller: TicketRestController. The endpoints are:
 
+- ticket/ticket/ -> getAllTickets : returns all tickets currently in the database.
+- ticket/ticket/screenings/{date} -> getScreeningsByDate() : returns all screenings for the cinema on that day
+- ticket/ticket/buyTicket?screeningId={screeningId} -> sellTicket() : buy a ticket for a given screeningId
+- ticket/ticket/{id} -> getTicket() : returns the ticket for the given id
+- ticket/ticket/screenings -> getScreenings() : returns all screenings in database for the cinema
+- ticket/ticket/validateParkingTicket/{ticketId} -> validateTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
 
+Kafka channels/ commandhandler are implemented, see package adapters.messaging, containing:
+- Channels
+- PlanningCommandHandler
 
+Payment adapters are implemented to mock the payment functionality, see package adapters.payment, containing:
 
+- IPaymentAdapter
+- PaymentAdapter
+
+### ***Domain***
+
+Classes are:
+- Ticket
+- CinemaProxy
+- Hall
+- Screening
+- ScreeningProxy
+
+### ***Persistence***
+
+Two repositories are used, both interacting with MYSQL databases:
+- ScreeningRepository
+- TicketRepository
+
+### ***Adapters***
+
+One service is added, for mocking the functionality of paying,
+-ParymentService
 
 
 -----------------------------
