@@ -109,7 +109,7 @@ public class TicketRestController {
 
 	@RequestMapping(value = "/validateParkingTicket/{ticketId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<Ticket> validateTicket(@PathVariable("ticketId") long ticketId) {
+	public ResponseEntity<Ticket> validateParkingTicket(@PathVariable("ticketId") long ticketId) {
 		Ticket t = ticketRepo.findById(ticketId).get();
 
 		if (t != null) {
