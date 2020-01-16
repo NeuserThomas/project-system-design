@@ -41,10 +41,11 @@ Two repositories are used, both interacting with MYSQL databases:
 - ScreeningRepository
 - TicketRepository
 
-### ***Adapters***
+### ***Services***
 
 One service is added, for mocking the functionality of paying,
--ParymentService
+
+-PaymentService
 
 
 -----------------------------
