@@ -45,7 +45,7 @@ Two repositories are used, both interacting with MYSQL databases:
 
 One service is added, for mocking the functionality of paying,
 
--PaymentService
+- PaymentService
 
 
 -----------------------------
