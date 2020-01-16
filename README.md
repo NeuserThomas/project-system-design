@@ -15,7 +15,7 @@ Added one REST controller: TicketRestController. The endpoints are:
 - ticket/ticket/buyTicket?screeningId={screeningId} -> sellTicket() : buy a ticket for a given screeningId
 - ticket/ticket/{id} -> getTicket() : returns the ticket for the given id
 - ticket/ticket/screenings -> getScreenings() : returns all screenings in database for the cinema
-- ticket/ticket/validateParkingTicket/{ticketId} -> validateTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
+- ticket/ticket/validateParkingTicket/{ticketId} -> validateParkingTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
 
 Kafka channels/ commandhandler are implemented, see package adapters.messaging, containing:
 - Channels
@@ -41,10 +41,11 @@ Two repositories are used, both interacting with MYSQL databases:
 - ScreeningRepository
 - TicketRepository
 
-### ***Adapters***
+### ***Services***
 
 One service is added, for mocking the functionality of paying,
--ParymentService
+
+- PaymentService
 
 
 -----------------------------
