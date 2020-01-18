@@ -17,6 +17,15 @@ spring.profiles.active=prod
 
 ## **Ticket service (Thomas)**
 
+General info
+
+Server port: 2300
+
+Dependencies:
+- Zookeeper
+- Kafka
+- MySQL
+
 ### ***Adapters***
 
 Added one REST controller: TicketRestController. The endpoints are:
@@ -64,6 +73,13 @@ One service is added, for mocking the functionality of paying,
 ## **Parking Service (Thomas)**
 
 This service is used for parking management. When initialized, one parking is available with 200 free spots.
+
+General info
+
+Server port: 2301
+
+Dependencies:
+- MySQL
 
 ### ***Adapters***
 
