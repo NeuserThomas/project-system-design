@@ -1,6 +1,8 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.util.List;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.annotations.Expose;
@@ -11,6 +13,7 @@ import org.bson.types.ObjectId;
 
 @Document
 public class Movie {
+	@Id
 	private ObjectId _id;
 	
 	@SerializedName("Title")
