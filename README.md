@@ -172,10 +172,16 @@ chmod +x ./run_mysqlcontainer.sh
 
 - - - -
 ## **frontend**
-To run the frontend, go to the direcotry /frontend in the terminal, and run:
+To run the frontend, go to the directory /frontend in the terminal, and run:
 ```bash
 $ ng serve --open
 ```
+You can also build the frontend with docker, and use it as an image. Do note, that default, it builds by copying the output of the npm build to the docker file, instead of building it in the container (dockerfile_v2).
+So you have to run (in a terminal, in the frontend directory):
+```
+npm run build
+```
+And then you can build build with docker.
 - - - -
 ## **Deployment on kubernetes! (and docker)**
 [Kubernets](kubernetes/readme.md)
