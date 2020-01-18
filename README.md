@@ -26,7 +26,7 @@ Dependencies:
 - Kafka
 - MySQL
 
-link to full file: [Ticket Service](ticket_management_service/readme.md)
+link to full file: [Ticket Service](ticket_management_service/README.md)
 
 -----------------------------
 
