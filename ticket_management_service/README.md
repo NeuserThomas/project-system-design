@@ -1,6 +1,8 @@
 
 ## **Ticket service (Thomas)**
 
+This service manages everything related to cinemaTickets. 
+
 ## ***General info***
 
 Server port: 2300
