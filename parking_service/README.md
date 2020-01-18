@@ -30,3 +30,9 @@ Classes are:
 
 - Parking 
 - ParkingTicket
+
+### ***Persistence***
+
+Two repositories are used, both interacting with MYSQL databases:
+- ParkingRepository
+- ParkingTicketRepository
