@@ -2,12 +2,22 @@
 
 This service is used for parking management. When initialized, one parking is available with 200 free spots.
 
-General info
+## ***General info***
 
 Server port: 2301
 
 Dependencies:
 - MySQL
+
+## ***Deployment***
+
+To run the service locally, you have to set up MYSQL first,
+ ```
+ docker run -d -e MYSQL_DATABASE=Parking -e MYSQL_ROOT_PASSWORD=ThePassword -p 3306:3306 --name mysqldb mysql:5.7
+
+ ```
+ will create a container with the necessary database
+ 
 
 ### ***Adapters***
 
