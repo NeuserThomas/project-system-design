@@ -1,14 +1,34 @@
 # StaffService
 
+## Deployment information
+
+### za 18 jan 2020 18:24:59 CET
+Running cassandra 
+```
+# origin: bitnami/cassandra
+# Container ID: 811984d095fafd4d2e010cb442fab31d85725a57e3d75b7d3012e65f9b8bb114
+docker start cassandra_01
+```
+When cassandra is running, StaffService can be launched in `dev`.
+The difference in dev is that the value of the cassandra contactpoints
+```
+spring.data.cassandra.contact-points=localhost
+``` 
+Overview of working parts, for which the following URLs are of relevance
+````plain 
+http://localhost:2224/timeslot/
+http://localhost:2224/cinemas
+http://localhost:2224/employees
+````
+
+`http://localhost:2224/timeslot/` should have an output similar to
+```
+[{"id":"198d9770-3a17-11ea-a5cf-df37814616fe","cinemaId":0,"day":{"millisSinceEpoch":1577836800000,
+"daysSinceEpoch":18262,"year":2020,"month":1,"day":1},
+"timeslot":"12:00:00","employeeId":"1980c630-3a17-11ea-a5cf-df37814616 ... 
+```
+
 ## Apache Cassandra
-
-Several approaches for Cassandra DB access
-- CqlTemplate and ReactiveCqlTemplate are the classic Spring CQL approach and the most popular. This is the “lowest-level” approach. Note that components like CassandraTemplate use CqlTemplate under-the-hood.
-- CassandraTemplate wraps a CqlTemplate to provide query result-to-object mapping and the use of SELECT, INSERT, UPDATE, and DELETE methods instead of writing CQL statements. This approach provides better documentation and ease of use.
-
-- ReactiveCassandraTemplate wraps a ReactiveCqlTemplate to provide query result-to-object mapping and the use of SELECT, INSERT, UPDATE, and DELETE methods instead of writing CQL statements. This approach provides better documentation and ease of use.
-
-- Repository Abstraction lets you create repository declarations in your data access layer. The goal of Spring Data’s repository abstraction is to significantly reduce the amount of boilerplate code required to implement data access layers for various persistence stores.
 
 ### MAC OSX
 Running cassandra
@@ -17,12 +37,6 @@ Running cassandra
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home
 cassandra/bin/cassandra -f
 ```
-
-### Implementation
-#### Domain Objects
-If you want to use Java configuration, use the @EnableCassandraRepositories annotation. The annotation carries the same attributes as the namespace element. If no base package is configured, the infrastructure scans the package of the annotated configuration class.
-
-Because our domain repository extends CrudRepository, it provides you with basic CRUD operations. Working with the repository instance is a matter of injecting the repository as a dependency into a client.
 
 
 ## References
