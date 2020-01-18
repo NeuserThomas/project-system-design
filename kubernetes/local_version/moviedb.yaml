@@ -40,6 +40,7 @@ spec:
     metadata:
       labels:
         app: moviedb
+        choas: immune
     spec:
       containers:
       - image: mongo
@@ -53,7 +54,7 @@ spec:
         - name: MONGODB_PASSWORD
           value: ThePassword
         - name: MONGODB_DATABASE
-          value: movie
+          value: admin
         ports:
         - containerPort: 3306
           name: moviedb
