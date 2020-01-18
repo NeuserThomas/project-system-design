@@ -176,11 +176,12 @@ To run the frontend, go to the directory /frontend in the terminal, and run:
 ```bash
 $ ng serve --open
 ```
-You can also build the frontend with docker, and use it as an image. Do note, that default, it builds by copying the output of the npm build to the docker file, instead of building it in the container (dockerfile_v2).
+You can also build the frontend with docker, and use it as an image. Do note, that default, it builds by copying the output of the npm build to the docker file, instead of building it in the container (dockerfile_v2, this because of errors).
 So you have to run (in a terminal, in the frontend directory):
 ```
 npm run build
 ```
+Do note: this needs node and angular installed.
 And then you can build build with docker.
 ### Testing locally:
 Right now the frontend routes all traffic, to the url it came from, on the same port, so you need the ingress controller to run. Or you have to manually change all urls in the service classes. 
