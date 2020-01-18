@@ -16,7 +16,7 @@ To locally run this service. You need to run:
 - Kafka
 - Zookeeper
 
-- MySQL, see command
+- MySQL server (if there is not already one running) , see command
 ```
  docker run -d -e MYSQL_DATABASE=Ticket -e MYSQL_ROOT_PASSWORD=ThePassword -p 3306:3306 --name mysqldb mysql:5.7
 
