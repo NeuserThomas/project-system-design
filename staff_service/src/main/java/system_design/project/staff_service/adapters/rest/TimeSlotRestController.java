@@ -11,6 +11,7 @@ import system_design.project.staff_service.domain.TimeSlot;
 import system_design.project.staff_service.persistence.TimeSlotRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/timeslot")
@@ -32,6 +33,11 @@ public class TimeSlotRestController {
         return com.datastax.driver.core.LocalDate.fromYearMonthDay(x.getYear(),x.getMonthValue(), x.getDayOfMonth());
     }
 
+    /**
+     *
+     *  GET REQUESTS
+     *
+     */
     @GetMapping("/")
     public @ResponseBody  ResponseEntity<Iterable<TimeSlot>> getAllTimeSlots(){
         Iterable<TimeSlot> timeSlots = this.repo.findAll();
@@ -54,5 +60,39 @@ public class TimeSlotRestController {
         Iterable<TimeSlot> timeSlots = this.repo.getTimeSlotsByDayAndCinemaId(toDataStaxLocalData(LocalDate.now()), cinemaId);
         return new ResponseEntity<>(timeSlots, HttpStatus.OK);
     }
+    
+    /**
+     * Create or Update a timeslot
+     * @param day
+     * @param x
+     * @return new or updatede timeslot
+     */
+    @PostMapping(path = "/create/{day}", consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TimeSlot createTimeSlotBasic(@PathVariable(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day,
+                                        @RequestBody TimeSlotRequestBody x){
+
+        logger.info("day: " + day);
+        TimeSlot tentative = new TimeSlot(x.cinemaId, toDataStaxLocalData(day), x.time, x.employeeId, x.availabilityCode);
+
+
+        // first obtain timeslots for the current employee/day/cinema
+        List<TimeSlot> existingTimeslot = this.repo.getTimeSlotsByDayAndTimeslotAndCinemaIdAndEmployeeId(
+                tentative.getDay(),
+                tentative.getTimeslot(),
+                tentative.getCinemaId(),
+                tentative.getEmployeeId());
+
+        // if the specific timeslot already exists, it will be updated
+        if(!existingTimeslot.isEmpty()){
+            existingTimeslot.get(0).update(tentative);
+        }
+        this.repo.save(tentative);
+
+        return tentative;
+    }
+
+
+
 
 }

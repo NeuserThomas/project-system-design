@@ -44,6 +44,13 @@ public class TimeSlot {
     }
 
 
+    public void update(TimeSlot other){
+        this.cinemaId = other.cinemaId;
+        this.day = other.day;
+        this.timeslot = other.timeslot;
+        this.employeeId = other.employeeId;
+        this.availabilityCode = other.availabilityCode;
+    }
     public Long getCinemaId() {
         return cinemaId;
     }
