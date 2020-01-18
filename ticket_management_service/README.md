@@ -1,7 +1,7 @@
 
 ## **Ticket service (Thomas)**
 
-This service manages everything related to cinemaTickets. 
+This service manages everything related to cinema tickets. 
 
 ## ***General info***
 
