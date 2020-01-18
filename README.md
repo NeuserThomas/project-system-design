@@ -144,6 +144,13 @@ To run the mongo db, go to the [bash_scripts directory](/bash_scripts) :
 ./build_mongocontainer.sh
 ```
 This will run a standard mongo image, and run it as well.
+#### Kubernetes:
+At the moment there is an error so our users don't get created. Use the following command:
+```
+kubectl exec -it <movie-pod-name> mongo
+...
+db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", db:"movie"}] })
+```
 
 ### Errors with the databases:
 If for some reason the data gets erases in the mongo databases (the movies), then please also erase all data in the mysql.
