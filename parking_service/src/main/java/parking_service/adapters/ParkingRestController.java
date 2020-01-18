@@ -125,7 +125,7 @@ public class ParkingRestController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/getTicket", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity getNewParkingTicket() {
+	public ResponseEntity getParkingTicket() {
 
 		Parking p = parkingRepo.findAll().iterator().next();
 

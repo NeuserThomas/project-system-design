@@ -35,7 +35,6 @@ public class TicketRestController {
 	private TicketRepository ticketRepo;
 	private ScreeningRepository screeningRepo;
 	private Logger logger = LoggerFactory.getLogger(Ticket.class);
-	private PaymentAdapter paymentAdapter = new PaymentAdapter();
 
 	@Autowired
 	private PaymentService paymentService;
@@ -98,8 +97,6 @@ public class TicketRestController {
 
 	}
 
-	// this call can be used for validateTicket: check if ticket is in db en is
-	// sold, check endTime etc
 	@GetMapping("/{id}")
 	public Ticket getTicket(@PathVariable("id") Long id) {
 		return ticketRepo.findById(id).orElse(null);
@@ -112,7 +109,7 @@ public class TicketRestController {
 
 	@RequestMapping(value = "/validateParkingTicket/{ticketId}", method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<Ticket> validateTicket(@PathVariable("ticketId") long ticketId) {
+	public ResponseEntity<Ticket> validateParkingTicket(@PathVariable("ticketId") long ticketId) {
 		Ticket t = ticketRepo.findById(ticketId).get();
 
 		if (t != null) {

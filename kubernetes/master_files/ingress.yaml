@@ -18,6 +18,14 @@ spec:
         backend:
           serviceName: hall-planning
           servicePort: 2223
+      - path: /ticket
+        backend:
+          serviceName: ticket
+          servicePort: 2300
+      - path: /parking
+        backend:
+          serviceName: parking
+          servicePort: 2301
       - path: /
         backend:
           serviceName: frontend
