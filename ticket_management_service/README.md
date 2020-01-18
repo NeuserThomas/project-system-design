@@ -1,7 +1,7 @@
 
 ## **Ticket service (Thomas)**
 
-General info
+## ***General info***
 
 Server port: 2300
 
@@ -9,6 +9,18 @@ Dependencies:
 - Zookeeper
 - Kafka
 - MySQL
+
+## Deployment
+
+To locally run this service. You need to run:
+- Kafka
+- Zookeeper
+
+- MySQL, see command
+```
+ docker run -d -e MYSQL_DATABASE=Ticket -e MYSQL_ROOT_PASSWORD=ThePassword -p 3306:3306 --name mysqldb mysql:5.7
+
+ ```
 
 ### ***Adapters***
 
