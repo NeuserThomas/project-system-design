@@ -11,7 +11,7 @@ Dependencies:
 
 ## ***Deployment***
 
-To run the service locally, you have to set up MYSQL first,
+To run the service locally, you have to set up MYSQL server first (if there is not already one running),
  ```
  docker run -d -e MYSQL_DATABASE=Parking -e MYSQL_ROOT_PASSWORD=ThePassword -p 3306:3306 --name mysqldb mysql:5.7
 
