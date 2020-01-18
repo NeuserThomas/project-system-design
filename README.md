@@ -182,6 +182,12 @@ So you have to run (in a terminal, in the frontend directory):
 npm run build
 ```
 And then you can build build with docker.
+### Testing locally:
+Right now the frontend routes all traffic, to the url it came from, on the same port, so you need the ingress controller to run. Or you have to manually change all urls in the service classes. 
+### Running in kubernetes:
+Make sure the ingress controller and ingress.yaml is depoyed.
+
+
 - - - -
 ## **Deployment on kubernetes! (and docker)**
 [Kubernets](kubernetes/readme.md)
