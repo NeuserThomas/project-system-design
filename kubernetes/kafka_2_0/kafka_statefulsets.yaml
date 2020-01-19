@@ -26,6 +26,7 @@ items:
         creationTimestamp: null
         labels:
           app: kafka
+          choas: immune
       spec:
         containers:
         - command:
@@ -186,6 +187,7 @@ items:
         creationTimestamp: null
         labels:
           app: zookeeper
+          chaos: immune
           storage: persistent
       spec:
         containers:
@@ -312,6 +314,7 @@ items:
         creationTimestamp: null
         labels:
           app: zookeeper
+          choas: immune
           storage: persistent-regional
       spec:
         containers:

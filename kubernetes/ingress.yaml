@@ -26,6 +26,10 @@ spec:
         backend:
           serviceName: parking
           servicePort: 2301
+      - path: /publicity
+        backend:
+          serviceName: publicity
+          servicePort: 5555
       - path: /
         backend:
           serviceName: frontend

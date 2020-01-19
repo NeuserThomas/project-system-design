@@ -13,7 +13,58 @@ To deploy a directory (like the kafka or ingress one), use the following command
 ```
 kubectl apply -f .
 ```
-## How to build images and export them:
+### Deploy on microk8s. (Using local images).
+Right now we use the docker hub registry images. You can use local images by [exporting them]().
+To use local images, change the image in the yaml from (example for shop):
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: shop
+  name: shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shop
+  template:
+    metadata:
+      labels:
+        app: shop
+    spec:
+      containers:
+      - image: rgoussey/shop:latest
+        name: shop
+        ports:
+        - containerPort: 2230
+```
+To:
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: shop
+  name: shop
+spec:
+  replicas: 1
+  selector:
+  matchLabels:
+      app: shop
+  template:
+    metadata:
+      labels:
+        app: shop
+    spec:
+      containers:
+      - image: shop
+	    imagePullPolicy: Never
+        name: shop
+        ports:
+        - containerPort: 2230
+```
+## How to build images and export them (also for microk8s):
 In this paragraph, there is a short explanation for all settings to work.
 ### application.properties
 Every spring boot app should have multiple applications properties files, like below:
@@ -144,7 +195,7 @@ You can put them in seperate files, or combine them with --- in between. Deployi
 (microk8s.) kubectl apply -f <file>
 ```
 #### Ingress
-To route the traffic, we use an ingress controller:
+To route the traffic, we use an ingress controller, for example:
 ```
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -164,15 +215,14 @@ spec:
           servicePort: 80
 ```
 #### Ingress controller:
-Uitleg over ingress controller:
-https://www.youtube.com/watch?v=VicH6KojwCI&fbclid=IwAR3MchJe-CeINbiEIdcq8acLMNJEXv2AtmCR0_RcDYH-GlWQ742Kf3jaF_A
 In microk8s you can use ingress without deploying the controller, and only the ingress yaml:
 ```
 microk8s.enable ingress
 ```
-#### Eigen ingress controller:
-Er zijn nu 2 yamls toegevoegd, die zelf een deployen. Zie kubernetes/definitive_versions/mandator.yaml en de kubernetes/definitive_versions/service-nodeport.yaml. Indien je deze deployt, heb je de microk8s ingress niet nodig.
-
+There are also two custom controllers:
+Right now there are 2 ingress controllers, an nginx one, and a treafik one. Deploy the nginx one by deploying everything in the map [local_ingress](/kubernetes/local_ingress).
+On the server we use the treafik one, this one can be deployed using the bash script [ingress_controller](ingress_controller).
+Then also apply the ingress.yaml.
 
 # ***Resilience test***
 
@@ -184,5 +234,3 @@ chmod a+x chaos.sh
 ./chaos.sh
 ```
 
-
-Dit was mijn TED talk, bedankt voor uw aandacht.

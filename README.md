@@ -148,5 +148,5 @@ Make sure the ingress controller and ingress.yaml is depoyed.
 
 - - - -
 ## **Deployment on kubernetes! (and docker)**
-[Kubernets](kubernetes/readme.md)
+[Kubernetes](kubernetes/readme.md)
 
