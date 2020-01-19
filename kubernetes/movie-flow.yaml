@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: movie-flow
+  name: movie-flow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movie-flow
+  template:
+    metadata:
+      labels:
+        app: movie-flow
+    spec:
+      containers:
+      - image: rgoussey/movie-flow:latest
+        name: movie-flow
+        ports:
+        - containerPort: 2225
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: movie-flow
+  name: movie-flow
+spec:
+  type: ClusterIP
+  ports:
+  - name: "2225"
+    port: 2225 # inside the cluster
+    targetPort: 2225 # pod port, same as containerPort
+  selector:
+    app: movie-flow

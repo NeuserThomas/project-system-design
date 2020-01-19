@@ -40,7 +40,7 @@ spec:
     metadata:
       labels:
         app: moviedb
-        choas: immune
+        chaos: immune
     spec:
       containers:
       - image: mongo
