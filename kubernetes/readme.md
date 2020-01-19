@@ -224,6 +224,14 @@ Right now there are 2 ingress controllers, an nginx one, and a treafik one. Depl
 On the server we use the treafik one, this one can be deployed using the bash script [ingress_controller](ingress_controller.sh).
 Then also apply the ingress.yaml.
 
+#### Mongo and hall-planning:
+At the moment there is an error so one of our users doesn't get created. So if hall-planning keeps crashing, use the underlying command:
+```
+kubectl exec -it <movie-pod-name> mongo
+...
+db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", db:"movie"}] })
+```
+
 # ***Resilience test***
 
 To test the resilience of our application, use the file chaos.sh which you can find in this directory.
