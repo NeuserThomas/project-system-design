@@ -85,7 +85,13 @@ link to full file: [shopService](shop_service/readme.md)
 
 Link to Staff Service's [Read Me](staff_service/README.md)
 -----------------------------
-
+## Staff Service
+### Dependencies:
+- hall-planning
+- kafka
+- mysql 
+This service can be run once all the above are running. There are no rest calls, only logs atm.
+-----------------------------
 ## Publicity Service (Jasper)
 - Server Port: `5555`
 - Dependencies:
