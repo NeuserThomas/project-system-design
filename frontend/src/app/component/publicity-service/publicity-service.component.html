@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="buttons_container">
+    <div> Categories are: Action, children, Plus18, Thriller, Family, Sciencefiction, Other and All.</div>
+    <div> You can type the categories in lowercase.</div>
+    <input type="String" name="category" [(ngModel)]="category"/>
+    <Button class="btn btn-primary" (click)="getAdMovieByCategory()" data-togle="tooltip"
+            data-placement="top" title="Click this button to get the AdMovie of some category">Get AdMovie by category
+    </Button>
+    <div class="alert alert-primary" role="alert" *ngIf="showAdMovieInfo">
+      {{ adMovieInfo }}
+    </div>
+    <Button class="btn btn-primary" (click)="getMaxDuration()" data-togle="tooltip"
+                  data-placement="top" title="Click this button to get the maximum Duration of an AdMovie (in seconds)">
+      Get maxDuration
+    </Button>
+    <div class="alert alert-primary" role="alert" *ngIf="showMaxDuration">
+      {{ maxDuration }}
+    </div>
+  </div>
+</div>

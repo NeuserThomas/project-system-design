@@ -4,12 +4,14 @@ import { HallPlanningServiceComponent } from './component/hall-planning-service/
 import { TicketServiceComponent } from './component/ticket-service/ticket-service.component';
 import { ParkingServiceComponent } from './component/parking-service/parking-service.component';
 import { ShopServiceComponent } from './component/shop-service/shop-service/shop-service.component';
+import { PublicityServiceComponent } from './component/publicity-service/publicity-service.component';
 
 const routes: Routes = [
   {path: 'hallPlanningService',component: HallPlanningServiceComponent },
   {path: 'ticketService',component: TicketServiceComponent},
   {path: 'parkingService',component: ParkingServiceComponent},
-  {path: 'shopService',component: ShopServiceComponent}
+  {path: 'shopService',component: ShopServiceComponent},
+  {path: 'publicityService',component: PublicityServiceComponent}
 ];
 
 @NgModule({

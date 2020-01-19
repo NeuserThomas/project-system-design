@@ -31,6 +31,8 @@ import { ListStockComponent } from './component/shop-service/list-stock/list-sto
 import { ShopItemListComponent } from './component/shop-service/shop-item-list/shop-item-list.component';
 import { NewTransactionComponent } from './component/shop-service/new-transaction/new-transaction.component';
 
+import { PublicityServiceComponent } from './component/publicity-service/publicity-service.component';
+
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { NewTransactionComponent } from './component/shop-service/new-transactio
     ShopServiceComponent,
     ListStockComponent,
     ShopItemListComponent,
-    NewTransactionComponent
+    NewTransactionComponent,
+    PublicityServiceComponent
     ],
   imports: [
     BrowserModule,
