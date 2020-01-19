@@ -74,6 +74,7 @@ spec:
     metadata:
       labels:
         app: cassandra
+        chaos: immune
     spec:
       containers:
         - name: cassandra
