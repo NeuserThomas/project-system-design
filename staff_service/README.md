@@ -17,15 +17,7 @@ populateCinemaRepository.enabled=true
 populateEmployeeRepository.enabled=true
 populateTimeSlotRepository.enabled=true
 ```
-The `application-dev.properties`-file
-```
-spring.jpa.hibernate.ddl-auto=update
-
-spring.data.cassandra.keyspace-name=staffservice_dev
-spring.data.cassandra.schema-action=CREATE_IF_NOT_EXISTS
-spring.data.cassandra.contact-points=cassandra
-```
-
+Sequence of commands to run the Cassandra DB & StaffService (note that Cassandra DB <u>has</u> to be running prior to StaffService)
 ```
 # network 
 docker network create app-tier --driver bridge
