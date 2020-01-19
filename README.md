@@ -82,8 +82,7 @@ link to full file: [shopService](shop_service/readme.md)
 - Dependencies:
   - Cassandra ([see below](https://github.com/NeuserThomas/project-system-design/blob/master/README.md#cassandra-db))
 
-  
-Link to Staff Service's [Read Me](staff_service/readme.md)
+Link to Staff Service's [Read Me](staff_service/README.md)
 
 
 ## Databases
@@ -125,7 +124,7 @@ db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", d
 Ports:
 - `9042` for client connections
 
-For more information on the Cassandra Database, please visit [this link](staff_service/readme.md)
+For more information on the Cassandra Database, please visit [this link](staff_service/README.md)
 
 
 ### Errors with the databases:
