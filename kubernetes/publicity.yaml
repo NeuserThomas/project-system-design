@@ -15,7 +15,7 @@ spec:
         app: publicity
     spec:
       containers:
-      - image: rgoussey/publicity
+      - image: rgoussey/publicity:latest
         name: publicity
         ports:
         - containerPort: 5555
