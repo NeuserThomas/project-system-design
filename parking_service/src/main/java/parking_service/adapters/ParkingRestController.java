@@ -94,7 +94,7 @@ public class ParkingRestController {
 			RestTemplate rt = new RestTemplate();
 			RequestEntity<ParkingTicket> re = new RequestEntity<ParkingTicket>(HttpMethod.PUT,
 					URI.create("http://" + env.getProperty("host.name") + ":" + env.getProperty("host.port")
-							+ "/ticket/validateParkingTicket/" + ticketId));
+							+ "/ticket/ticket/validateParkingTicket/" + ticketId));
 
 			if (pt.isValidated() == false) {
 

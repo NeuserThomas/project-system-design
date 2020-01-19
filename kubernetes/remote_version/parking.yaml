@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - image: thomasneuser/parking:latest
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         name: parking
         ports:
         - containerPort: 2301

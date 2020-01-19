@@ -15,8 +15,8 @@ spec:
         app: ticket
     spec:
       containers:
-      - image: ticket-management:latest
-        imagePullPolicy: Never
+      - image: thomasneuser/ticket:latest
+        imagePullPolicy: Always
         name: ticket
         ports:
         - containerPort: 2300

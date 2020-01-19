@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class TransactionService {
 
-  SHOP_URL = window.location.hostname + "/transaction";
+  SHOP_URL = window.location.hostname+":"+location.port + "/transaction";
 
   constructor(private http: HttpClient) {
     console.log(this.SHOP_URL);

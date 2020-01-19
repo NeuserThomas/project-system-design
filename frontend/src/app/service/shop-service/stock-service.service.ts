@@ -14,8 +14,9 @@ export class StockService {
   private stockUrl: string;
 
   constructor(private http: HttpClient, private router: Router) {
-    this.stockUrl = "http://" + window.location.hostname + "/shop/stock";
-    this.shopUrl = "http://" + window.location.hostname + "/shop/shopItem";
+    console.log(location.port);
+    this.stockUrl = "http://" + window.location.hostname+":"+location.port + "/shop/stock";
+    this.shopUrl = "http://" + window.location.hostname +":"+location.port + "/shop/shopItem";
     console.log(this.stockUrl);
     console.log(this.shopUrl);
   }

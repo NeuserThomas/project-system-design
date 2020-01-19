@@ -15,7 +15,8 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: rgoussey/frontend
+      - image: rgoussey/frontend:latest
+        imagePullPolicy: Always
         name: frontend
         ports:
         - containerPort: 80
