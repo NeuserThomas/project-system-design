@@ -17,5 +17,4 @@ public interface HallRepository extends JpaRepository<MovieHall, Long>  {
 	
 	@Query("select m from MovieHall m where m.cinema.id=?1 and m.hallNumber=?2")
 	public List<MovieHall> findAllByCinemaIdAndHallNumber(long cinemaId,int hallNumber);
-	
 }

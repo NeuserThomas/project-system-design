@@ -65,7 +65,7 @@ public class PublicityService {
 			
 			//check if duration is not going to exceed the maximum value
 			//toMinutes is no rounded value, but is the minutes part
-			if(duration.toSeconds() + a.getDuration().toSeconds() < AdMovie.getMaximalDuration()*60) {
+			if((duration.getSeconds()+ a.getDuration().getSeconds()) < AdMovie.getMaximalDuration()*60) {
 				playlist.add(a);
 				duration = duration.plus(a.getDuration());
 			}
