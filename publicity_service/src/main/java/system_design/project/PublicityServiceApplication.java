@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
+import system_design.project.publicity_service.adapters.messaging.Channels;
 import system_design.project.publicity_service.domain.AMovie;
 import system_design.project.publicity_service.domain.AdMovie;
 import system_design.project.publicity_service.domain.Advertisement;
@@ -23,6 +25,7 @@ import system_design.project.publicity_service.persistence.AdMovieRepository;
 import system_design.project.publicity_service.persistence.AdvertisementRepository;
 
 @SpringBootApplication
+@EnableBinding(Channels.class)
 public class PublicityServiceApplication {
 
 	private static Logger logger = LoggerFactory.getLogger(PublicityServiceApplication.class);
