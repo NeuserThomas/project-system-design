@@ -23,10 +23,10 @@ One REST controller is added: PublicityRestController. The endpoints are:
 
 ```
 
-- /publicity/publicity/{category (GET) -> getAdMovieByCategoryForToday() : returns the most recently made AdMovie whose commissioningDate has already passed.
-- /publicity/publicity/maxDuration (GET) -> getMaxDurationInSeconds(): returns the maximum number of seconds an AdMovie can last.
-- /publicity/publicity/maxDuration/{minutes} (POST) -> setMaximalDuration() : set the maximal Duration of an AdMovie to a specific value.
-- /publicity/publicity/delay/{minutes} (POST) -> setDelay() : to set the minimal Duration of an AdMovie, post the difference in minutes. 
+- /publicity/publicity/{category}            (GET) -> getAdMovieByCategoryForToday() : returns the most recently made AdMovie whose commissioningDate has already passed.
+- /publicity/publicity/maxDuration           (GET) -> getMaxDurationInSeconds()      : returns the maximum number of seconds an AdMovie can last.
+- /publicity/publicity/maxDuration/{minutes} (POST) -> setMaximalDuration()          : set the maximal Duration of an AdMovie to a specific value.
+- /publicity/publicity/delay/{minutes}       (POST) -> setDelay()                    : to set the minimal Duration of an AdMovie, post the difference in minutes. 
 
 ```
 
