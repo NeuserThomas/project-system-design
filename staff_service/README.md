@@ -33,8 +33,15 @@ docker run -p 2224:2224/tcp  -dit --rm --name staffservice04 --network app-tier 
 > Running the staffservice when cassandra isn't active --> will cause staffservice to shutdown and throw an exception
 
 
-Once running, the staffservice can be acessed like 
-
+A brief overview of (some of) the availabe calls
+- `localhost:2224/staffservice/timeslot/`
+    - get all timeslots
+- `localhost:2224/staffservice/employee/`
+    - get all employees
+- `localhost:2224/staffservice/timeslot/2020-01-19`
+    - get all timeslots of a given date
+- `localhost:2224/staffservice/timeslot/cinema/1/employee/9b541ee0-3b08-11ea-8a57-01b8efbeb107`
+    - get all timeslots for an employee with a given ID that works at a cinema (given the cinema id)
 ```
 # localhost:2224/staffservice/timeslot/
 [
@@ -52,10 +59,10 @@ Once running, the staffservice can be acessed like
         "employeeId": "f3bff520-3a5b-11ea-9406-d36fce80f50c",
         "availabilityCode": 0
     },
- .....
+ ..localhost:2224/staffservice/employee/...
 
 ]
-# localhost:2224/staffservice/employee/
+# 
 [
     {
         "id": "f3bff520-3a5b-11ea-9406-d36fce80f50c",
@@ -91,6 +98,27 @@ Once running, the staffservice can be acessed like
         "availabilityCode": 0
     },
   ....   
+  
+  # getAllTimeSlotsForEmployee
+  #   localhost:2224/staffservice/timeslot/cinema/1/employee/9b541ee0-3b08-11ea-8a57-01b8efbeb107
+[
+    {
+        "id": "9b89fbf0-3b08-11ea-8a57-01b8efbeb107",
+        "cinemaId": 1,
+        "day": {
+            "millisSinceEpoch": 1579392000000,
+            "daysSinceEpoch": 18280,
+            "day": 19,
+            "year": 2020,
+            "month": 1
+        },
+        "timeslot": "12:00:00",
+        "employeeId": "9b541ee0-3b08-11ea-8a57-01b8efbeb107",
+        "availabilityCode": 0
+    },
+    ...
+    
+   ]
 ]
 
 ````
