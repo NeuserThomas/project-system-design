@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,12 +26,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author robin
  *
  */
+@Table(
+	    uniqueConstraints=
+	        @UniqueConstraint(columnNames={"id", "hallNumber"})
+	)
 public class MovieHall{
 	
 	@Id
 	@GeneratedValue
 	private long hallId;
 	
+	@Column(nullable=false)
 	private int hallNumber;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
@@ -52,7 +59,7 @@ public class MovieHall{
 	 * Returns the amount of total seats
 	 * @return the amount of available seats
 	 */
-	public int get_seats_count() {
+	public int getSeatCount() {
 		return seats.size();
 	}
 	
@@ -72,11 +79,11 @@ public class MovieHall{
 		this.projectorTypes = projector_types;
 	}
 
-	public int getHall_number() {
+	public int getHallNumber() {
 		return hallNumber;
 	}
 
-	public void setHall_number(int hall_number) {
+	public void setHallNumber(int hall_number) {
 		this.hallNumber = hall_number;
 	}
 

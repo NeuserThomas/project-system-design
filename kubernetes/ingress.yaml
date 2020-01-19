@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /shop
+        backend:
+          serviceName: shop
+          servicePort: 2230
+      - path: /planning
+        backend:
+          serviceName: hall-planning
+          servicePort: 2223
+      - path: /ticket
+        backend:
+          serviceName: ticket
+          servicePort: 2300
+      - path: /parking
+        backend:
+          serviceName: parking
+          servicePort: 2301
+      - path: /publicity
+        backend:
+          serviceName: publicity
+          servicePort: 5555
+      - path: /staffservice
+        backend:
+          serviceName: staff
+          servicePort: 2224
+      - path: /
+        backend:
+          serviceName: frontend
+          servicePort: 80
+          

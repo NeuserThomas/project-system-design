@@ -1,0 +1,5 @@
+FROM nginx:alpine
+
+COPY dist/frontend/* frontend/dist/frontend/* /usr/share/nginx/html/
+RUN chmod 755 /usr/share/nginx/html/*
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf

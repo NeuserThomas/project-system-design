@@ -18,24 +18,46 @@ services:
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     expose:
       - "9092"
-  mySQLdb:
-    image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password
+#--- mysql dbs ----      
+  mysqldb:
+    build:
+      context: ./mysql
+    #image: mysql:5.7
+    #entrypoint:  sh -c "echo 'CREATE DATABASE IF NOT EXISTS HallPlanningService; CREATE DATABASE IF NOT EXISTS Shop;' > /docker-entrypoint-initdb.d/init.sql; /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    #command: --default-authentication-plugin=mysql_native_password
     expose:
       - "3306"
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=ThePassword
-      - MYSQL_DATABASE=Day
-
-
+#      - MYSQL_DATABASE=Shop
+#      - MYSQL_DATABASE=HallPlanningService
+#    ticket_db:
+#        image: mysql:5.7
+#        expose:
+#          - "3307"
+#        ports:
+#          - "3306:3307"
+#        environment:
+#          - MYSQL_ROOT_PASSWORD=root
+#          - MYSQL_DATABASE=Ticket
+#---- mongo dbs -------
+  moviedb:
+   image: mongo:4.2
+   expose:
+     - "27017"
+   ports:
+     - "27017:27017" 
+   environment:
+     - MONGO_INITDB_ROOT_USERNAME=root
+     - MONGO_INITDB_ROOT_PASSWORD=ThePassword
+     - MONGO_INITDB_DATABASE=movie
 # -------------Main services---------------
-  hall_planning:
+  hall-planning:
     build: 
       context: ./hall_planning_service
-    entrypoint: ["./wait-for-it.sh", "mySQLdb:3306", "--","./wait-for-it.sh", "kafka:9092", "--","java", "-jar", "/app/target/hall_planning_service-0.0.1-SNAPSHOT.jar"]
-#   TODO: wait for mySQLdb
+   # entrypoint: ["java","-jar", "/app/target/hall_planning_service-0.0.1-SNAPSHOT.jar"]
     deploy:
       restart_policy:
         condition: on-failure
@@ -44,16 +66,65 @@ services:
         window: 10s
     restart: on-failure
     links:
-      - mySQLdb
+      - mysqldb
       - kafka
       - zookeeper
+      - moviedb
     depends_on:
-      - mySQLdb
+      - mysqldb
       - kafka
       - zookeeper
+      - moviedb
     ports:
       - "2223:2223"
     expose:
       - "2223"
-
-
+#  ticket_management:
+#    build:
+#      context: ./ticket_management_service
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        delay: 20s
+#        max_attempts: 5
+#        window: 10s
+#    restart: on-failure
+#    depends_on:
+#      - ticket_db
+#    links:
+#      - ticket_db
+#    ports:
+#      - "2300:2300"
+#    expose: 
+#      - "2300"
+  shop-service:
+    build:
+      context: ./shop_service
+    #entrypoint: ["java", "-jar", "/app/target/shop_service-0.0.1-SNAPSHOT.jar"]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 5
+        window: 10s
+    restart: on-failure
+    links:
+      - mysqldb
+    depends_on:
+      - mysqldb
+    ports:
+      - "2230:2230"
+    expose:
+      - "2230"
+#------ frontend -------
+  frontend:
+    build:
+      context:  ./frontend
+    restart: on-failure
+    depends_on:
+      - shop-service
+      - hall-planning
+    ports:
+      - "80:80"
+    expose:
+      - "80"

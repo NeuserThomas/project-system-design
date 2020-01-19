@@ -1,60 +1,100 @@
 package system_design.project.hall_planning_service.domain;
 
 import java.io.Serializable;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
-@Embeddable
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
- * Class that describes how long a movie will take.
+ * Class that describes how long a movie will take. The class could extend from an event class, if you would like to 
+ * have more flexibility. (Paper already submitted, extra feature)
  * @author robin
  *
  */
+@Entity
 public class TimeSlot implements Serializable {
 	
 	/**
 	 * Version number?
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column(name = "startTime", columnDefinition = "TIME")
-	private LocalTime startTime;
 	
-	@Column(name = "stopTime", columnDefinition = "TIME")
-	private LocalTime stopTime;
-	/*@Id
-	@GeneratedValue
-	private long id;
-	*/
-	//Todo mapping
-	private long movieId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long tId;
+
+	//@Column(name = "startTime", columnDefinition = "TIMESTAMP") 
+	private LocalDateTime startTime=LocalDateTime.now();
+	
+	//@Column(name = "stopTime", columnDefinition = "TIMESTAMP") //Creates error?
+	private LocalDateTime stopTime=LocalDateTime.now();
+	//remove when working with more than event.
+	@Column(nullable=false)
+	/*
+	 * Maps to the string representation of movieId
+	 */
+	private String movieId;
+	
+	@Transient
+	@JsonSerialize
+	private String movieTitle;
+	
+	@ManyToOne
+	@JsonIgnoreProperties(value = { "cinema","seats" })
+	@JoinColumn(name="hallId",nullable=false)
+	private MovieHall hall;
 	
 	//------------ separation declarations and methods ------------------------
-	public LocalTime getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(LocalTime startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
-	public LocalTime getStopTime() {
+	
+	public long gettId() {
+		return tId;
+	}
+	public void settId(long tId) {
+		this.tId = tId;
+	}
+	
+	public LocalDateTime getStopTime() {
 		return stopTime;
 	}
-	public void setStopTime(LocalTime stopTime) {
+	public void setStopTime(LocalDateTime stopTime) {
 		this.stopTime = stopTime;
 	}
 
-	public long getMovieId() {
+	public String getMovieId() {
 		return movieId;
 	}
-	public void setMovieId(long movieId) {
-		this.movieId = movieId;
+	public void setMovieId(String objectId) {
+		this.movieId = objectId;
 	}
-	/*public long getId() {
-		return id;
+	
+
+	public MovieHall getHall() {
+		return hall;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setHall(MovieHall hall) {
+		this.hall = hall;
 	}
-	*/
+	
+	public String getMovieTitle() {
+		return movieTitle;
+	}
+	public void setMovieTitle(String movieTitle) {
+		this.movieTitle = movieTitle;
+	}
 }

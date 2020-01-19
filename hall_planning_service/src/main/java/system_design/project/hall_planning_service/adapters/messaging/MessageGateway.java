@@ -8,4 +8,7 @@ public interface MessageGateway {
 
 	@Gateway(requestChannel = Channels.PLANNING_UPDATED)
 	public void updateDay(String message);
+	
+	@Gateway(requestChannel = Channels.NEW_MOVIE)
+	public void newMovie(String message);
 }

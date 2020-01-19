@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: staff
+  name: staff
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: staff
+  template:
+    metadata:
+      labels:
+        app: staff
+    spec:
+      containers:
+      - image: rgoussey/staff:latest
+        name: staff
+        ports:
+        - containerPort: 2224
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: staff
+  name: staff
+spec:
+  type: ClusterIP
+  ports:
+  - name: "2230"
+    port: 2224 # inside the cluster
+    targetPort: 2224 # pod port, same as containerPort
+  selector:
+    app: staff

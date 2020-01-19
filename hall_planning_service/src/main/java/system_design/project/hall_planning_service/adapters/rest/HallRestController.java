@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.persistence.HallRepository;
 
+/**
+ * @author robin
+ *
+ */
 @RestController
 @RequestMapping("hall")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -28,12 +32,6 @@ public class HallRestController {
 	private HallRepository hallRepo;
 
 	final Logger logger = LoggerFactory.getLogger(HallRestController.class);
-	
-	/*
-	@RequestMapping(path="/{cinema}/{date}",produces="application/json",method=RequestMethod.GET)
-	public @ResponseBody Day getPlanningForDay(@PathVariable LocalDate date, @PathVariable Cinema cine) {
-		return planRepo.findDayByDateAndCinema(date,cine);
-	}*/
 	
 	@GetMapping
 	public @ResponseBody ResponseEntity<List<MovieHall>> getAllHalls() {

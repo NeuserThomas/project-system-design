@@ -1,10 +1,30 @@
 
 \.project
 
-movie_flow_service/src/main/java/system_design/.DS_Store
+frontend/frontend/.settings/
 
-frontend/frontend/node_modules/
+movie_flow_service/target/
 
-frontend/frontend/\.settings/
+movie_flow_service/.settings/
+
+movie_flow_service/.classpath
 
 *.swp
+
+shop_service/bin/
+
+.metadata/
+
+parking_service/.settings/
+
+*.tar
+node_modules
+
+node_modules/
+
+*.tar
+
+staff_service/.factorypath
+
+
+staff_service/bin/
