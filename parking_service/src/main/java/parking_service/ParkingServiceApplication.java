@@ -19,9 +19,8 @@ public class ParkingServiceApplication {
 	public CommandLineRunner populateDatabase(ParkingRepository parkingRepo){
 
 		return args ->{
-			
 			if(parkingRepo.count() == 0) {
-				Parking p = new Parking(2);
+				Parking p = new Parking(200);
 				parkingRepo.save(p);
 			}
 		};

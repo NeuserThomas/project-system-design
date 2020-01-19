@@ -1,16 +1,11 @@
 package system_design.project.hall_planning_service.service;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,22 +18,24 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import system_design.project.hall_planning_service.adapters.messaging.MessageGateway;
 import system_design.project.hall_planning_service.domain.Cinema;
 import system_design.project.hall_planning_service.domain.Day;
 import system_design.project.hall_planning_service.domain.HallDay;
 import system_design.project.hall_planning_service.domain.Movie;
-import system_design.project.hall_planning_service.domain.MovieHall;
 import system_design.project.hall_planning_service.domain.PlannedMovies;
 import system_design.project.hall_planning_service.domain.TimeSlot;
 import system_design.project.hall_planning_service.persistence.CinemaRepository;
 import system_design.project.hall_planning_service.persistence.DayRepository;
 import system_design.project.hall_planning_service.persistence.MovieRepository;
-import system_design.project.hall_planning_service.persistence.TimeSlotRepository;
 
 /**
  * @author robin
@@ -54,8 +51,11 @@ public class PlanningService {
 	public CinemaRepository cinemaRepo;
 	@Autowired
 	public MovieRepository movieRepo;
+	//@Autowired
+	//public TimeSlotRepository timeSlotRepo;
+	
 	@Autowired
-	public TimeSlotRepository timeSlotRepo;
+	private Environment env;
 	
 	// @Autowired
 	// private KafkaTemplate<String, String> simpleProducer;
@@ -70,9 +70,9 @@ public class PlanningService {
 	}
 
 	/**
-	 * Will run every day, at 8 in the morning.
+	 * Will run every day, at 7 in the morning. (UTC)
 	 */
-	@Scheduled(cron = "0 0 8 * * *")
+	@Scheduled(cron = "0 0 6 * * *")
 	public void planWeek() {
 		LocalDate date = LocalDate.now();
 		LocalDate week = date.plusDays(7);
@@ -108,9 +108,11 @@ public class PlanningService {
 			}
 		}
 		if (updated) {
-			publish("Updated schedule!");
+			publish(date.toString());
 		}
 	}
+
+	
 	
 	/**
 	 * Version 0.1 Rudementary planning algorithm. Next version should be PERT.
@@ -121,6 +123,15 @@ public class PlanningService {
 	 * @return
 	 */
 	private void planCinemaForDay(Cinema c,List<Movie> movies,List<Double> wStatus, LocalDate date) {
+		//TODO, only one master.
+
+		//todo change url
+		//String publicityUrl = env.getProperty("publicity.url");
+		//RestTemplate restTemplate = new RestTemplate();
+		//String result = restTemplate.getForObject(publicityUrl, String.class);
+		
+		//logger.info("Publicity answer: "+result);
+		
 		Day day = new Day();
 		day.setCinema(c);
 		day.setDate(date);
@@ -132,49 +143,54 @@ public class PlanningService {
 		if(planning==null) {
 			planning = new ArrayList<HallDay>();
 		}
-		/**
-		 * For each movie, count how many tickets are sold.
-		 */
-		List<Long> amountPlanned = new ArrayList<Long>();
-		for(int j = 0;j<wStatus.size();j++) {
-			amountPlanned.add(0L);
-		}
-		Long totalAmount=0L;
-		for(int i = 0;i<c.getHalls().size();i++) {			
-			LocalDateTime lastTime=LocalDateTime.of(date, day.getStartTime().toLocalTime());
-			//logger.info("Lasttime: "+lastTime);
-			HallDay hallDay= new HallDay();
-			long amountOfSeats=c.getHalls().get(i).getSeatCount();
-			
-			while(lastTime.compareTo(day.getStopTime())<=0) {
-				int chosenMovie = chooseMovie(wStatus,amountPlanned,totalAmount);
-				TimeSlot timeSlot = new TimeSlot();
-				timeSlot.setHall(c.getHalls().get(i));
-				timeSlot.setMovieId(movies.get(chosenMovie).getId());
-				timeSlot.setStartTime(lastTime);
-				//logger.info("timeslot start: "+timeSlot.getStartTime());
-				String temp = movies.get(chosenMovie).getRuntime().replaceAll("\\D", "");
-				if(temp.equals("")) {
-					temp="120";
-					logger.error("Movie has no time! "+movies.get(chosenMovie).getTitle());
-					Movie m = movies.get(chosenMovie);
-					m.setRuntime("120");
-					movieRepo.save(m);
-				}
-				int minutes = Integer.parseInt(temp);
-				timeSlot.setStopTime(timeSlot.getStartTime().plusMinutes(minutes));
-				lastTime = timeSlot.getStopTime().plusMinutes(30); //give employees time to clean
-				// Round to 15 minutes
-				int unroundedMinutes = lastTime.getMinute();
-				int mod = unroundedMinutes % 15;
-				lastTime=lastTime.plusMinutes(15-mod);
-				hallDay.addTimeSlot(timeSlot);
-				amountPlanned.set(chosenMovie,amountPlanned.get(chosenMovie)+amountOfSeats);
+		if(movies.size()!=0) {
+			/**
+			 * For each movie, count how many tickets are sold.
+			 */
+			List<Long> amountPlanned = new ArrayList<Long>();
+			for(int j = 0;j<wStatus.size();j++) {
+				amountPlanned.add(0L);
 			}
-			planning.add(hallDay);
+			Long totalAmount=0L;
+			for(int i = 0;i<c.getHalls().size();i++) {			
+				LocalDateTime lastTime=LocalDateTime.of(date, day.getStartTime().toLocalTime());
+				//logger.info("Lasttime: "+lastTime);
+				HallDay hallDay= new HallDay();
+				long amountOfSeats=c.getHalls().get(i).getSeatCount();
+				
+				while(lastTime.compareTo(day.getStopTime())<=0) {
+					int chosenMovie = chooseMovie(wStatus,amountPlanned,totalAmount);
+					TimeSlot timeSlot = new TimeSlot();
+					timeSlot.setHall(c.getHalls().get(i));
+					timeSlot.setMovieId(movies.get(chosenMovie).getId());
+					timeSlot.setStartTime(lastTime);
+					//logger.info("timeslot start: "+timeSlot.getStartTime());
+					String temp = movies.get(chosenMovie).getRuntime().replaceAll("\\D", "");
+					if(temp.equals("")) {
+						temp="120";
+						logger.error("Movie has no time! "+movies.get(chosenMovie).getTitle());
+						Movie m = movies.get(chosenMovie);
+						m.setRuntime("120");
+						movieRepo.save(m);
+					}
+					int minutes = Integer.parseInt(temp);
+					timeSlot.setStopTime(timeSlot.getStartTime().plusMinutes(minutes));
+					lastTime = timeSlot.getStopTime().plusMinutes(30); //give employees time to clean
+					// Round to 15 minutes
+					int unroundedMinutes = lastTime.getMinute();
+					int mod = unroundedMinutes % 15;
+					lastTime=lastTime.plusMinutes(15-mod);
+					hallDay.addTimeSlot(timeSlot);
+					amountPlanned.set(chosenMovie,amountPlanned.get(chosenMovie)+amountOfSeats);
+				}
+				planning.add(hallDay);
+			}
+			day.setPlanning(planning);
+			planRepo.save(day);
+		} else {
+			logger.warn("No movies planned!");
 		}
-		day.setPlanning(planning);
-		planRepo.save(day);
+		
 	}
 	/*
 	 * Algorithm that chooses what the next movie will be. Right now, it is random by chance. If no movie has a preference number, it will assign them all with the same chance.
@@ -263,4 +279,8 @@ public class PlanningService {
 		movies=movieRepo.findMoviesWithId(ids);
 		return movies;
 	}
+	/*
+	public List<TimeSlot> findPlannedMoviesForCinema(long cinemaId, LocalDate date, String movieId) {
+		return timeSlotRepo.findByCinemaIdAndMovie(cinemaId, movieId,date);
+	}*/
 }

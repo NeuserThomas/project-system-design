@@ -3,6 +3,9 @@ package system_design.project;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import system_design.project.hall_planning_service.adapters.messaging.Channels;
 import system_design.project.hall_planning_service.adapters.movieInfo.IMovieInfoAPI;
@@ -31,11 +35,18 @@ import system_design.project.hall_planning_service.service.MovieAPIService;
  */
 @SpringBootApplication
 @EnableBinding(Channels.class)
+@EnableMongoRepositories
 public class HallPlanningServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HallPlanningServiceApplication.class, args);
 	}
+	
+	@PostConstruct
+    public void init(){
+      // Setting Spring Boot SetTimeZone
+      TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
 	
 	@Bean
 	CommandLineRunner testRepository(CinemaRepository cRep,PlannedMoviesRepository pRepo, MovieRepository mRepo, MovieAPIService mService) {
@@ -72,28 +83,15 @@ public class HallPlanningServiceApplication {
 			Cinema c = cinema.get();
 			PlannedMovies pm = c.getPlannedMovies();
 			if(pm==null) {
-				logger.warn("No PlannedMovies object. Adding them now. Amount to add: "+ids.size());
 				pm=new PlannedMovies();
-				pm.setMongoMovieIds(ids);
-				c.setPlannedMovies(pm);
-				pm.setCinema(c);
-				pRepo.save(pm);
-				logger.info("Amount of plannedMovies objects: "+pRepo.findAll().size());
-				cRep.saveAndFlush(c);
-				logger.info("Movies saved!");
-			} else {
-				if(pm.getMovieIds().isEmpty()) {
-					logger.warn("No movies planned. Adding them now. Amount to add: "+ids.size());
-					pm.setMongoMovieIds(ids);
-					pm.setCinema(c);
-					pRepo.save(pm);
-					c.setPlannedMovies(pm);
-					cRep.saveAndFlush(c);
-					logger.info("Movies saved!");
-				} else {
-					logger.info("There are movies planned, no intervention needed.");
-				}
 			}
+			pm.setMongoMovieIds(ids);
+			c.setPlannedMovies(pm);
+			pm.setCinema(c);
+			pRepo.save(pm);
+			logger.info("Amount of plannedMovies objects: "+pRepo.findAll().size());
+			cRep.saveAndFlush(c);
+			logger.info("Movies saved!");
 		} else {
 			logger.info("The test cinema \"Cinema init\" was not found. Nothing was added.");
 		}
@@ -104,7 +102,7 @@ public class HallPlanningServiceApplication {
 		if(mRepo.count()<1) {
 			logger.warn("No movies are in db!");
 			List<String> list = new ArrayList<String>();
-			list.add("Star Wars: The Rise of skywalker");
+			list.add("Star Wars: The Rise Of Skywalker");
 			list.add("Avengers: Endgame");
 			list.add("The Matrix");
 			list.add("Lego Movie");
