@@ -173,4 +173,16 @@ microk8s.enable ingress
 #### Eigen ingress controller:
 Er zijn nu 2 yamls toegevoegd, die zelf een deployen. Zie kubernetes/definitive_versions/mandator.yaml en de kubernetes/definitive_versions/service-nodeport.yaml. Indien je deze deployt, heb je de microk8s ingress niet nodig.
 
+
+# ***Resilience test***
+
+To test the resilience of our application, use the file chaos.sh which you can find in this directory.
+Eventually make it executable first, then run it.
+
+```
+chmod a+x chaos.sh
+./chaos.sh
+```
+
+
 Dit was mijn TED talk, bedankt voor uw aandacht.
