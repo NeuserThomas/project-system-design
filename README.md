@@ -22,6 +22,7 @@ NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     
 kube-dns                  ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP        51d
 traefik-ingress-service   NodePort    10.107.202.17   <none>        80:30600/TCP,8080:32726/TCP   3h18m
 ```
+If hall planning keeps crashing, please see [this](https://github.com/NeuserThomas/project-system-design/tree/master/kubernetes#mongo-and-hall-planning).
 
 ## **Ticket service (Thomas)**
 
