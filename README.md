@@ -86,7 +86,7 @@ link to full file: [shopService](shop_service/readme.md)
 Link to Staff Service's [Read Me](staff_service/README.md)
 -----------------------------
 
-## Publicity Service
+## Publicity Service (Jasper)
 - Server Port: `5555`
 - Dependencies:
   - MySQL
