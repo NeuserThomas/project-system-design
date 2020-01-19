@@ -1,39 +1,128 @@
 # project-system-design
+
 ## System design project: Bioscoop system
 
 This repository contains all the folders/ files related to the Bioscoop system project for the course System Design 2019-2020.
+The link to the github repo is: [system-design](https://github.com/NeuserThomas/project-system-design)
+
+## Deploying locally (spring tool suite)
+When deploying locally, please change the environment. Change the application.properties file to:
+```
+spring.profiles.active=dev
+```
+When deploying on kubernetes, leave it on:
+```
+spring.profiles.active=prod
+```
+## Testing remote (Kmaster)
+In the directory [kubernetes](kubernetes/), there is a port forward script, to test the remote server. Please use your own certificates and password etc. For the ip adress, use the ip adress of the ingress controller service. We use the cluster ip from the traefik service.
+```
+rgoussey@kmaster:~$ kubectl get svc --namespace kube-system
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                       AGE
+kube-dns                  ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP        51d
+traefik-ingress-service   NodePort    10.107.202.17   <none>        80:30600/TCP,8080:32726/TCP   3h18m
+```
+
+## **Ticket service (Thomas)**
+
+General info
+
+Server port: 2300
+
+Dependencies:
+- Zookeeper
+- Kafka
+- MySQL
+
+link to full file: [Ticket Service](ticket_management_service/README.md)
+
+-----------------------------
+
+## **Parking Service (Thomas)**
+
+This service is used for parking management. When initialized, one parking is available with 200 free spots.
+
+General info
+
+Server port: 2301
+
+Dependencies:
+- MySQL
+
+link to full file: [Parking Service](parking_service/README.md)
+
+-----------------------------
 
 
-## **TicketManagement service**
-
-### ***Domain***
-
-Added next classes:
-
-- Ticket
-- Movie
-- MovieSchedule (MovieSchedule is an array of Movies, used when getting the MovieSchedule from the MoviePlanner service)
-- TicketStatus (enum containing the states that a Ticket can have)
-
-### ***Persistence***
-
-Added a TicketRepository (currrently working with H2 database) for storing the tickets
-
-### ***Adapters***
-
-Added a RestController (that can later be used for validateTicket)
-
-## **Hall Planning service**
+## **Hall Planning service (Robin)**
 ### **General info**
 - Server port: `2223`
 - Dependencies:
   - Zookeeper
   - Kafka
   - MySQL
-- mongo
+  - mongo
 
 link to full file: [hallPlanningService](hall_planning_service/readme.md)
 
+-----------------------------
+
+
+## **Shop service (Robin)**
+### **General info**
+- Server port: `2230`
+- Dependencies:
+  - MySQL
+
+link to full file: [shopService](shop_service/readme.md)
+-----------------------------
+
+## Databases
+### **MySQL**
+#### Running locally
+To run an appliction locally (in spring tool suite), you might need to set up a local database. We use one server, with multiple databases.
+To deploy kafka, you will need to install it, and run the zookeeper, and kafka.
+To run our mongo or mysql database, go to the [mysql directory](/mysql) :
+```bash
+./build_mysqlcontainer.sh
+```
+This will build the mysql container if not already done, and run it. (port 3306). The reason we use a custom image, is to build our databases.
+If we have time, we can try to dynamically create the needed databases.
+#### Building docker
+To build the database, use the command as written below in the mysql directory:
+```
+docker build -t mysqldb .
+```
+
+### **Mongo**
+
+#### Running locally
+To run the mongo db, go to the [bash_scripts directory](/bash_scripts) :
+```bash
+./build_mongocontainer.sh
+```
+This will run a standard mongo image, and run it as well.
+#### Kubernetes:
+At the moment there is an error so our users don't get created. Use the following command:
+```
+kubectl exec -it <movie-pod-name> mongo
+...
+db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", db:"movie"}] })
+```
+
+### Errors with the databases:
+If for some reason the data gets erases in the mongo databases (the movies), then please also erase all data in the mysql.
+Since right now we use the mongo id as string in the mysql database. So if the movies get new ids, the mapping is wrong, and it can cause errors for other applications. 
+They won't crash, just return empty lists, as the ids are no longer in the database.
+So just doing:
+```
+docker stop mysqldb moviedb
+docker rm mysqldb moviedb
+```
+And rebuilding both you should be fine (you don't need to manually remove the data).
+-----------------------------
+
+## Common errors:
 ##### Bash: `build_docker.sh` & `run_mysqlcontainer.sh`
 ###### Permission denied errors 
 Make sure to grant execution rights:
@@ -45,162 +134,27 @@ chmod +x ../hall_planning_service/mvnw
 
 chmod +x ./run_mysqlcontainer.sh
 ```
+
+- - - -
 ## **frontend**
-To run the frontend, go to the direcotry /frontent/frontend in the terminal, and run:
+To run the frontend, go to the directory /frontend in the terminal, and run:
 ```bash
 $ ng serve --open
 ```
-## **Deployment op kubernetes!**
-Hieronder het stappenplan om uw applicatie van development (spring tool suite), naar kubernetes om te zetten.
-### application.properties
-Iedere spring boot app, heeft resources, daarin staat standaard een application.properties file. De andere zijn zelf aangemaakt.(Zie hieronder).
+You can also build the frontend with docker, and use it as an image. Do note, that default, it builds by copying the output of the npm build to the docker file, instead of building it in the container (dockerfile_v2, this because of errors).
+So you have to run (in a terminal, in the frontend directory):
 ```
-application-dev.properties
-application-prod.properties
-application.properties
+npm run build
 ```
-In de application.properties, zet je dan afhankelijk van als je test, of je in productie draait, prod of dev.
-```
-spring.profiles.active=prod # of dev
-```
-De productie ziet er dan zo uit:
-```
-server.port=2230
-spring.jpa.hibernate.ddl-auto=update
-#Docker compose:
-spring.datasource.url=jdbc:mysql://localhost:3306/Shop
-spring.datasource.username=root
-spring.datasource.password=ThePassword
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+Do note: this needs node and angular installed.
+And then you can build build with docker.
+### Testing locally:
+Right now the frontend routes all traffic, to the url it came from, on the same port, so you need the ingress controller to run. Or you have to manually change all urls in the service classes. 
+### Running in kubernetes:
+Make sure the ingress controller and ingress.yaml is depoyed.
 
-server.servlet.context-path=/shop
-```
-En in productie wordt localhost dan vervangen door de docker naam (indien docker compose), of de kubernetes naam (in kubernetes). Dus neem je best dezelfde naam voor beiden.
-```
-server.port=2230
-spring.jpa.hibernate.ddl-auto=update
-#Docker compose:
-spring.datasource.url=jdbc:mysql://mysqldb:3306/Shop
-spring.datasource.username=root
-spring.datasource.password=ThePassword
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
-server.servlet.context-path=/shop # dit zorgt ervoor dat localhost:2230/shop de applicatie op draait
-```
-Je zorgt er best voor dat je een server.servlet.context-path defineert, zo worden alle calls van die applicatie minstens onderscheiden door dit. (En heeft het maar 1 ingress route nodig).
 
-### Docker file
-Iedere applicatie heeft een dockerfile nodig, om het tot een image om te vormen, hieronder een voorbeeld:
-```
-from maven:3.6-jdk-8-alpine AS builder
-#from openjdk:8
-WORKDIR /app
-copy pom.xml .
-RUN mvn -e -B dependency:resolve
-copy src ./src
-RUN mvn -e -B package -DskipTests # maakt de jar
+- - - -
+## **Deployment on kubernetes! (and docker)**
+[Kubernetes](kubernetes/readme.md)
 
-FROM openjdk:8-jre-alpine
-COPY --from=builder /app/target/shop_service-0.0.1-SNAPSHOT.jar /
-CMD ["java", "-jar", "/shop_service-0.0.1-SNAPSHOT.jar","-Dspring.profiles.active=prod"] #hoe gestart?
-```
-Dan doe je in de directory waar dze zich bevindt:
-```
-docker build -t <naam> .
-```
-### Exporteren naar kubernetes
-#### lokale images
-Als je werkt met microk8s, dan weet hij niet waar de lokale docker images zijn. Dus daarom kan je het script:
-```
-./save_image.sh <image_name>
-``` 
-gebruiken, om de image in het microk8s image register te registreren. 
-#### images registren op docker hub.
-Je kan ook je image pushen naar een docker hub registry. Ik heb er al enkele, bv rgoussey/frontend, rgousey/shop etc. Via:
-```
-docker tag frontend rgoussey/frontend
-docker push frontend
-```
-Kan je ze zo pushen. Let op je moet wel ingelogd zijn (docker login), en toegang hebben tot de registry (ik moet dat goedkeuren voor die registries.
-Je kan ook zelf registries aanmaken. Later kan je dan zo aan rgoussey/frontend de image pullen. (in kubernetes)
-### Werking kubernetes.
-Kubernetes zal werken als je container orchestration tool. Het eerste wat je moet doen is een deployment creeeren:
-```
-apiVersion: apps/v1 # definitie
-kind: Deployment # Een deployment: het kijkt automatisch om voor u een aantal pods te creeeren, afhankelijk van replica's
-metadata:
-  labels:
-    app: shop ## belangrijk, dit wordt gebruikt voor services om te selecteren welke pods het gebruikt. Indien er bij de labels en selectors iets niet klopt, dan heeft je service geen endpoint
-  name: shop
-spec:
-  replicas: 1 # aantal pods/replicas
-  selector:
-    matchLabels:
-      app: shop ## zorg dat dit klopt
-  template:
-    metadata:
-      labels:
-        app: shop
-    spec:
-      containers:
-      - image: shop # naam van de image
-        imagePullPolicy: Never # dit enkel wanneer het lokaal staat, indien je hier rgoussey/shop, zet dan moet dit weg
-        name: shop
-        ports:
-        - containerPort: 2230 # op welke poort draait je container
-```
-Daarna heb je een service nodig, die in de pod gaat draaien:
-```
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: shop # zorg dat dit correct is
-  name: shop
-spec:
-  type: ClusterIP # type van kubernetes, nekel beschikbaar in cluster
-  ports:
-  - name: "2230" # gewoon de naam
-    port: 2230 # Poort in de cluster
-    targetPort: 2230 # poort van de container
-  selector:
-    app: shop # weer zorg dat dit correct is.
-```
-Je kan deze ofwel in aparte files steken (.yaml), of in een gescheiden door ---. Vervolgens dien je 
-```
-(microk8s.) kubectl apply -f <file>
-```
-te doen om ze te deployen. Via kubectl get of describe krijg je meer info over het deployement of de services.
-#### Ingress
-Vervolgens moet je vanaf de buitenwereld aan deze service kunnen, dit doe je door in een ingress, een regel toe te passen, die al het verkeer doorgeeft.
-```
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: gateway-ingress
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /shop #indien er /shop staat, dan wordt alle aanvragen naar deze service omgeleid.
-        backend:
-          serviceName: shop
-          servicePort: 2230
-      - path: / #geen url naar frontend
-        backend:
-          serviceName: frontend
-          servicePort: 80
-```
-Daarom is het belangrijk dat je applicatie mogelijks via een algemene url /shop omleidbaar is. 
-Indien je er meerdere hebt (bv per restcontroller, zonder /shop ervoor), zou je hier per url moeten omleiden.
-#### Ingress controller:
-Uitleg over ingress controller:
-https://www.youtube.com/watch?v=VicH6KojwCI&fbclid=IwAR3MchJe-CeINbiEIdcq8acLMNJEXv2AtmCR0_RcDYH-GlWQ742Kf3jaF_A
-In microk8s kan je via :
-```
-microk8s.enable ingress
-```
-een ingebouwde ingress controller gebruiken. Ik ben zelf nog aan het uitzoeken hoe ik deze goed deploy. Enige hulp is altijd welkom.
-#### Eigen ingress controller:
-Er zijn nu 2 yamls toegevoegd, die zelf een deployen. Zie kubernetes/definitive_versions/mandator.yaml en de kubernetes/definitive_versions/service-nodeport.yaml. Indien je deze deployt, heb je de microk8s ingress niet nodig.
-
-Dit was mijn TED talk, bedankt voor uw aandacht.

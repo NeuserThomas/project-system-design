@@ -12,7 +12,7 @@ export class DayService {
 
 
   constructor(private http: HttpClient) {
-    this.dayUrl = "http://" + window.location.hostname + "/planning/planning";
+    this.dayUrl = "http://" + window.location.hostname+":"+location.port + "/planning/planning";
   }
 
   public findAll(): Observable<Day[]> {

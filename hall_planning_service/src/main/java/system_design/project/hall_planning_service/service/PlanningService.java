@@ -18,8 +18,6 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -51,14 +49,9 @@ public class PlanningService {
 	public CinemaRepository cinemaRepo;
 	@Autowired
 	public MovieRepository movieRepo;
-	//@Autowired
-	//public TimeSlotRepository timeSlotRepo;
 	
 	@Autowired
 	private Environment env;
-	
-	// @Autowired
-	// private KafkaTemplate<String, String> simpleProducer;
 
 	final Logger logger = LoggerFactory.getLogger(PlanningService.class);
 
@@ -123,14 +116,19 @@ public class PlanningService {
 	 * @return
 	 */
 	private void planCinemaForDay(Cinema c,List<Movie> movies,List<Double> wStatus, LocalDate date) {
-		//TODO, only one master.
-
-		//todo change url
-		//String publicityUrl = env.getProperty("publicity.url");
-		//RestTemplate restTemplate = new RestTemplate();
-		//String result = restTemplate.getForObject(publicityUrl, String.class);
-		
-		//logger.info("Publicity answer: "+result);
+		String publicityUrl = env.getProperty("publicity.url");
+		RestTemplate restTemplate = new RestTemplate();
+		int adTime=15;
+		/**
+		 * Get the duration of the ad time, so we have enough time to clean up.
+		 */
+		try {
+			String result = restTemplate.getForObject(publicityUrl, String.class);
+			adTime= Integer.parseInt(result);
+			logger.info("Publicity answer: "+result);
+		}catch (Exception e) {
+			logger.error("Publicity unreachable: "+e);
+		}
 		
 		Day day = new Day();
 		day.setCinema(c);
@@ -175,7 +173,7 @@ public class PlanningService {
 					}
 					int minutes = Integer.parseInt(temp);
 					timeSlot.setStopTime(timeSlot.getStartTime().plusMinutes(minutes));
-					lastTime = timeSlot.getStopTime().plusMinutes(30); //give employees time to clean
+					lastTime = timeSlot.getStopTime().plusMinutes(30+adTime); //give employees time to clean
 					// Round to 15 minutes
 					int unroundedMinutes = lastTime.getMinute();
 					int mod = unroundedMinutes % 15;

@@ -6,8 +6,8 @@ This service plans movies, and also makes itself available to get info from movi
 To locally run this service. You need to run:
 - Kafka
 - Zookeeper
-- A mysql server 
-- A mongo server
+- [ mysql server](https://github.com/NeuserThomas/project-system-design#running-locally)
+- [A mongo server](https://github.com/NeuserThomas/project-system-design#running-locally-1)
 
 ## **Rest Calls** ##
 Not all the calls have been fully tested.
