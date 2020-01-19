@@ -21,12 +21,12 @@ One REST controller is added: ParkingRestController. The endpoints are:
 
 ```
 
-- /parking/parking -> getParkings() : returns (all of) the parking(s). At the moment, only one parking is used.
-- /parking/parking/numberOfFreeSpots -> getNumberOfFreeSpots(): returns how many spots are still free on the parking
-- /parking/parking/tickets -> getParkingTickets() : returns all the parkingtickets in the database
-- /parking/parking/exitParking/{parkingTicketId} -> exitParking() : for exiting the parking when a valid parkingTicketId is supplied. 
-- /parking/parking/validateTicket/{parkingTicketId}?ticketId={cinemaTicketId} -> validateParkingTicket() : for validating your parking ticket when an valid cinemaTicketId is supplied.
-- /parking/parking/getTicket -> getParkingTicket() : when entering the parking, a new parkingticket is returned.
+- /parking/parking (GET) -> getParkings() : returns (all of) the parking(s). At the moment, only one parking is used.
+- /parking/parking/numberOfFreeSpots (GET) -> getNumberOfFreeSpots(): returns how many spots are still free on the parking
+- /parking/parking/tickets (GET) -> getParkingTickets() : returns all the parkingtickets in the database
+- /parking/parking/exitParking/{parkingTicketId} (DELETE) -> exitParking() : for exiting the parking when a valid parkingTicketId is supplied. 
+- /parking/parking/validateTicket/{parkingTicketId}?ticketId={cinemaTicketId} (PUT) -> validateParkingTicket() : for validating your parking ticket when an valid cinemaTicketId is supplied.
+- /parking/parking/getTicket (GET) -> getParkingTicket() : when entering the parking, a new parkingticket is returned.
 
 ```
 
