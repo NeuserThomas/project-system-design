@@ -10,7 +10,7 @@ export class ParkingService {
   private parkingUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.parkingUrl = "http://" + window.location.hostname + "/parking";
+    this.parkingUrl = "http://" + window.location.hostname  + ':' + location.port + "/parking";
   }
 
   public findAll(): Observable<ParkingTicket[]> {

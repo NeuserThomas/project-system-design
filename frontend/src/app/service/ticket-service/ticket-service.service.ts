@@ -13,7 +13,7 @@ export class TicketService {
   private ticketUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.ticketUrl = "http://" + window.location.hostname + "/ticket";
+    this.ticketUrl = "http://" + window.location.hostname + ':' + location.port + "/ticket";
   }
 
   public findAllScreeningsByDate(d:String): Observable<Screening[]> {
