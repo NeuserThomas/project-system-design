@@ -214,16 +214,6 @@ spec:
           serviceName: frontend
           servicePort: 80
 ```
-#### Ingress controller:
-In microk8s you can use ingress without deploying the controller, and only the ingress yaml:
-```
-microk8s.enable ingress
-```
-There are also two custom controllers:
-Right now there are 2 ingress controllers, an nginx one, and a treafik one. Deploy the nginx one by deploying everything in the map [local_ingress](/kubernetes/local_ingress).
-On the server we use the treafik one, this one can be deployed using the bash script [ingress_controller](ingress_controller.sh).
-Then also apply the ingress.yaml.
-
 #### Mongo and hall-planning:
 At the moment there is an error so one of our users doesn't get created. So if hall-planning keeps crashing, use the underlying command:
 ```
@@ -231,6 +221,17 @@ kubectl exec -it <movie-pod-name> mongo
 ...
 db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", db:"movie"}] })
 ```
+#### Ingress controller:
+##### Microk8s
+In microk8s you can use ingress without deploying the controller, and only the ingress yaml:
+```
+microk8s.enable ingress
+```
+##### Bare metal
+Right now there are 2 ingress controllers, an nginx one, and a treafik one. Deploy the nginx one by deploying everything in the map [local_ingress](/kubernetes/local_ingress).
+On the server we use the treafik one, this one can be deployed using the bash script [ingress_controller](ingress_controller.sh).
+Then also apply the ingress.yaml. 
+The local_ingress doesn't work on the server, but does work local, we haven't tested treafik, but don't see why it wouldn't work.
 
 # ***Resilience test***
 
