@@ -23,3 +23,8 @@ node_modules
 node_modules/
 
 *.tar
+
+staff_service/.factorypath
+
+
+staff_service/bin/
