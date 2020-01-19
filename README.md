@@ -14,6 +14,14 @@ When deploying on kubernetes, leave it on:
 ```
 spring.profiles.active=prod
 ```
+## Testing remote (Kmaster)
+In the directory [kubernetes](kubernetes/), there is a port forward script, to test the remote server. Please use your own certificates and password etc. For the ip adress, use the ip adress of the ingress controller service. We use the cluster ip from the traefik service.
+```
+rgoussey@kmaster:~$ kubectl get svc --namespace kube-system
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                       AGE
+kube-dns                  ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP        51d
+traefik-ingress-service   NodePort    10.107.202.17   <none>        80:30600/TCP,8080:32726/TCP   3h18m
+```
 
 ## **Ticket service (Thomas)**
 
