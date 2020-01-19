@@ -78,14 +78,14 @@ link to full file: [hallPlanningService](hall_planning_service/readme.md)
 link to full file: [shopService](shop_service/readme.md)
 -----------------------------
 
-## Staff Service
+## Staff Service (Gert-Jan)
 - Server Port: `2224`
 - Dependencies:
   - Cassandra ([see below](https://github.com/NeuserThomas/project-system-design/blob/master/README.md#cassandra-db))
 
 Link to Staff Service's [Read Me](staff_service/README.md)
 -----------------------------
-## Staff Service
+## Movie Flow Service (Gert-Jan)
 ### Dependencies:
 - hall-planning
 - kafka
