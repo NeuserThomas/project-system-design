@@ -23,12 +23,12 @@ To locally run this service. You need to run:
 
 Added one REST controller: TicketRestController. The endpoints are:
 ```
-- ticket/ticket/ -> getAllTickets : returns all tickets currently in the database.
-- ticket/ticket/screenings/{date} -> getScreeningsByDate() : returns all screenings for the cinema on that day
-- ticket/ticket/buyTicket?screeningId={screeningId} -> sellTicket() : buy a ticket for a given screeningId
-- ticket/ticket/{id} -> getTicket() : returns the ticket for the given id
-- ticket/ticket/screenings -> getScreenings() : returns all screenings in database for the cinema
-- ticket/ticket/validateParkingTicket/{ticketId} -> validateParkingTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
+- ticket/ticket/ (GET) -> getAllTickets : returns all tickets currently in the database.
+- ticket/ticket/screenings/{date} (GET) -> getScreeningsByDate() : returns all screenings for the cinema on that day
+- ticket/ticket/buyTicket?screeningId={screeningId} (GET) -> sellTicket() : buy a ticket for a given screeningId
+- ticket/ticket/{id} (GET) -> getTicket() : returns the ticket for the given id
+- ticket/ticket/screenings (GET) -> getScreenings() : returns all screenings in database for the cinema
+- ticket/ticket/validateParkingTicket/{ticketId} (PUT) -> validateParkingTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
 ```
 
 Kafka channels/ commandhandler are implemented, see package adapters.messaging, containing:
