@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import system_design.project.publicity_service.service.PublicityService;
 @RestController
 @RequestMapping("publicity")
 public class PublicityRestController {
+	
 	private final AdMovieRepository adMovieRepository;
 	private final PublicityService publicityService;
 	@Autowired
@@ -31,16 +33,21 @@ public class PublicityRestController {
 	
 	@GetMapping("/{category}")
 	public @ResponseBody ResponseEntity<AdMovie> getAdMovieByCategoryForToday(@PathVariable("category") String category) {
-		//there is no need for the user to send the LocalDate (now) in Rest, because the controller knows that LocalDate too.
-		List<AdMovie> adMovies = this.adMovieRepository.findAdMovieByCategoryAndDate(Category.valueOf(category),LocalDate.now());
-		AdMovie res = adMovies.get(0);
-		for(AdMovie adMovie : adMovies) {//get most recent of selected adMovies
-			if(adMovie.getCommissioningDate().compareTo(res.getCommissioningDate()) > 1) {
-				//adMovie is more recent than res
-				res = adMovie;
+		try {
+			//there is no need for the user to send the LocalDate (now) in Rest, because the controller knows that LocalDate too.
+			List<AdMovie> adMovies = this.adMovieRepository.findAdMovieByCategoryAndDate(Category.valueOf(StringUtils.capitalize(category)),LocalDate.now());
+			AdMovie res = adMovies.get(0);
+			for(AdMovie adMovie : adMovies) {//get most recent of selected adMovies
+				if(adMovie.getCommissioningDate().compareTo(res.getCommissioningDate()) > 1) {
+					//adMovie is more recent than res
+					res = adMovie;
+				}
 			}
+			return new ResponseEntity<AdMovie>(res, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<AdMovie>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<AdMovie>(res, HttpStatus.OK);
+		
 	}
 	
 	@GetMapping("/maxDuration")
