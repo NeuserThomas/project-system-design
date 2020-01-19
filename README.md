@@ -77,8 +77,18 @@ link to full file: [hallPlanningService](hall_planning_service/readme.md)
 link to full file: [shopService](shop_service/readme.md)
 -----------------------------
 
+## Staff Service
+- Server Port: `2224`
+- Dependencies:
+  - Cassandra
+  
+Link to Staff Service's [Read Me](staff_service/readme.md)
+
+
 ## Databases
+
 ### **MySQL**
+
 #### Running locally
 To run an appliction locally (in spring tool suite), you might need to set up a local database. We use one server, with multiple databases.
 To deploy kafka, you will need to install it, and run the zookeeper, and kafka.
@@ -88,6 +98,7 @@ To run our mongo or mysql database, go to the [mysql directory](/mysql) :
 ```
 This will build the mysql container if not already done, and run it. (port 3306). The reason we use a custom image, is to build our databases.
 If we have time, we can try to dynamically create the needed databases.
+
 #### Building docker
 To build the database, use the command as written below in the mysql directory:
 ```
@@ -109,6 +120,12 @@ kubectl exec -it <movie-pod-name> mongo
 ...
 db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", db:"movie"}] })
 ```
+### Cassandra DB
+Ports:
+- `9042` for client connections
+
+For more information on the Cassandra Database, please visit [this link](staff_service/readme.md)
+
 
 ### Errors with the databases:
 If for some reason the data gets erases in the mongo databases (the movies), then please also erase all data in the mysql.
