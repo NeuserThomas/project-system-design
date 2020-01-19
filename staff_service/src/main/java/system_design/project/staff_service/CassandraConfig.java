@@ -45,7 +45,7 @@ import java.util.List;
 public class CassandraConfig extends AbstractCassandraConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(CassandraConfig.class);
     //private static final String CONTACT_POINTS = "localhost";
-    private static final String KEYSPACE_NAME = "staffservice_dev";
+//    private static final String KEYSPACE_NAME = "staffservice_dev";
 
 
 
@@ -55,13 +55,23 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     private final String keyspace;
     private final String hosts;
 
+
     CassandraConfig(
             @Value("${spring.data.cassandra.keyspace-name}") String keyspace,
             @Value("${spring.data.cassandra.contact-points}") String hosts) {
+
+
         this.keyspace = keyspace;
         this.hosts = hosts;
+        logger.info("--------------_CASSANDRACONFIG_--------------------");
+        logger.info("KEYSPACE: " + this.keyspace);
+        logger.info("HOSTS; " + this.hosts);
+        logger.info("CONTACT POINTS: " + this.getContactPoints());
+        logger.info("KEYSPACE NAME: " + this.getKeyspaceName());
         logger.info("CassandraConfig Constructor called ! keyspace: " + keyspace + "\t hosts: " + hosts);
-
+        logger.info("--------------------------------------------------------------");
+        logger.info("--------------------------------------------------------------");
+        logger.info("--------------------------------------------------------------");
     }
 
 
@@ -93,7 +103,7 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 //        keyspaceSpecifications.add(CreateKeyspaceSpecification.createKeyspace(KEYSPACE_NAME));
 
         CreateKeyspaceSpecification specification =
-                CreateKeyspaceSpecification.createKeyspace(KEYSPACE_NAME)
+                CreateKeyspaceSpecification.createKeyspace(this.keyspace)
                                             .ifNotExists()
                                             .with(KeyspaceOption.DURABLE_WRITES, true)
                                             .withSimpleReplication();
@@ -107,7 +117,7 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     @Override
     protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
         List<DropKeyspaceSpecification> keyspaceSpecifications = new ArrayList<>();
-        keyspaceSpecifications.add(DropKeyspaceSpecification.dropKeyspace(KEYSPACE_NAME));
+        keyspaceSpecifications.add(DropKeyspaceSpecification.dropKeyspace(this.keyspace));
         return keyspaceSpecifications;
     }
 

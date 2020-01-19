@@ -60,7 +60,7 @@ public class TimeSlotRestController {
         Iterable<TimeSlot> timeSlots = this.repo.getTimeSlotsByDayAndCinemaId(toDataStaxLocalData(LocalDate.now()), cinemaId);
         return new ResponseEntity<>(timeSlots, HttpStatus.OK);
     }
-    
+
     /**
      * Create or Update a timeslot
      * @param day

@@ -1,32 +1,109 @@
 # StaffService
+- [ ] prevent staffservice from exiting when it can't connect to a cassandra cluster at startup
 
 ## Deployment information
 
-### za 18 jan 2020 18:24:59 CET
-Running cassandra 
+### zo 19 jan 2020 01:50:03 CET
+
+Working configuration
+
+The `application.properties`-file
 ```
-# origin: bitnami/cassandra
-# Container ID: 811984d095fafd4d2e010cb442fab31d85725a57e3d75b7d3012e65f9b8bb114
-docker start cassandra_01
+spring.profiles.active=prod
+server.port=2224
+server.servlet.context-path=/staffservice
+# BEAN FLAG
+populateCinemaRepository.enabled=true
+populateEmployeeRepository.enabled=true
+populateTimeSlotRepository.enabled=true
 ```
-When cassandra is running, StaffService can be launched in `dev`.
-The difference in dev is that the value of the cassandra contactpoints
+The `application-dev.properties`-file
 ```
-spring.data.cassandra.contact-points=localhost
-``` 
-Overview of working parts, for which the following URLs are of relevance
-````plain 
-http://localhost:2224/timeslot/
-http://localhost:2224/cinemas
-http://localhost:2224/employees
+spring.jpa.hibernate.ddl-auto=update
+
+spring.data.cassandra.keyspace-name=staffservice_dev
+spring.data.cassandra.schema-action=CREATE_IF_NOT_EXISTS
+spring.data.cassandra.contact-points=cassandra
+```
+
+```
+# network 
+docker network create app-tier --driver bridge
+# run cassandra service (remove when being stopped)
+docker run -d --rm --name cassandra --network app-tier bitnami/cassandra:latest
+# build service
+docker build -t staffservice:v1.0 . && docker run -P --name StaffService staffservice:v1.0
+# run service & connect to network 
+docker run -p 2224:2224/tcp  -dit --rm --name staffservice04 --network app-tier staffservice:v1.0
+```
+
+> The -dit flags mean to start the container detached (in the background), interactive (with the ability to type into it), and with a TTY (so you can see the input and output).
+> If you have not specified any --network flags, the containers connect to the default bridge network.
+> Running the staffservice when cassandra isn't active --> will cause staffservice to shutdown and throw an exception
+
+
+Once running, the staffservice can be acessed like 
+
+```
+# localhost:2224/staffservice/timeslot/
+[
+    {
+        "id": "f4136c50-3a5b-11ea-9406-d36fce80f50c",
+        "cinemaId": 1,
+        "day": {
+            "millisSinceEpoch": 1579392000000,
+            "daysSinceEpoch": 18280,
+            "day": 19,
+            "year": 2020,
+            "month": 1
+        },
+        "timeslot": "12:00:00",
+        "employeeId": "f3bff520-3a5b-11ea-9406-d36fce80f50c",
+        "availabilityCode": 0
+    },
+ .....
+
+]
+# localhost:2224/staffservice/employee/
+[
+    {
+        "id": "f3bff520-3a5b-11ea-9406-d36fce80f50c",
+        "firstName": "Jan",
+        "lastName": "Cnops"
+    },
+    {
+        "id": "f3bdd240-3a5b-11ea-9406-d36fce80f50c",
+        "firstName": "Joris",
+        "lastName": "Moreau"
+    },
+    {
+        "id": "f3baec10-3a5b-11ea-9406-d36fce80f50c",
+        "firstName": "Geralt",
+        "lastName": "Of Rivia"
+    }
+]
+# get timeslots for a specific date
+# localhost:2224/staffservice/timeslot/2020-01-19
+[
+    {
+        "id": "f4136c50-3a5b-11ea-9406-d36fce80f50c",
+        "cinemaId": 1,
+        "day": {
+            "millisSinceEpoch": 1579392000000,
+            "daysSinceEpoch": 18280,
+            "day": 19,
+            "year": 2020,
+            "month": 1
+        },
+        "timeslot": "12:00:00",
+        "employeeId": "f3bff520-3a5b-11ea-9406-d36fce80f50c",
+        "availabilityCode": 0
+    },
+  ....   
+]
+
 ````
 
-`http://localhost:2224/timeslot/` should have an output similar to
-```
-[{"id":"198d9770-3a17-11ea-a5cf-df37814616fe","cinemaId":0,"day":{"millisSinceEpoch":1577836800000,
-"daysSinceEpoch":18262,"year":2020,"month":1,"day":1},
-"timeslot":"12:00:00","employeeId":"1980c630-3a17-11ea-a5cf-df37814616 ... 
-```
 
 ## Apache Cassandra
 
@@ -46,3 +123,5 @@ cassandra/bin/cassandra -f
 - Defining entities: https://docs.spring.io/spring-data/cassandra/docs/current/reference/html/#cassandra-repo-usage
 - [Spring Data Cassandra (Github) examples](https://github.com/spring-projects/spring-data-examples/tree/master/cassandra)
 - https://hub.docker.com/r/bitnami/cassandra/
+- [networking from a container's of view](https://docs.docker.com/config/containers/container-networking/)
+- [docker publishing ports](https://docs.docker.com/config/containers/container-networking/)
