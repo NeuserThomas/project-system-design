@@ -17,11 +17,11 @@ export class TicketService {
   }
 
   public findAllScreeningsByDate(d:String): Observable<Screening[]> {
-    return this.http.get<Screening[]>(this.ticketUrl+'/screenings/'+d);
+    return this.http.get<Screening[]>(this.ticketUrl+'/ticket/screenings/'+d);
   }
 
   public buyTicket(id: number): Observable<Ticket> {
-    return this.http.get<Ticket>(this.ticketUrl+'/buyTicket/?screeningId=' + id);
+    return this.http.get<Ticket>(this.ticketUrl+'/ticket/buyTicket/?screeningId=' + id);
   }
 
 }
