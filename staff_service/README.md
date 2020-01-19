@@ -1,5 +1,4 @@
 # StaffService
-- [ ] prevent staffservice from exiting when it can't connect to a cassandra cluster at startup
 
 ## Deployment information
 
