@@ -84,6 +84,16 @@ link to full file: [shopService](shop_service/readme.md)
   - Cassandra ([see below](https://github.com/NeuserThomas/project-system-design/blob/master/README.md#cassandra-db))
 
 Link to Staff Service's [Read Me](staff_service/README.md)
+-----------------------------
+
+## Publicity Service
+- Server Port: `5555`
+- Dependencies:
+  - MySQL
+  - Kafka
+  - Zookeeper
+
+Link to Publicity Service's [Read Me](publicity_service/README.md)
 
 
 ## Databases
