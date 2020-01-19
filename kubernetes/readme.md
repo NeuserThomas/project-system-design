@@ -221,7 +221,7 @@ microk8s.enable ingress
 ```
 There are also two custom controllers:
 Right now there are 2 ingress controllers, an nginx one, and a treafik one. Deploy the nginx one by deploying everything in the map [local_ingress](/kubernetes/local_ingress).
-On the server we use the treafik one, this one can be deployed using the bash script [ingress_controller](ingress_controller).
+On the server we use the treafik one, this one can be deployed using the bash script [ingress_controller](ingress_controller.sh).
 Then also apply the ingress.yaml.
 
 # ***Resilience test***
