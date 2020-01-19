@@ -17,7 +17,7 @@ populateCinemaRepository.enabled=true
 populateEmployeeRepository.enabled=true
 populateTimeSlotRepository.enabled=true
 ```
-Sequence of commands to run the Cassandra DB & StaffService (note that Cassandra DB <u>has</u> to be running prior to StaffService)
+Sequence of commands to run the Cassandra DB & StaffService (note that Cassandra DB should be running prior to StaffService)
 ```
 # network 
 docker network create app-tier --driver bridge
