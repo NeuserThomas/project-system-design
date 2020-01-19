@@ -94,7 +94,8 @@ You can push images to the registry by using: (You have to be authorized by me)
 docker tag frontend rgoussey/frontend
 docker push frontend
 ```
-You have to be logged in by doing docker login ...
+You have to be logged in by doing docker login (cfr. [stackoverflow topic](https://stackoverflow.com/questions/41984399/denied-requested-access-to-the-resource-is-denied-docker))
+
 ### How does kubernetes work kubernetes.
 Each app has a deployment and a service: 
 ```
