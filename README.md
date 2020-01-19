@@ -14,6 +14,14 @@ When deploying on kubernetes, leave it on:
 ```
 spring.profiles.active=prod
 ```
+## Testing remote (Kmaster)
+In the directory [kubernetes](kubernetes/), there is a port forward script, to test the remote server. Please use your own certificates and password etc. For the ip adress, use the ip adress of the ingress controller service. We use the cluster ip from the traefik service.
+```
+rgoussey@kmaster:~$ kubectl get svc --namespace kube-system
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                       AGE
+kube-dns                  ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP        51d
+traefik-ingress-service   NodePort    10.107.202.17   <none>        80:30600/TCP,8080:32726/TCP   3h18m
+```
 
 ## **Ticket service (Thomas)**
 
@@ -26,47 +34,7 @@ Dependencies:
 - Kafka
 - MySQL
 
-### ***Adapters***
-
-Added one REST controller: TicketRestController. The endpoints are:
-
-- ticket/ticket/ -> getAllTickets : returns all tickets currently in the database.
-- ticket/ticket/screenings/{date} -> getScreeningsByDate() : returns all screenings for the cinema on that day
-- ticket/ticket/buyTicket?screeningId={screeningId} -> sellTicket() : buy a ticket for a given screeningId
-- ticket/ticket/{id} -> getTicket() : returns the ticket for the given id
-- ticket/ticket/screenings -> getScreenings() : returns all screenings in database for the cinema
-- ticket/ticket/validateParkingTicket/{ticketId} -> validateParkingTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
-
-Kafka channels/ commandhandler are implemented, see package adapters.messaging, containing:
-- Channels
-- PlanningCommandHandler
-
-Payment adapters are implemented to mock the payment functionality, see package adapters.payment, containing:
-
-- IPaymentAdapter
-- PaymentAdapter
-
-### ***Domain***
-
-Classes are:
-- Ticket
-- CinemaProxy
-- Hall
-- Screening
-- ScreeningProxy
-
-### ***Persistence***
-
-Two repositories are used, both interacting with MYSQL databases:
-- ScreeningRepository
-- TicketRepository
-
-### ***Services***
-
-One service is added, for mocking the functionality of paying,
-
-- PaymentService
-
+link to full file: [Ticket Service](ticket_management_service/README.md)
 
 -----------------------------
 
@@ -81,33 +49,7 @@ Server port: 2301
 Dependencies:
 - MySQL
 
-### ***Adapters***
-
-One REST controller is added: ParkingRestController. The endpoints are:
-
-- /parking/parking -> getParkings() : returns (all of) the parking(s). At the moment, only one parking is used.
-- /parking/parking/numberOfFreeSpots -> getNumberOfFreeSpots(): returns how many spots are still free on the parking
-- /parking/parking/tickets -> getParkingTickets() : returns all the parkingtickets in the database
-- /parking/parking/exitParking/{parkingTicketId} -> exitParking() : for exiting the parking when a valid parkingTicketId is supplied. 
-- /parking/parking/validateTicket/{parkingTicketId}?ticketId={cinemaTicketId} -> validateParkingTicket() : for validating your parking ticket when an valid cinemaTicketId is supplied.
-- /parking/parking/getTicket -> getParkingTicket() : when entering the parking, a new parkingticket is returned.
-
-
-### ***Domain***
-
-Classes are: 
-
-- Parking 
-- ParkingTicket
-
-
-### ***Persistence***
-
-Two repositories are used (both interacting with MYSQL databases):
-
-- ParkingRepository
-- ParkingTicketRepository
-
+link to full file: [Parking Service](parking_service/README.md)
 
 -----------------------------
 
@@ -214,5 +156,5 @@ Make sure the ingress controller and ingress.yaml is depoyed.
 
 - - - -
 ## **Deployment on kubernetes! (and docker)**
-[Kubernets](kubernetes/readme.md)
+[Kubernetes](kubernetes/readme.md)
 

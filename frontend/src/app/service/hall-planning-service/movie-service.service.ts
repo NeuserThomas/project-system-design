@@ -10,7 +10,7 @@ export class MovieService {
   private movieUrl: string;
 
   constructor(private http: HttpClient) {
-    this.movieUrl = "http://" + window.location.hostname + "/planning/movie";
+    this.movieUrl = "http://" + window.location.hostname+":"+location.port + "/planning/movie";
   }
 
   public findAll(): Observable<Movie[]> {
