@@ -15,8 +15,8 @@ spec:
         app: shop
     spec:
       containers:
-      - image: shop
-        imagePullPolicy: Never
+      - image: rgoussey/shop:latest
+        imagePullPolicy: Always
         name: shop
         ports:
         - containerPort: 2230

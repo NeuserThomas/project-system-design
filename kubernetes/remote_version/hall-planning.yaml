@@ -15,8 +15,7 @@ spec:
         app: hall-planning
     spec:
       containers:
-      - image: rgoussey/hall-planning
-        imagePullPolicy: Never
+      - image: rgoussey/hall-planning:latest
         name: hall-planning
         ports:
         - containerPort: 2223
