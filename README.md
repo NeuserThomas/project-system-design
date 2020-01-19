@@ -5,6 +5,8 @@
 This repository contains all the folders/ files related to the Bioscoop system project for the course System Design 2019-2020.
 The link to the github repo is: [system-design](https://github.com/NeuserThomas/project-system-design)
 
+Changes are documented in Addendum in the architectuur_finaal file.
+
 ## Deploying locally (spring tool suite)
 When deploying locally, please change the environment. Change the application.properties file to:
 ```
