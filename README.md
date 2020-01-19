@@ -80,7 +80,8 @@ link to full file: [shopService](shop_service/readme.md)
 ## Staff Service
 - Server Port: `2224`
 - Dependencies:
-  - Cassandra
+  - Cassandra ([see below](https://github.com/NeuserThomas/project-system-design/blob/master/README.md#cassandra-db))
+
   
 Link to Staff Service's [Read Me](staff_service/readme.md)
 
