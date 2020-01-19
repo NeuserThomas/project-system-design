@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import system_design.project.staff_service.domain.TimeSlot;
+import system_design.project.staff_service.persistence.EmployeeRepository;
 import system_design.project.staff_service.persistence.TimeSlotRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/timeslot")
@@ -19,11 +21,29 @@ public class TimeSlotRestController {
     private static final Logger logger = LoggerFactory.getLogger(TimeSlotRestController.class);
     private TimeSlotRepository repo;
 
-    @Autowired
+/*    @Autowired
     private TimeSlotRestController(TimeSlotRepository repo){
         this.repo = repo;
+    }*/
+
+    private EmployeeRepository employeeRepository;
+    @Autowired
+    private TimeSlotRestController(TimeSlotRepository repo, EmployeeRepository employeeRepository){
+        this.repo = repo;
+        this.employeeRepository = employeeRepository;
     }
 
+    @GetMapping("/cinema/{cinemaId}/employee/{employeeId}")
+    public @ResponseBody  ResponseEntity<Iterable<TimeSlot>> getAllTimeSlotsForEmployee(@PathVariable(required = true) Long cinemaId , @PathVariable(required = true) UUID employeeId){
+
+        if(this.employeeRepository.findById(employeeId).isPresent()){
+            Iterable<TimeSlot> timeSlots = this.repo.getTimeSlotsByCinemaIdAndEmployeeId(cinemaId, employeeId);
+            return new ResponseEntity<>(timeSlots, HttpStatus.OK);
+        }else {
+            return new  ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
     /**
      * Helper method for casting java.time.LocalDate to com.datastax.driver.core.LocalDate
      * @param x (java.time.LocalDate)
@@ -58,6 +78,7 @@ public class TimeSlotRestController {
     public @ResponseBody
     ResponseEntity<Iterable<TimeSlot>> getTimeSlotsForToday(@PathVariable(required = false) Long cinemaId){
         Iterable<TimeSlot> timeSlots = this.repo.getTimeSlotsByDayAndCinemaId(toDataStaxLocalData(LocalDate.now()), cinemaId);
+
         return new ResponseEntity<>(timeSlots, HttpStatus.OK);
     }
 

@@ -23,8 +23,13 @@ public interface TimeSlotRepository extends CrudRepository<TimeSlot, UUID> {
     List<TimeSlot> getTimeSlotsByDayAndCinemaId(LocalDate day, Long cinemaId);
 
     @Query(allowFiltering = true)
+    List<TimeSlot> getTimeSlotsByCinemaIdAndEmployeeId(Long cinemaId, UUID employeeId);
+
+    @Query(allowFiltering = true)
     List<TimeSlot> getTimeSlotsByDayAndCinemaIdAndEmployeeId(LocalDate day, Long cinemaId, UUID employeeId);
 
     @Query(allowFiltering = true)
     List<TimeSlot> getTimeSlotsByDayAndTimeslotAndCinemaIdAndEmployeeId(LocalDate day, LocalTime timeslot, Long cinemaId, UUID employeeId);
+
+
 }
