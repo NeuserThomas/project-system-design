@@ -17,47 +17,16 @@ spring.profiles.active=prod
 
 ## **Ticket service (Thomas)**
 
-### ***Adapters***
+General info
 
-Added one REST controller: TicketRestController. The endpoints are:
+Server port: 2300
 
-- ticket/ticket/ -> getAllTickets : returns all tickets currently in the database.
-- ticket/ticket/screenings/{date} -> getScreeningsByDate() : returns all screenings for the cinema on that day
-- ticket/ticket/buyTicket?screeningId={screeningId} -> sellTicket() : buy a ticket for a given screeningId
-- ticket/ticket/{id} -> getTicket() : returns the ticket for the given id
-- ticket/ticket/screenings -> getScreenings() : returns all screenings in database for the cinema
-- ticket/ticket/validateParkingTicket/{ticketId} -> validateParkingTicket() : validates a parkingTicket by using the cinemaTicket provided by its id
+Dependencies:
+- Zookeeper
+- Kafka
+- MySQL
 
-Kafka channels/ commandhandler are implemented, see package adapters.messaging, containing:
-- Channels
-- PlanningCommandHandler
-
-Payment adapters are implemented to mock the payment functionality, see package adapters.payment, containing:
-
-- IPaymentAdapter
-- PaymentAdapter
-
-### ***Domain***
-
-Classes are:
-- Ticket
-- CinemaProxy
-- Hall
-- Screening
-- ScreeningProxy
-
-### ***Persistence***
-
-Two repositories are used, both interacting with MYSQL databases:
-- ScreeningRepository
-- TicketRepository
-
-### ***Services***
-
-One service is added, for mocking the functionality of paying,
-
-- PaymentService
-
+link to full file: [Ticket Service](ticket_management_service/README.md)
 
 -----------------------------
 
@@ -65,33 +34,14 @@ One service is added, for mocking the functionality of paying,
 
 This service is used for parking management. When initialized, one parking is available with 200 free spots.
 
-### ***Adapters***
+General info
 
-One REST controller is added: ParkingRestController. The endpoints are:
+Server port: 2301
 
-- /parking/parking -> getParkings() : returns (all of) the parking(s). At the moment, only one parking is used.
-- /parking/parking/numberOfFreeSpots -> getNumberOfFreeSpots(): returns how many spots are still free on the parking
-- /parking/parking/tickets -> getParkingTickets() : returns all the parkingtickets in the database
-- /parking/parking/exitParking/{parkingTicketId} -> exitParking() : for exiting the parking when a valid parkingTicketId is supplied. 
-- /parking/parking/validateTicket/{parkingTicketId}?ticketId={cinemaTicketId} -> validateParkingTicket() : for validating your parking ticket when an valid cinemaTicketId is supplied.
-- /parking/parking/getTicket -> getParkingTicket() : when entering the parking, a new parkingticket is returned.
+Dependencies:
+- MySQL
 
-
-### ***Domain***
-
-Classes are: 
-
-- Parking 
-- ParkingTicket
-
-
-### ***Persistence***
-
-Two repositories are used (both interacting with MYSQL databases):
-
-- ParkingRepository
-- ParkingTicketRepository
-
+link to full file: [Parking Service](parking_service/README.md)
 
 -----------------------------
 
@@ -144,6 +94,13 @@ To run the mongo db, go to the [bash_scripts directory](/bash_scripts) :
 ./build_mongocontainer.sh
 ```
 This will run a standard mongo image, and run it as well.
+#### Kubernetes:
+At the moment there is an error so our users don't get created. Use the following command:
+```
+kubectl exec -it <movie-pod-name> mongo
+...
+db.createUser({ user: "root", pwd: "ThePassword", roles: [ { role : "dbAdmin", db:"movie"}] })
+```
 
 ### Errors with the databases:
 If for some reason the data gets erases in the mongo databases (the movies), then please also erase all data in the mysql.

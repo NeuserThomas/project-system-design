@@ -15,7 +15,7 @@ spec:
         app: shop
     spec:
       containers:
-      - image: rgoussey/shop
+      - image: rgoussey/shop:latest
         name: shop
         ports:
         - containerPort: 2230
