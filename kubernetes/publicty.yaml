@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: publicity
+  name: publicity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publicity
+  template:
+    metadata:
+      labels:
+        app: publicity
+    spec:
+      containers:
+      - image: publicity
+        name: publicity
+        ports:
+        - containerPort: 5555
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: publicity
+  name: publicity
+spec:
+  type: ClusterIP
+  ports:
+  - name: "5555"
+    port: 5555 # inside the cluster
+    targetPort: 5555 # pod port, same as containerPort
+  selector:
+    app: publicity

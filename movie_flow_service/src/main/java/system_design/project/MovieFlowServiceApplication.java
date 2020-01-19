@@ -1,7 +1,6 @@
 package system_design.project;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,10 +10,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import system_design.project.adapters.messaging.channels.PlanningChannels;
+import system_design.project.domain.TimeSlot;
+import system_design.project.persistence.TimeSlotRepository;
+import system_design.project.service.MovieFlowService;
 
 
 
@@ -26,19 +26,22 @@ public class MovieFlowServiceApplication {
 		SpringApplication.run(MovieFlowServiceApplication.class, args);
 	}
 	
+	/**
+	 * Bean used to re add timers on crash
+	 * @param tRepo
+	 * @param mService
+	 * @return
+	 */
 	@Bean
-	CommandLineRunner sayHello() {
+	CommandLineRunner sayHello(TimeSlotRepository tRepo, MovieFlowService mService) {
 		
 		return (args)->{
 			final Logger logger = LoggerFactory.getLogger(MovieFlowServiceApplication.class);
-			System.out.println("sayHello....");
-			logger.info("logger says hello...");
-			RestTemplate restTemplate  = new RestTemplate();
-			String planningUrl = "http://localhost:2223/planning";
-			//ResponseEntity<String> response = restTemplate.getForEntity(planningUrl, String.class);
-			
-			//logger.info("response: " + response);
-			
+			List<TimeSlot> dates = tRepo.findafterDate(LocalDate.now());
+			TimeSlot[] slots = new TimeSlot[dates.size()];
+			slots = dates.toArray(slots);
+			mService.addEvents(slots);
+			logger.info("Added messages! amount: "+slots.length);
 		};
 	}
 	
